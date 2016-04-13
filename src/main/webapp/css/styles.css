@@ -1,9 +1,9 @@
-.authorTable{   
+.entityTable{   
    border-collapse:collapse;
    border-bottom:1px solid #000000;
 }
 
-.authorTableHeader{
+.entityTableHeader{
    text-align:center;
    background:none repeat scroll 0 0 #B5B5B5;
    border-bottom:1px solid #000000;
@@ -11,12 +11,12 @@
    padding:2px;
 }
 
-.authorTableOddRow{
+.entityTableOddRow{
    text-align:center;
    background:none repeat scroll 0 0 #FFFFFFF;	
 }
 
-.authorTableEvenRow{
+.entityTableEvenRow{
    text-align:center;
    background:none repeat scroll 0 0 #D3D3D3;
 }
