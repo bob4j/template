@@ -6,19 +6,14 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:tp="http://java.sun.com/jsf/composite/tutorialspoint">
 <h:head>
-	<title>JSF tutorial</title>
+	<title>Template</title>
 </h:head>
 <h:body>
-	<h2>Ajax Example</h2>
+	<h2>Template</h2>
 	<h:form>
-		<h:inputText id="inputName" value="#{userData.name}"></h:inputText>
-		<h:commandButton value="Show Message">
-			<f:ajax execute="inputName" render="outputMessage" />
-		</h:commandButton>
-		<h2>
-			<h:outputText id="outputMessage"
-				value="#{userData.welcomeMessage !=null ? userData.welcomeMessage : ''}" />
-		</h2>
+		<h:commandLink action="cities" value="Cities" />
+		<br/>
+		<h:commandLink action="categories" value="Categories" />
 	</h:form>
 </h:body>
 </html>
