@@ -27,7 +27,7 @@
  * copy target/{project}.war into {tomcat_home}/webapps/
 * create dir /home/{user}/static - will contain all static images and uploads
 * edit {tomcat_home}/conf/server.xml 
- * <Host appBase="webapps"> ... <Context docBase="/home/{user}/static" path="/{project}/static" /> ... </Host>
+ * ```<Host appBase="webapps"> <Context docBase="/home/{user}/static" path="/{project}/static" /> </Host>```
 * run tomcat
  * {tomcat_home}/bin/startup.sh
 * http://localhost:8080/template
