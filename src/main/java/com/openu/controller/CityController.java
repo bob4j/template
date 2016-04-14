@@ -45,8 +45,9 @@ public class CityController implements Serializable {
         repository.save(city);
     }
 
-    public void load(City city) {
+    public String load(City city) {
         this.city = city;
+        return "city";
     }
 
     /*-- getters & setters --*/
