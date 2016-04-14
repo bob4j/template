@@ -7,24 +7,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<title><ui:insert name="title">Spring-Security - Login</ui:insert>
+	<title>
+		<ui:insert name="title">Spring-Security - Login</ui:insert>
 	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-	<!-- Template CSS - Do not modify -->
-	<link rel="stylesheet" type="text/css"
-		href="#{facesContext.externalContext.request.contextPath}/css/reset.css" />
-	<link rel="stylesheet" type="text/css"
-		href="#{facesContext.externalContext.request.contextPath}/css/template.css" />
-
-	<!-- Oldies CSS and scripts -->
-	<!--[if lte IE 8]>
-		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/template-ie.css" />
-		<script type="text/javascript"> activeHTML(); </script>
-		<![endif]-->
-	<!-- custom -->
-	<link rel="stylesheet" type="text/css"
-		href="#{facesContext.externalContext.request.contextPath}/css/classnotfound.css" />
 </h:head>
 
 <h:body>
@@ -59,10 +45,10 @@
 							<div class="forLabel" style="width: 30%">
 								<h:outputText value="Authentication" />
 							</div>
-							<div class="forField" style="width: 65%">
+							<!-- <div class="forField" style="width: 65%">
 								<h:selectBooleanCheckbox id="method" name="method" />
 								<h:outputLabel for="method" value="LDAP" />
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<ui:fragment rendered="${!empty param['error']}">

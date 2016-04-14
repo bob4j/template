@@ -10,7 +10,7 @@
 <h:body>
 	<h2>Cities</h2>
 	<h:form>
-		<h:dataTable value="#{cityController.cities}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
+		<h:dataTable value="#{cityController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
 					rowClasses="entityTableOddRow,entityTableEvenRow">
 			<h:column>
 				<f:facet name="header">ID</f:facet>
@@ -19,6 +19,10 @@
 			<h:column>
 				<f:facet name="header">Name</f:facet>
 				<h:commandLink action="#{cityController.load(c)}" value="#{c.name}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Delete</f:facet>
+				<h:commandButton action="#{cityController.delete(c)}" value="Delete" />
 			</h:column>
 		</h:dataTable>
 		<h:commandButton action="add-city" value="Add city" />

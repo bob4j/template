@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 
 import com.openu.model.City;
@@ -15,7 +16,7 @@ import com.openu.service.CityService;
 @ManagedBean
 @RequestScoped
 @Component
-public class CityController implements Serializable {
+public class CityController extends AbstractCrudController<City> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,34 +26,17 @@ public class CityController implements Serializable {
     @Autowired
     private CityRepository repository;
 
-    private City city;
-
     private String cityName;
 
-    /**
-     * Get all cities
-     */
-    public Iterable<City> getCities() {
-        return repository.findAll();
+    @Override
+    protected PagingAndSortingRepository<City, Long> getRepository() {
+        return repository;
     }
 
-    public void addCity() {
-        if (cityName == null) {
-            return;
-        }
+    @Override
+    protected City createEntity() throws Exception {
         City city = new City();
         city.setName(cityName);
-        repository.save(city);
-    }
-
-    public String load(City city) {
-        this.city = city;
-        return "city";
-    }
-
-    /*-- getters & setters --*/
-
-    public City getCity() {
         return city;
     }
 

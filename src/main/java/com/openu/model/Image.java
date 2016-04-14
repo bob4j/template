@@ -14,14 +14,21 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "image_seq")
     private Long id;
 
-    private byte[] data;
+    // private byte[] data;
+    // @Lob
+    // private String value;
+
+    private String name;
 
     public Image() {
-
     }
 
-    public Image(byte[] data) {
-        this.data = data;
+    // public Image(byte[] data) {
+    // this.data = data;
+    // }
+
+    public Image(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -32,12 +39,12 @@ public class Image {
         this.id = id;
     }
 
-    public byte[] getData() {
-        return data;
+    public String getName() {
+        return name;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

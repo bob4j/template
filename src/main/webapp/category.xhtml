@@ -8,8 +8,8 @@
 		<link rel="stylesheet" href="css/styles.css" />
 	</h:head>
 	<h:body>
-		<h2>ID: #{productCategoryController.category.id}</h2>
-		<h2>Name: #{productCategoryController.category.name}</h2>
-		<h:graphicImage value="/image/#{productCategoryController.category.image.id}" />
+		<h2>ID: #{productCategoryController.entity.id}</h2>
+		<h2>Name: #{productCategoryController.entity.name}</h2>
+		<h:graphicImage value="/#{productCategoryController.entity.image.name}" />
 	</h:body>
 </html>
