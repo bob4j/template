@@ -4,13 +4,13 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
-	<title>Categories</title>
+	<title>Cities</title>
 	<link rel="stylesheet" href="css/styles.css" />
 </h:head>
 <h:body>
-	<h2>Categories</h2>
+	<h2>Cities</h2>
 	<h:form>
-		<h:dataTable value="#{productCategoryController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
+		<h:dataTable value="#{cityController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
 					rowClasses="entityTableOddRow,entityTableEvenRow">
 			<h:column>
 				<f:facet name="header">ID</f:facet>
@@ -18,18 +18,14 @@
 	      	</h:column>
 			<h:column>
 				<f:facet name="header">Name</f:facet>
-				<h:commandLink action="category" actionListener="#{productCategoryController.load(c)}" value="#{c.name}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">Image</f:facet>
-				<h:graphicImage url="/#{c.image.name}" />
+				<h:commandLink action="#{cityController.load(c)}" value="#{c.name}" />
 			</h:column>
 			<h:column>
 				<f:facet name="header">Delete</f:facet>
-				<h:commandButton action="#{productCategoryController.delete(c)}" value="Delete" />
+				<h:commandButton action="#{cityController.delete(c)}" value="Delete" />
 			</h:column>
 		</h:dataTable>
-		<h:commandButton action="add-category" value="Add category" />
+		<h:commandButton action="/admin/add-city" value="Add city" />
 	</h:form>
 </h:body>
 </html>

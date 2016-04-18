@@ -5,13 +5,16 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-	<title>Add City</title>
+	<title>Template</title>
 </h:head>
 <h:body>
-	<h2>Add City</h2>
+	<h2>Template</h2>
 	<h:form>
-		<h:inputText id="inputName" value="#{cityController.cityName}" />
-		<h:commandButton action="cities" actionListener="${cityController.save}" value="Add" />
+		<h:link outcome="/admin/cities" value="Cities" />
+		<br />
+		<h:link outcome="/admin/categories" value="Categories" />
+		<br />
+		<h:link outcome="/admin/admin-users" value="Admin users" />
 	</h:form>
 </h:body>
 </html>

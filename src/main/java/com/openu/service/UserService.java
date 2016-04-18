@@ -7,10 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-import com.openu.model.Role;
-import com.openu.model.User;
-import com.openu.repository.UserRepository;
+import com.openu.model.Administrator;
+import com.openu.repository.AdministratorRepository;
+import com.openu.repository.CustomerRepository;
 
 @Service
 public class UserService {
@@ -18,24 +17,29 @@ public class UserService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Resource
-    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
 
-    private static final String ADMIN = "admin";
+    @Resource
+    private AdministratorRepository administratorRepository;
+
+    public static final String ADMIN = "admin";
 
     @PostConstruct
     public void init() {
-        initDefaultUser();
+        initDefaultAdmin();
     }
 
-    private void initDefaultUser() {
-        if (userRepository.findByUsername(ADMIN) != null) {
+    private void initDefaultAdmin() {
+        if (administratorRepository.findByUsername(ADMIN) != null) {
             return;
         }
-        logger.info("going to create default user '{}'", ADMIN);
-        User user = new User();
-        user.setUsername(ADMIN);
-        user.setPassword(ADMIN);
-        user.setRoles(Lists.newArrayList(Role.ADMIN, Role.CUSTOMER));
-        userRepository.save(user);
+        logger.info("going to create default administrator '{}'", ADMIN);
+        Administrator admin = new Administrator();
+        admin.setUsername(ADMIN);
+        admin.setPassword(ADMIN);
+        admin.setName(ADMIN);
+        admin.setEmail("admin@company.com");
+        administratorRepository.save(admin);
     }
+
 }

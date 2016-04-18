@@ -2,31 +2,34 @@ package com.openu.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 
-@Entity(name = "user_")
-public class User {
+//@Entity(name = "user_")
+@MappedSuperclass
+public abstract class User {
 
     @Id
     @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    private Long id;
+    protected Long id;
 
-    private String username;
+    @Column(unique = true)
+    protected String username;
 
-    private String password;
+    protected String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Role> roles;
+    protected List<Role> roles;
 
     public Long getId() {
         return id;

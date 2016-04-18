@@ -22,6 +22,7 @@
 		<!-- <form-login login-page="/login.jsf" authentication-failure-url="/login.jsf?error=1" default-target-url="/home.jsf" authentication-details-source-ref="myAuthenticationDetailsSource" 
 			username-parameter="username" password-parameter="password" /> -->
 		<csrf disabled="true" />
+		<logout logout-success-url="/home.jsf" />
 	</http>
 
 	<authentication-manager>

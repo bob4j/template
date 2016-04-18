@@ -15,13 +15,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.openu.model.User;
-import com.openu.repository.UserRepository;
+import com.openu.repository.AdministratorRepository;
+import com.openu.repository.CustomerRepository;
 
 @Service
 public class AuthProvider implements AuthenticationProvider {
 
     @Resource
-    private UserRepository userRepository;
+    private CustomerRepository customerRepository;
+
+    @Resource
+    private AdministratorRepository administratorRepository;
 
     @Override
     public Authentication authenticate(final Authentication authentication) throws AuthenticationException {
@@ -34,7 +38,10 @@ public class AuthProvider implements AuthenticationProvider {
 
     private Authentication isValid(final Authentication authentication) {
         Authentication res = authentication;
-        User user = userRepository.findByUsername(String.valueOf(authentication.getPrincipal()));
+        User user = administratorRepository.findByUsername(String.valueOf(authentication.getPrincipal()));
+        if (user == null) {
+            user = customerRepository.findByUsername(String.valueOf(authentication.getPrincipal()));
+        }
         if (user != null && user.getPassword().equals(authentication.getCredentials())) {
             res = createSuccessAuthentication(authentication, user);
         }
