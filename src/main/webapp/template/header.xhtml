@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+	<ui:composition>
+		<div id="templatemo_header">
+				<div id="site_title">
+					<h1>
+						<a href="#">Online Shoes Store</a>
+					</h1>
+				</div>
+				<h:form>
+					<div id="header_right">
+						<c:choose>
+							<c:when test="${sessionBean.customer != null}">
+								<p>
+									<a href="#">My Account</a> | <a href="#">My Wishlist</a> | <a
+										href="#">My Cart</a> | <a href="#">Checkout</a> |
+									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
+								</p>
+								<p>Welcome ${sessionBean.customer.name}, 
+									Shopping Cart: <strong>3 items</strong> ( <a
+										href="shoppingcart.html">Show Cart</a> )
+								</p>
+							</c:when>
+							<c:otherwise>
+								<h:commandLink action="login" value="Login" />
+								|
+								<h:commandLink action="signup" value="Sign up" />
+							</c:otherwise>
+						</c:choose>
+
+					</div>
+				</h:form>
+				<div class="cleaner"></div>
+			</div>
+			
+	</ui:composition>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Template</title>
+</h:head>
+<h:body>
+	<h2>Homepage</h2>
+	<h:form>
+		Nothing here yet ...
+		<br />
+		<br />
+		<h:link outcome="/admin/admin-home" value="Admin home" />
+		<br />
+		<br />
+		<h:link outcome="signup" value="Sign up"/>
+		<br />
+		<br />
+		<h:commandButton action="login" value="Login" rendered="#{sessionBean.user == null}"/>
+		<br />
+		<br />
+		<h:commandButton action="${loginManager.doLogout()}" value="Logout" rendered="#{sessionBean.user != null}"/>
+	</h:form>
+	
+</h:body>
+</html>

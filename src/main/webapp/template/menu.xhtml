@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+	<ui:composition>
+		<div id="templatemo_menubar">
+				<div id="top_nav" class="ddsmoothmenu">
+					<ul>
+						<li><a href="index.html" class="selected">Home</a></li>
+						<li>
+							<a href="products.html">Categories</a>
+							<ul>
+								<c:forEach items="${categoryController.all}" var="cat" varStatus="loop">
+									<li>
+										<h:link outcome="category" value="${cat.name}">
+											<f:param name="category_id" value="${cat.id}" />
+										</h:link>
+									</li>
+								</c:forEach>
+							</ul>
+						</li>
+						<li><a href="about.html">About</a>
+							<ul>
+								<li><a href="#submenu1">Sub menu 1</a></li>
+								<li><a href="#submenu2">Sub menu 2</a></li>
+								<li><a href="#submenu3">Sub menu 3</a></li>
+							</ul></li>
+						<li><a href="faqs.html">FAQs</a></li>
+						<li><a href="checkout.html">Checkout</a></li>
+						<li><a href="contact.html">Contact Us</a></li>
+					</ul>
+					<br style="clear: left" />
+				</div>
+				<!-- end of ddsmoothmenu -->
+				<div id="templatemo_search">
+					<form action="#" method="get">
+						<input type="text" value=" " name="keyword" id="keyword"
+							title="keyword" onfocus="clearText(this)"
+							onblur="clearText(this)" class="txt_field" /> <input
+							type="submit" name="Search" value=" " alt="Search"
+							id="searchbutton" title="Search" class="sub_btn" />
+					</form>
+				</div>
+			</div>
+			<!-- END of templatemo_menubar -->
+	</ui:composition>
+</body>
+</html>

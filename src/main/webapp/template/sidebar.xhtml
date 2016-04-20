@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+	<ui:composition>
+
+		<div id="sidebar" class="float_l">
+			<div class="sidebar_box">
+				<span class="bottom"></span>
+				<h3>Categories</h3>
+				<div class="content">
+					<ul class="sidebar_list">
+
+						<c:forEach items="${categoryController.all}" var="cat"
+							varStatus="loop">
+							<c:choose>
+								<c:when test="${loop.first}">
+									<li class="first"><a href="#">${cat.name}</a></li>
+								</c:when>
+								<c:when test="${loop.last}">
+									<li class="last"><a href="#">${cat.name}</a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="#">${cat.name}</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+
+					</ul>
+				</div>
+			</div>
+			<div class="sidebar_box">
+				<span class="bottom"></span>
+				<h3>Bestsellers</h3>
+				<div class="content">
+					<div class="bs_box">
+						<a href="#"><img src="images/templatemo_image_01.jpg"
+							alt="image" /></a>
+						<h4>
+							<a href="#">Donec nunc nisl</a>
+						</h4>
+						<p class="price">$10</p>
+						<div class="cleaner"></div>
+					</div>
+					<div class="bs_box">
+						<a href="#"><img src="images/templatemo_image_01.jpg"
+							alt="image" /></a>
+						<h4>
+							<a href="#">Lorem ipsum dolor sit</a>
+						</h4>
+						<p class="price">$12</p>
+						<div class="cleaner"></div>
+					</div>
+					<div class="bs_box">
+						<a href="#"><img src="images/templatemo_image_01.jpg"
+							alt="image" /></a>
+						<h4>
+							<a href="#">Phasellus ut dui</a>
+						</h4>
+						<p class="price">$20</p>
+						<div class="cleaner"></div>
+					</div>
+					<div class="bs_box">
+						<a href="#"><img src="images/templatemo_image_01.jpg"
+							alt="image" /></a>
+						<h4>
+							<a href="#">Vestibulum ante</a>
+						</h4>
+						<p class="price">$8</p>
+						<div class="cleaner"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:composition>
+</body>
+</html>

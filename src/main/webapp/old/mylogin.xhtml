@@ -1,0 +1,66 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>
+		<ui:insert name="title">Spring-Security - Login</ui:insert>
+	</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</h:head>
+
+<h:body>
+	<div>
+		<h:form id="loginFormId" prependId="false">
+			<div class="full-box" style="text-align: center">
+				<div class="child-box box-c3">
+					<h3>Login</h3>
+					<div class="fluid-row">
+						<div class="fluid-column fluid-c12">
+							<div class="forLabel" style="width: 30%">
+								<h:outputLabel for="username" value="User" />
+							</div>
+							<div class="forField" style="width: 65%">
+								<h:inputText id="username" required="true"
+									requiredMessage="Please enter username (or go to hell...)" />
+								<h:messages for="username" />
+							</div>
+						</div>
+						<div class="fluid-column fluid-c12">
+							<div class="forLabel" style="width: 30%">
+								<h:outputLabel for="password" value="Password" />
+							</div>
+							<div class="forField" style="width: 65%">
+								<h:inputSecret id="password" required="true"
+									requiredMessage="Please enter password (otherwise you'll die!!)"
+									name="password" />
+								<h:messages for="password" />
+							</div>
+						</div>
+						<div class="fluid-column fluid-c12">
+							<div class="forLabel" style="width: 30%">
+								<h:outputText value="Authentication" />
+							</div>
+							<!-- <div class="forField" style="width: 65%">
+								<h:selectBooleanCheckbox id="method" name="method" />
+								<h:outputLabel for="method" value="LDAP" />
+							</div> -->
+						</div>
+					</div>
+					<ui:fragment rendered="${!empty param['error']}">
+						<div>Connection failed: user and/or password are wrong.</div>
+					</ui:fragment>
+					<div id="loginBtnPanelId">
+						<h:commandButton id="btnLoginId" value="Login" type="submit"
+							action="${loginManager.doLogin()}" styleClass="loginPanelBtn" />
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>
