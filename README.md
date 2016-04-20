@@ -8,7 +8,8 @@
  * jsf (apache myfaces)
 
 ## how to run
-* install postgres
+###### this section is in progress, so maybe a few steps are missing or are not accurate...
+* install postgreSQL (schema: openu; username: openu; password: openu)
  * yum install postgresql-server
  * postgresql-setup initdb
  * systemctl start postgresql
@@ -26,10 +27,11 @@
  * mvn clean install
  * copy target/{project}.war into {tomcat_home}/webapps/
 * create dir /home/{user}/static - will contain all static images and uploads
+* copy the file {project_dir}/src/main/webapp/images/slider/04.jpg into /home/{user}/static/category_default.jpg
 * edit {tomcat_home}/conf/server.xml 
  * ```<Host appBase="webapps"> <Context docBase="/home/{user}/static" path="/{project}/static" /> </Host>```
 * run tomcat
  * {tomcat_home}/bin/startup.sh
-* http://localhost:8080/template
+* browse to http://localhost:8080/template
 
 
