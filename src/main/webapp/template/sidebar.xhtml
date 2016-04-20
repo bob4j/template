@@ -20,13 +20,13 @@
 							varStatus="loop">
 							<c:choose>
 								<c:when test="${loop.first}">
-									<li class="first"><a href="#">${cat.name}</a></li>
+									<li class="first"><h:link outcome="category" value="${cat.name}"><f:param name="category_id" value="${cat.id}" /></h:link></li>
 								</c:when>
 								<c:when test="${loop.last}">
-									<li class="last"><a href="#">${cat.name}</a></li>
+									<li class="last"><h:link outcome="category" value="${cat.name}"><f:param name="category_id" value="${cat.id}" /></h:link></li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="#">${cat.name}</a></li>
+									<li><h:link outcome="category" value="${cat.name}"><f:param name="category_id" value="${cat.id}" /></h:link></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>

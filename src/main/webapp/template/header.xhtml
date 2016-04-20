@@ -24,8 +24,8 @@
 									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
 								</p>
 								<p>Welcome ${sessionBean.customer.name}, 
-									Shopping Cart: <strong>3 items</strong> ( <a
-										href="shoppingcart.html">Show Cart</a> )
+									Shopping Cart: <strong>3 items</strong> ( 
+									<h:link outcome="shoppingcart" value="Show Cart"/> )
 								</p>
 							</c:when>
 							<c:otherwise>

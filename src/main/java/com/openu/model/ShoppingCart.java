@@ -1,8 +1,10 @@
 package com.openu.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,8 +23,8 @@ public class ShoppingCart {
 
     private Long modified;
 
-    @OneToMany
-    private List<ShoppingCartItem> item;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<ShoppingCartItem> item = new ArrayList<>();
 
     public Long getId() {
         return id;

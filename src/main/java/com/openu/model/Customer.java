@@ -1,11 +1,9 @@
 package com.openu.model;
 
-import java.util.List;
-
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.google.common.collect.Lists;
 
@@ -24,8 +22,8 @@ public class Customer extends User {
     @ManyToOne
     private CreditCardInfo creditCardInfo;
 
-    @OneToMany
-    private List<ShoppingCart> shoppingCarts;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private ShoppingCart shoppingCart;
 
     public Customer() {
         super();
@@ -72,12 +70,12 @@ public class Customer extends User {
         this.creditCardInfo = creditCardInfo;
     }
 
-    public List<ShoppingCart> getShoppingCarts() {
-        return shoppingCarts;
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
     }
 
-    public void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
-        this.shoppingCarts = shoppingCarts;
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 
 }

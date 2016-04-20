@@ -11,7 +11,8 @@
 		<div id="templatemo_menubar">
 				<div id="top_nav" class="ddsmoothmenu">
 					<ul>
-						<li><a href="index.html" class="selected">Home</a></li>
+						<!-- <li><a href="index.html" class="selected">Home</a></li> -->
+						<li><h:link outcome="home" value="Home" class="selected" /></li>
 						<li>
 							<a href="products.html">Categories</a>
 							<ul>
@@ -24,15 +25,16 @@
 								</c:forEach>
 							</ul>
 						</li>
-						<li><a href="about.html">About</a>
-							<ul>
+						<li><h:link outcome="about" value="About" />
+							<!-- <ul>
 								<li><a href="#submenu1">Sub menu 1</a></li>
 								<li><a href="#submenu2">Sub menu 2</a></li>
 								<li><a href="#submenu3">Sub menu 3</a></li>
-							</ul></li>
-						<li><a href="faqs.html">FAQs</a></li>
-						<li><a href="checkout.html">Checkout</a></li>
-						<li><a href="contact.html">Contact Us</a></li>
+							</ul> -->
+						</li>
+						<li><h:link outcome="faqs" value="FAQs" /></li>
+						<li><h:link outcome="checkout" value="Checkout" /></li>
+						<li><h:link outcome="contact" value="Contact us" /></li>
 					</ul>
 					<br style="clear: left" />
 				</div>
