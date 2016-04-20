@@ -14,14 +14,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 
+import com.openu.model.Category;
 import com.openu.model.Image;
-import com.openu.model.ProductCategory;
-import com.openu.repository.ProductCategoryRepository;
+import com.openu.repository.CategoryRepository;
 
 @ManagedBean
 @RequestScoped
 @Component
-public class ProductCategoryController extends AbstractCrudController<ProductCategory> implements Serializable {
+public class CategoryController extends AbstractCrudController<Category> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class ProductCategoryController extends AbstractCrudController<ProductCat
     private Part imagePart;
 
     @Autowired
-    private ProductCategoryRepository productCategoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Value("${static.content.dir}")
     private String staticContentDir;
@@ -44,13 +44,13 @@ public class ProductCategoryController extends AbstractCrudController<ProductCat
     }
 
     @Override
-    protected PagingAndSortingRepository<ProductCategory, Long> getRepository() {
-        return productCategoryRepository;
+    protected PagingAndSortingRepository<Category, Long> getRepository() {
+        return categoryRepository;
     }
 
     @Override
-    protected ProductCategory createEntity() throws Exception {
-        ProductCategory cat = new ProductCategory();
+    protected Category createEntity() throws Exception {
+        Category cat = new Category();
         cat.setName(categoryName);
         String filename = System.currentTimeMillis() + getImageSuffix();
         Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));

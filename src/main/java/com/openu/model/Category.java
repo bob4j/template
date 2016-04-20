@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 @Entity
-public class ProductCategory {
+public class Category {
 
     @Id
     @SequenceGenerator(name = "category_seq", sequenceName = "category_seq", allocationSize = 1, initialValue = 100)

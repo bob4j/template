@@ -13,15 +13,12 @@ import com.openu.model.User;
 @SessionScoped
 public class SessionBean {
 
-    private User user;
-
     public User getUser() {
-        if (user == null) {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (principal instanceof User) {
-                user = (User) principal;
-            }
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            return (User) principal;
         }
-        return user;
+        return null;
     }
+
 }

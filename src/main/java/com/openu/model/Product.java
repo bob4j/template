@@ -10,6 +10,6 @@ public class Product {
     private String image;
     private Double price;
 
-    private List<ProductCategory> categories;
+    private List<Category> categories;
 
 }

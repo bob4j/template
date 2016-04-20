@@ -10,5 +10,5 @@ public class Department {
 
     private String description;
 
-    private List<ProductCategory> productCategories;
+    private List<Category> productCategories;
 }

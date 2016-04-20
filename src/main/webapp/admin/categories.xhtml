@@ -10,7 +10,7 @@
 <h:body>
 	<h2>Categories</h2>
 	<h:form>
-		<h:dataTable value="#{productCategoryController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
+		<h:dataTable value="#{categoryController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
 					rowClasses="entityTableOddRow,entityTableEvenRow">
 			<h:column>
 				<f:facet name="header">ID</f:facet>
@@ -18,7 +18,7 @@
 	      	</h:column>
 			<h:column>
 				<f:facet name="header">Name</f:facet>
-				<h:commandLink action="category" actionListener="#{productCategoryController.load(c)}" value="#{c.name}" />
+				<h:commandLink action="category" actionListener="#{categoryController.load(c)}" value="#{c.name}" />
 			</h:column>
 			<h:column>
 				<f:facet name="header">Image</f:facet>
@@ -26,7 +26,7 @@
 			</h:column>
 			<h:column>
 				<f:facet name="header">Delete</f:facet>
-				<h:commandButton action="#{productCategoryController.delete(c)}" value="Delete" />
+				<h:commandButton action="#{categoryController.delete(c)}" value="Delete" />
 			</h:column>
 		</h:dataTable>
 		<h:commandButton action="/admin/add-category" value="Add category" />
