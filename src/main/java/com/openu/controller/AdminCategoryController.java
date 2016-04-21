@@ -40,7 +40,7 @@ public class AdminCategoryController extends AbstractCrudController<Category> im
 
     @PostConstruct
     public void init() {
-        staticContentDir = staticContentDir.replaceFirst("^~", System.getProperty("user.home"));
+        staticContentDir = staticContentDir.replace("~", System.getProperty("user.home"));
     }
 
     @Override

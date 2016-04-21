@@ -25,19 +25,20 @@
 * install maven
  * cd {project}
  * mvn clean install
- * copy target/{project}.war into {tomcat_home}/webapps/
 * create dir "static" - will contain all static images and uploads
  * linux - /home/{user}/static
- * windows - c:/static
-* copy {project_dir}/src/main/webapp/static/* into /home/{user}/static/ (c:/static/ on windows)
+ * windows - c:/users/{user}/static
+* copy {project_dir}/src/main/webapp/static/* into /home/{user}/static/ (c:/users/{user}/static on windows)
 * edit {tomcat_home}/conf/server.xml 
  * ```<Host appBase="webapps"> <Context docBase="/home/{user}/static" path="/template/static" /> </Host>``` (linux)
- * ```<Host appBase="webapps"> <Context docBase="c:/static" path="/template/static" /> </Host>``` (windows)
-* edit {project_dir}/src/main/resources/props.properties
- * static.content.dir=/home/{user}/static (on linux)
- * static.content.dir=c:/static (on windows)
-* run tomcat
- * {tomcat_home}/bin/startup.sh
+ * ```<Host appBase="webapps"> <Context docBase="c:/users/{user}/static" path="/template/static" /> </Host>``` (windows)
+* run application
+ * option 1
+  * add the installed tomcat as a server in eclipse
+  * deploy "template" to tomcat and run it
+ * option 2
+  * copy {project_dir}/target/template.war into {tomcat_home}/webapps/
+  * {tomcat_home}/bin/startup.sh
 * browse to http://localhost:8080/template
 
 
