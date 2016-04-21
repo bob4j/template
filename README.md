@@ -27,7 +27,7 @@
  * mvn clean install
  * copy target/{project}.war into {tomcat_home}/webapps/
 * create dir /home/{user}/static - will contain all static images and uploads
-* copy {project_dir}/src/main/webapp/static/ into /home/{user}/static/
+* copy {project_dir}/src/main/webapp/static/* into /home/{user}/static/
 * edit {tomcat_home}/conf/server.xml 
  * ```<Host appBase="webapps"> <Context docBase="/home/{user}/static" path="/{project}/static" /> </Host>```
 * run tomcat
