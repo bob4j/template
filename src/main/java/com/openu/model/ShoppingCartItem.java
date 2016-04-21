@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -14,11 +15,12 @@ public class ShoppingCartItem {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shopping_cart_item_seq")
     private Long id;
 
-    private Long productId;
+    @ManyToOne
+    private Product productId;
 
-    private Long cartId;
+    // private Long cartId;
 
-    private int numberOfItems;
+    private int quantity;
 
     public Long getId() {
         return id;
@@ -28,27 +30,20 @@ public class ShoppingCartItem {
         this.id = id;
     }
 
-    public Long getProductId() {
+    public Product getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId) {
+    public void setProductId(Product productId) {
         this.productId = productId;
     }
 
-    public Long getCartId() {
-        return cartId;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public int getNumberOfItems() {
-        return numberOfItems;
-    }
-
-    public void setNumberOfItems(int numberOfItems) {
-        this.numberOfItems = numberOfItems;
-    }
 }

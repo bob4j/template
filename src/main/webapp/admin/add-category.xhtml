@@ -10,10 +10,10 @@
 <h:body>
 	<h:form enctype="multipart/form-data">
 		Category Name:
-		<h:inputText value="#{categoryController.categoryName}" />
+		<h:inputText value="#{adminCategoryController.categoryName}" />
 		Category Image:
-		<h:inputFile value="#{categoryController.imagePart}" />
-		<h:commandButton value="Add" actionListener="#{categoryController.save}" action="/admin/categories"/>
+		<h:inputFile value="#{adminCategoryController.imagePart}" />
+		<h:commandButton value="Add" actionListener="#{adminCategoryController.save}" action="/admin/categories"/>
 	</h:form>
 </h:body>
 </html>

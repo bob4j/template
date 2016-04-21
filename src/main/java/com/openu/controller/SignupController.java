@@ -17,7 +17,8 @@ public class SignupController {
     @Autowired
     private CustomerRepository repository;
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String username;
     private String password;
     private String passwordAgain;
@@ -29,21 +30,14 @@ public class SignupController {
             throw new RuntimeException("Passwords do not match...");
         }
         Customer customer = new Customer();
-        customer.setName(name);
+        customer.setFirstName(firstName);
+        customer.setLastName(lastName);
         customer.setUsername(username);
         customer.setPassword(password);
         customer.setEmail(email);
         customer.setPhoneNumber(phoneNumber);
         repository.save(customer);
         return null;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {
@@ -84,6 +78,22 @@ public class SignupController {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
 }

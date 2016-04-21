@@ -1,9 +1,8 @@
-* image
-	base64
-	static content
-	raw blob in DB
-
 * paging
 
 * authentication
+
+* product:
+	promotion
+	size, width, color, multiple images (small + regular)
 

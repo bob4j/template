@@ -14,18 +14,10 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "image_seq")
     private Long id;
 
-    // private byte[] data;
-    // @Lob
-    // private String value;
-
     private String name;
 
     public Image() {
     }
-
-    // public Image(byte[] data) {
-    // this.data = data;
-    // }
 
     public Image(String name) {
         this.name = name;

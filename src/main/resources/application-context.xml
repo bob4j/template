@@ -38,11 +38,11 @@
 		<property name="jpaProperties">
 			<props>
 				<prop key="javax.persistence.validation.mode">CALLBACK</prop>
-				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">${db.hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${db.show.sql}</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.use_sql_comments">true</prop>
+				<prop key="hibernate.format_sql">${db.show.sql}</prop>
+				<prop key="hibernate.use_sql_comments">${db.show.sql}</prop>
 				<prop key="hibernate.event.merge.entity_copy_observer">allow</prop>
 			</props>
 		</property>
@@ -73,10 +73,10 @@
 	<!-- Persistence section -->
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-		<property name="driverClass" value="org.postgresql.Driver" />
-		<property name="jdbcUrl" value="jdbc:postgresql://127.0.0.1/openu" />
-		<property name="user" value="openu" />
-		<property name="password" value="openu" />
+		<property name="driverClass" value="${db.driver}" />
+		<property name="jdbcUrl" value="${db.url}" />
+		<property name="user" value="${db.username}" />
+		<property name="password" value="${db.password}" />
 		<property name="acquireIncrement" value="1" />
 		<property name="minPoolSize" value="5" />
 		<property name="maxPoolSize" value="20" />

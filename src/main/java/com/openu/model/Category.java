@@ -10,10 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 public class Category {
@@ -25,15 +26,18 @@ public class Category {
 
     private String name;
 
+    private String description;
+
     @Transient
-    // TODO
+    // TODO what to do with it
     private List<Department> departments;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Image image;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    @JoinTable(name = "category_product", inverseJoinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, joinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinTable(name = "category_product", inverseJoinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, joinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") }, uniqueConstraints = { @UniqueConstraint(columnNames = {
+            "product_id", "category_id" }) })
     private List<Product> products;
 
     public Long getId() {
@@ -74,6 +78,14 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

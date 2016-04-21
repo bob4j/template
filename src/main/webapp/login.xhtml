@@ -16,16 +16,23 @@
 
 				<div class="content_half float_l checkout" id="login_form">
 					<h:form id="loginFormId" prependId="false">
-						<p>Username:</p>
-						<h:inputText id="username" required="true"
-							requiredMessage="Please enter username" style="width: 300px;" />
-						<p style="margin-top: 20px;">Password:</p>
-						<h:inputSecret id="password" required="true"
-							requiredMessage="Please enter password" name="password"
-							style="width: 300px;" />
-						<h:commandButton id="submit" class="submit_btn" value="Login"
-							type="submit" action="${loginManager.doLogin()}"
-							style="margin-top:20px;" />
+						<c:choose>
+							<c:when test="${sessionBean.customer == null}">
+								<p>Username:</p>
+								<h:inputText id="username" required="true"
+									requiredMessage="Please enter username" style="width: 300px;" />
+								<p style="margin-top: 20px;">Password:</p>
+								<h:inputSecret id="password" required="true"
+									requiredMessage="Please enter password" name="password"
+									style="width: 300px;" />
+								<h:commandButton id="submit" class="submit_btn" value="Login"
+									type="submit" action="${loginManager.doLogin()}"
+									style="margin-top:20px;" />
+							</c:when>
+							<c:otherwise>
+								<h:commandButton id="submit" class="submit_btn" value="Logout" type="submit" action="${loginManager.doLogout()}" style="margin-top:20px;" />
+							</c:otherwise>
+						</c:choose>
 					</h:form>
 				</div>
 				<div class="cleaner h50"></div>

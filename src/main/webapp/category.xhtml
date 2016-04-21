@@ -12,8 +12,7 @@
 
 		<ui:define name="content">
 			<div id="content" class="float_r">
-				<c:set var="category" value="${categoryHandler.category}"
-					scope="request" />
+				<c:set var="category" value="${categoryController.category}" scope="request" />
 
 				<div id="slider-wrapper">
 					<h:graphicImage value="/#{category.image.name}" />
@@ -23,13 +22,16 @@
 				<c:forEach items="${category.products}" var="p" varStatus="loop">
 					<div class="product_box">
 						<h3>${p.name}</h3>
-						<a href="productdetail.html">
+						<h:link outcome="productdetail" >
 							<h:graphicImage value="/#{p.image.name}" />
-						</a>
+							<f:param name="product_id" value="${p.id}" />
+						</h:link>
 						<p>${p.description}</p>
 						<p class="product_price">$ ${p.price}</p>
-						<a href="shoppingcart.html" class="addtocart"></a> <a
-							href="productdetail.html" class="detail"></a>
+						<a href="shoppingcart.html" class="addtocart"></a> 
+						<h:link outcome="productdetail" class="detail">
+							<f:param name="product_id" value="${p.id}" />
+						</h:link>
 					</div>
 				</c:forEach>
 			</div>

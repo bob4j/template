@@ -33,7 +33,25 @@
 					});
 				</script>
 				<h1>New Products</h1>
-				<div class="product_box">
+				
+				<c:forEach items="${productController.newProducts}" var="p" varStatus="loop">
+					<div class="product_box">
+						<h3>${p.name}</h3>
+						<h:link outcome="productdetail" >
+							<h:graphicImage value="/#{p.image.name}" />
+							<f:param name="product_id" value="${p.id}" />
+						</h:link>
+						<p>${p.description}</p>
+						<p class="product_price">$ ${p.price}</p>
+						<a href="shoppingcart.html" class="addtocart"></a> 
+						<h:link outcome="productdetail" class="detail">
+							<f:param name="product_id" value="${p.id}" />
+						</h:link>
+					</div>
+				</c:forEach>
+				
+				
+				<!-- <div class="product_box">
 					<h3>Ut eu feugiat</h3>
 					<a href="productdetail.html"><img src="images/product/01.jpg"
 						alt="Shoes 1" /></a>
@@ -96,7 +114,7 @@
 					<p class="product_price">$ 160</p>
 					<a href="shoppingcart.html" class="addtocart"></a> <a
 						href="productdetail.html" class="detail"></a>
-				</div>
+				</div> -->
 			</div>
 		</ui:define>
 

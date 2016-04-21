@@ -333,6 +333,10 @@ a.nivo-prevNav {
 	margin-top: 20px;
 }
 
+#signup_form form p { 
+	margin-top: 10px;
+}
+
 #signup_form form .submit_btn { 
 	display: block; 
 	padding: 5px 12px; 

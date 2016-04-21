@@ -10,7 +10,9 @@ import com.google.common.collect.Lists;
 @Entity
 public class Customer extends User {
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     private String email;
 
@@ -28,14 +30,6 @@ public class Customer extends User {
     public Customer() {
         super();
         roles = Lists.newArrayList(Role.CUSTOMER);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -76,6 +70,22 @@ public class Customer extends User {
 
     public void setShoppingCart(ShoppingCart shoppingCart) {
         this.shoppingCart = shoppingCart;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
 }

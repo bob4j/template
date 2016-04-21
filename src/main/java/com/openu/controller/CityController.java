@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.openu.model.City;
 import com.openu.repository.CityRepository;
-import com.openu.service.CityService;
 
 @ManagedBean
 @RequestScoped
@@ -19,9 +18,6 @@ import com.openu.service.CityService;
 public class CityController extends AbstractCrudController<City> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Autowired
-    private CityService cityService;
 
     @Autowired
     private CityRepository repository;

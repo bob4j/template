@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 
-//@Entity(name = "user_")
 @MappedSuperclass
 public abstract class User {
 

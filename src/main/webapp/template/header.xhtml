@@ -23,7 +23,7 @@
 										href="#">My Cart</a> | <a href="#">Checkout</a> |
 									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
 								</p>
-								<p>Welcome ${sessionBean.customer.name}, 
+								<p>Welcome ${sessionBean.customer.firstName}, 
 									Shopping Cart: <strong>3 items</strong> ( 
 									<h:link outcome="shoppingcart" value="Show Cart"/> )
 								</p>
