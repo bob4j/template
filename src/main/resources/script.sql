@@ -26,6 +26,18 @@ insert into product(id,brand,name,description,price,image_id) values (6,'Nimrod'
 insert into product(id,brand,name,description,price,image_id) values (7,'Adidas',  'run 1.0','greatest men snikers ever',102,8);
 insert into product(id,brand,name,description,price,image_id) values (8,'Nimrod',  'first steps','great shoes for your baby',75,9);
 
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (1, 'BLACK', 99, '_9', 1);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (2, 'BLACK', 99, '_10', 1);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (3, 'BLACK', 99, '_10', 1);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (4, 'RED', 99, '_10', 1);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (5, 'BLACK', 99, '_9', 2);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (6, 'BLACK', 99, '_9', 3);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (7, 'BLACK', 99, '_9', 4);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (8, 'BLACK', 99, '_9', 5);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (9, 'BLACK', 99, '_9', 6);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (10, 'BLACK', 99, '_9', 7);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (11, 'BLACK', 99, '_9', 8);
+
 INSERT INTO category_product(category_id, product_id) VALUES (1, 1);
 INSERT INTO category_product(category_id, product_id) VALUES (2, 2);
 INSERT INTO category_product(category_id, product_id) VALUES (3, 3);
@@ -34,4 +46,3 @@ INSERT INTO category_product(category_id, product_id) VALUES (5, 5);
 INSERT INTO category_product(category_id, product_id) VALUES (3, 6);
 INSERT INTO category_product(category_id, product_id) VALUES (1, 7);
 INSERT INTO category_product(category_id, product_id) VALUES (3, 8);
-

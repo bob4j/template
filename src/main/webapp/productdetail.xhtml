@@ -21,45 +21,66 @@
 						src="images/product/10.jpg" alt="image" /></a>
 				</div>
 				<div class="content_half float_r">
-					<table>
-						<tr>
-							<td width="160">Price:</td>
-							<td>$ ${product.price}</td>
-						</tr>
-						<tr>
-							<td>Availability:</td>
-							<td>In Stock</td>
-						</tr>
-						<tr>
-							<td>Model:</td>
-							<td>${product.name}</td>
-						</tr>
-						<tr>
-							<td>Manufacturer:</td>
-							<td>${product.brand}</td>
-						</tr>
-						<tr>
-							<td>Quantity</td>
-							<td><input type="text" value="1"
-								style="width: 20px; text-align: right" /></td>
-						</tr>
-					</table>
-					<div class="cleaner h20"></div>
+					<h:form>
+						<table>
+							<tr>
+								<td width="160">Price:</td>
+								<td>$ ${product.price}</td>
+							</tr>
+							<tr>
+								<td>Availability:</td>
+								<td>In Stock</td>
+							</tr>
+							<tr>
+								<td>Model:</td>
+								<td>${product.name}</td>
+							</tr>
+							<tr>
+								<td>Manufacturer:</td>
+								<td>${product.brand}</td>
+							</tr>
+							<tr>
+								<td>Color:</td>
+								<td>
+									<h:selectOneMenu value="#{productController.selectedColor}" >
+										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+						                <f:selectItems value="#{productController.colors}" />
+						                <f:ajax listener="#{productController.listener}" render="sizes" />
+						            </h:selectOneMenu>
+								</td>
+							</tr>
+							<tr>
+								<td>Size:</td>
+								<td>
+									<h:selectOneMenu value="#{productController.selectedSize}" id="sizes">
+										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+						                <f:selectItems value="#{productController.sizes}" />
+						            </h:selectOneMenu>
+								</td>
+							</tr>
+							<tr>
+								<td>Quantity</td>
+								<td><input type="text" value="1"
+									style="width: 20px; text-align: right" /></td>
+							</tr>
+						</table>
+						<h:messages />
 
-					<a href="shoppingcart.html" class="addtocart"></a>
-
+						<div class="cleaner h20" />
+						
+						<a href="shoppingcart.html" class="addtocart" />
+						
+					</h:form>
 				</div>
 				<div class="cleaner h30"></div>
 
 				<h5>Product Description</h5>
-				<p>
-					${product.description}
-				</p>
+				<p>${product.description}</p>
 
 				<div class="cleaner h50"></div>
 				
 				<!-- TODO display the products from the same category -->
-				<h3>Related Products</h3>
+				<h3>Related Products (TODO)</h3>
 				<div class="product_box">
 					<a href="productdetail.html"><img src="images/product/01.jpg"
 						alt="" /></a>

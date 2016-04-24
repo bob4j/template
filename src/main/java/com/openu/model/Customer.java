@@ -1,9 +1,12 @@
 package com.openu.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.google.common.collect.Lists;
 
@@ -24,14 +27,15 @@ public class Customer extends User {
     @ManyToOne
     private CreditCardInfo creditCardInfo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private ShoppingCart shoppingCart;
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders = new ArrayList<>();
 
     public Customer() {
         super();
         roles = Lists.newArrayList(Role.CUSTOMER);
     }
 
+    // TODO add methods for get/add shopping card, which is Order (with status=OPEN)
     public String getEmail() {
         return email;
     }
@@ -62,14 +66,6 @@ public class Customer extends User {
 
     public void setCreditCardInfo(CreditCardInfo creditCardInfo) {
         this.creditCardInfo = creditCardInfo;
-    }
-
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
-    }
-
-    public void setShoppingCart(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
     }
 
     public String getFirstName() {

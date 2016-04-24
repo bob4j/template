@@ -13,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 @Entity
@@ -27,10 +26,6 @@ public class Category {
     private String name;
 
     private String description;
-
-    @Transient
-    // TODO what to do with it
-    private List<Department> departments;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Image image;
@@ -54,14 +49,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Department> getDepartments() {
-        return departments;
-    }
-
-    public void setDepartments(List<Department> departments) {
-        this.departments = departments;
     }
 
     public Image getImage() {
