@@ -42,3 +42,4 @@
 * browse to http://localhost:8080/template
 
 
+* import to eclipse the formatter properties - {project}/extra/eclipse.prefs
