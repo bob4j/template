@@ -1,11 +1,17 @@
 package com.openu.controller;
 
+import java.util.Optional;
+
 import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.openu.model.Customer;
+import com.openu.model.Order;
+import com.openu.model.OrderStatus;
 import com.openu.repository.CustomerRepository;
 import com.openu.repository.ProductRepository;
 
@@ -19,23 +25,27 @@ public class CustomerController {
 
     @Resource
     private CustomerRepository customerRepository;
+
     @Resource
     private ProductRepository productRepository;
 
-    public String addProductToCart(long productId) {
-        // Customer customer = sessionBean.getCustomer();
-        // if (customer == null) {
-        // return "login";
-        // }
-        // Product product = productRepository.findOne(productId);
-        // ShoppingCartItem item = new ShoppingCartItem();
-        // item.setProduct(product);
-        // if (customer.getShoppingCart() == null) {
-        // customer.setShoppingCart(new ShoppingCart());
-        // }
-        // customer.getShoppingCart().getItems().add(item);
-        // customerRepository.save(customer);
-        return null;
+    @Transactional
+    public int getNumberOfShoppingItems() {
+        Customer customer = sessionBean.getCustomer();
+        if (customer == null) {
+            return 0;
+        }
+        return Optional.ofNullable(customerRepository.findOrder(customer, OrderStatus.OPEN)).map(o -> o.getItems().size()).orElse(0);
     }
 
+    @Transactional
+    public Order getShoppingCart() {
+        Customer customer = sessionBean.getCustomer();
+        if (customer == null) {
+            return null;
+        }
+        Order order = Optional.ofNullable(customerRepository.findOrder(customer, OrderStatus.OPEN)).orElse(new Order());
+        order.getItems().size();
+        return order;
+    }
 }

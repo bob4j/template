@@ -61,6 +61,6 @@ public class AuthProvider implements AuthenticationProvider {
     }
 
     private static Collection<GrantedAuthority> loadAuthorities(User user) {
-        return user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.name())).collect(Collectors.toList());
+        return user.getRoles().stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r.name())).collect(Collectors.toList());
     }
 }

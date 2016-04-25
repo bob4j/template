@@ -60,15 +60,17 @@
 							</tr>
 							<tr>
 								<td>Quantity</td>
-								<td><input type="text" value="1"
-									style="width: 20px; text-align: right" /></td>
+								<td>
+									<h:inputText style="width: 20px; text-align: right" value="${productController.selectedQuantity}" />
+									<!-- <input type="text" value="1" style="width: 20px; text-align: right" /> -->
+								</td>
 							</tr>
 						</table>
 						<h:messages />
 
 						<div class="cleaner h20" />
 						
-						<a href="shoppingcart.html" class="addtocart" />
+						<h:commandLink action="${productController.addToShoppingCart()}" class="addtocart"/>
 						
 					</h:form>
 				</div>

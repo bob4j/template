@@ -3,6 +3,7 @@ package com.openu.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -27,12 +28,19 @@ public class Customer extends User {
     @ManyToOne
     private CreditCardInfo creditCardInfo;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     private List<Order> orders = new ArrayList<>();
 
     public Customer() {
         super();
         roles = Lists.newArrayList(Role.CUSTOMER);
+    }
+
+    /**
+     * utility method to retrieve the open order (shopping cart)
+     */
+    public Order getShoppingCart() {
+        return orders.stream().filter(o -> o.getStatus() == OrderStatus.OPEN).findAny().orElse(null);
     }
 
     // TODO add methods for get/add shopping card, which is Order (with status=OPEN)
@@ -82,6 +90,14 @@ public class Customer extends User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
 }
