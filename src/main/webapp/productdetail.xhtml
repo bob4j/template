@@ -54,7 +54,7 @@
 								<td>
 									<h:selectOneMenu value="#{productController.selectedSize}" id="sizes">
 										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
-						                <f:selectItems value="#{productController.sizes}" />
+						                <f:selectItems value="#{productController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}"/>
 						            </h:selectOneMenu>
 								</td>
 							</tr>

@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -26,9 +25,8 @@ import com.openu.repository.ProductRepository;
 import com.openu.repository.StockItemRepository;
 import com.openu.util.Utils;
 
-@ManagedBean
-@ViewScoped
 @Component
+@Scope("view")
 public class ProductController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -104,7 +102,7 @@ public class ProductController implements Serializable {
     }
 
     /**
-     * Loads the product by the request parameters - category.jsf?category_id=<ID>
+     * Loads the product by the request parameters - productdetail.jsf?category_id=<ID>
      */
     public Product getProduct() {
         String productId = Utils.getRequest().getParameter("product_id");

@@ -12,6 +12,9 @@ import com.openu.model.Customer;
 import com.openu.repository.AdministratorRepository;
 import com.openu.repository.CustomerRepository;
 
+/**
+ * TODO - no need for services, move the logic to controller
+ */
 @Service
 public class UserService {
 
