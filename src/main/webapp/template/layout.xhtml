@@ -33,6 +33,9 @@
 			//customtheme: ["#1c5a80", "#18374a"],
 			contentsource : "markup" //"markup" or ["container_id", "path_to_menu_file"]
 		})
+		function search(){
+			window.location.href='products.jsf?search='+$('#keyword').val();
+		}
 	</script>
 </h:head>
 

@@ -79,6 +79,10 @@ public class OrderItem {
         return price;
     }
 
+    public Double getTotalPrice() {
+        return price * quantity;
+    }
+
     public void setPrice(Double price) {
         this.price = price;
     }
