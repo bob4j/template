@@ -29,6 +29,7 @@ public class CheckoutController implements Serializable {
 
     private CreditCardInfo ccInfo;
     private Address shippingAddress;
+    private Long cityId;
     @Resource
     private SessionBean sessionBean;
     @Resource
@@ -45,19 +46,24 @@ public class CheckoutController implements Serializable {
     public Double getTotalPrice() {
         Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
         Order order = customer.getShoppingCart();
-        return order.getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
+        // return order.getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
+        return order.getTotalPrice();
     }
 
     @Transactional
-    public String order() {
+    public void order() {
         Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
         Order order = customer.getShoppingCart();
         order.setStatus(OrderStatus.PLACED);
         order.setCcInfo(ccInfo);
         order.setModified(System.currentTimeMillis());
-        order.setShippingAddress(shippingAddress);
+        order.setShippingAddress(getAddress());
         customerRepository.save(customer);
-        return null;
+    }
+
+    private Address getAddress() {
+        shippingAddress.setCity(cityRepository.findOne(cityId));
+        return shippingAddress;
     }
 
     public List<CreditCardType> getCcTypes() {
@@ -82,5 +88,13 @@ public class CheckoutController implements Serializable {
 
     public void setShippingAddress(Address shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 }

@@ -18,8 +18,8 @@
 	
 	<http use-expressions="true">
 		<intercept-url pattern="/cities.jsf" access="isFullyAuthenticated()" />
-		<!-- <intercept-url pattern="/admin/**" access="hasRole('ADMIN')" /> -->
 		<intercept-url pattern="/shoppingcart.jsf" access="hasRole('CUSTOMER')" />
+		<intercept-url pattern="/myaccount.jsf" access="hasRole('CUSTOMER')" />
 		<intercept-url pattern="/checkout.jsf" access="hasRole('CUSTOMER')" />
 		<intercept-url pattern="/**" access="permitAll()" />
 		<form-login login-page="/login.jsf" authentication-failure-url="/login.jsf?error=1" default-target-url="/home.jsf" 

@@ -19,8 +19,10 @@
 						<c:choose>
 							<c:when test="${sessionBean.customer != null}">
 								<p>
-									<a href="#">My Account</a> | <a href="#">My Wishlist</a> | <a
-										href="#">My Cart</a> | <h:link outcome="checkout" value="Checkout"/> |
+									<h:link outcome="myaccount" value="My Account"/> | 
+									<a href="#">My Wishlist</a> | 
+									<h:link outcome="shoppingcart" value="My Cart"/> | 
+									<h:link outcome="checkout" value="Checkout"/> |
 									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
 								</p>
 								<p>Welcome ${sessionBean.customer.firstName}, 
