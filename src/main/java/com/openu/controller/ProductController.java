@@ -23,6 +23,7 @@ import com.openu.model.ProductSize;
 import com.openu.repository.CustomerRepository;
 import com.openu.repository.ProductRepository;
 import com.openu.repository.StockItemRepository;
+import com.openu.util.CustomerTransaction;
 import com.openu.util.Utils;
 
 @Component
@@ -64,6 +65,7 @@ public class ProductController implements Serializable {
         return null;
     }
 
+    @CustomerTransaction
     @Transactional
     public String addToShoppingCart() {
         if (selectedColor == null || selectedSize == null) {

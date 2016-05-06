@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.openu.model.Customer;
 import com.openu.model.Order;
+import com.openu.model.OrderStatus;
 import com.openu.repository.CustomerRepository;
 import com.openu.repository.OrderRepository;
 
@@ -28,7 +29,8 @@ public class OrderController implements Serializable {
 
     public List<Order> getCustomerOrders() {
         Customer customer = sessionBean.loadCustomer();
-        return orderRepository.findByCustomer(customer);
+        return orderRepository.findAll((root, query, cb) -> cb.and(cb.equal(root.get("customer"), customer),
+                cb.notEqual(root.get("status"), OrderStatus.OPEN)));
     }
 
 }

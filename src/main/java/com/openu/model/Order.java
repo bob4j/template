@@ -1,6 +1,9 @@
 package com.openu.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -66,6 +69,11 @@ public class Order {
 
     public Long getModified() {
         return modified;
+    }
+
+    public String getModifiedPretty() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(new Date(modified));
     }
 
     public void setModified(Long modified) {

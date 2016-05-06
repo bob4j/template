@@ -20,6 +20,7 @@ import com.openu.model.Order;
 import com.openu.model.OrderStatus;
 import com.openu.repository.CityRepository;
 import com.openu.repository.CustomerRepository;
+import com.openu.util.CustomerTransaction;
 
 @Component
 @Scope("view")
@@ -51,8 +52,9 @@ public class CheckoutController implements Serializable {
     }
 
     @Transactional
+    @CustomerTransaction
     public void order() {
-        Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
+        Customer customer = sessionBean.loadCustomer();
         Order order = customer.getShoppingCart();
         order.setStatus(OrderStatus.PLACED);
         order.setCcInfo(ccInfo);

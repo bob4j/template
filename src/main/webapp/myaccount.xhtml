@@ -14,18 +14,21 @@
 				<h1>Orders</h1>
 				<table width="680px" cellspacing="0" cellpadding="5">
 					<tr bgcolor="#ddd">
-						<th width="220" align="left">ID</th>
+						<th width="100" align="left">ID</th>
 						<th width="180" align="left">Date</th>
 						<th width="100" align="left">Status</th>
-						<th width="60" align="right">Price</th>
-						<th width="90"></th>
+						<th width="60" align="left">Price</th>
+						<th width="90">Actions</th>
 					</tr>
 					<c:forEach items="${orderController.customerOrders}" var="o">
 						<tr>
 							<td>${o.id}</td>					
-							<td>${o.modified}</td>
+							<td>${o.modifiedPretty}</td>
 							<td>${o.status}</td>
 							<td>$ ${o.totalPrice}</td>
+							<c:if test="${o.status=='PLACED'}">
+								<td><h:link outcome="#" value="Cancel"></h:link></td>
+							</c:if>
 						</tr>
 					</c:forEach>
 				</table>
