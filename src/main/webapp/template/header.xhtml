@@ -20,14 +20,23 @@
 							<c:when test="${sessionBean.customer != null}">
 								<p>
 									<h:link outcome="myaccount" value="My Account"/> | 
-									<a href="#">My Wishlist</a> | 
 									<h:link outcome="shoppingcart" value="My Cart"/> | 
 									<h:link outcome="checkout" value="Checkout"/> |
 									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
 								</p>
 								<p>Welcome ${sessionBean.customer.firstName}, 
-									Shopping Cart: <strong>${customerController.numberOfShoppingItems} items</strong> ( 
-									<h:link outcome="shoppingcart" value="Show Cart"/> )
+									Shopping Cart: <strong>${customerController.numberOfShoppingItems} items</strong>
+								</p>
+							</c:when>
+							<c:when test="${sessionBean.admin != null}">
+								<p>
+									<h:link outcome="admin/orders" value="Orders"/> | 
+									<h:link outcome="admin/categories" value="Categories"/> |
+									
+									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
+								</p>
+								<p>Welcome ${sessionBean.customer.firstName}, 
+									Shopping Cart: <strong>${customerController.numberOfShoppingItems} items</strong> 
 								</p>
 							</c:when>
 							<c:otherwise>
