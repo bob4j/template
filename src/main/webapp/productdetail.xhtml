@@ -23,11 +23,28 @@
 				<div class="content_half float_r">
 					<h:form>
 						<table>
-							<tr>
-								<td width="160">Price:</td>
-								<td>$ ${product.price}</td>
-							</tr>
-							<tr>
+							<c:if test="${productController.admin != null}">
+									<tr>
+										<td>Costumer Price </td>
+										<td><h:inputText id="costumerPrice" required="true"
+												value="$ ${product.price}" />
+										</td>
+										<td>
+											<h:button value= "Save"></h:button>
+										</td>
+									</tr>
+									<tr>
+										<td>Provider Price:</td>
+										<td>$ 20</td>
+									</tr>
+							</c:if>
+							<c:if test="${productController.admin == null}">
+								<tr>
+									<td width="160">Price:</td>
+									<td>$ ${product.price}</td>
+								</tr>
+							</c:if>
+							<tr>									
 								<td>Availability:</td>
 								<td>In Stock</td>
 							</tr>

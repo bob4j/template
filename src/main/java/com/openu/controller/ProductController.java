@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.openu.model.Administrator;
 import com.openu.model.Customer;
 import com.openu.model.Order;
 import com.openu.model.OrderItem;
@@ -156,5 +158,13 @@ public class ProductController implements Serializable {
 
     public void setSelectedQuantity(Integer selectedQuantity) {
         this.selectedQuantity = selectedQuantity;
+    }
+    
+    public Administrator getAdmin() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Administrator) {
+            return (Administrator) principal;
+        }
+        return null;
     }
 }
