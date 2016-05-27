@@ -13,8 +13,23 @@
 				<ul>
 					<li><h:link outcome="home" value="Home" class="selected" /></li>
 					<c:if test="${categoryController.admin != null}">
-						<li><h:link outcome="admin/categories"
-								value="Categories" /></li>
+						<li><a href="#">Actions </a>
+							<ul>
+							<li><h:link outcome="admin/categories" value="Change Categories" /></li>
+							<li><h:link outcome="admin/cities" value="Change Cities" /></li>
+							<li><h:link outcome="admin/add-admin-user" value="Add Admin" /></li>
+							<li><h:link outcome="admin/orders" value="Orders" /></li>
+							
+							
+							<!-- TODO SHAHAR REPLACE After fix Action Repository
+								<c:forEach items="${adminActionsController.all}" var="action"
+									varStatus="loop">
+									<li><h:link outcome="action" value="${action.name}">
+											<f:param name="action_id" value="${action.id}" />
+										</h:link></li>
+								</c:forEach>
+								-->
+							</ul></li>
 					</c:if>
 					<c:if test="${categoryController.admin == null}">
 						<li><a href="#">Categories </a>
