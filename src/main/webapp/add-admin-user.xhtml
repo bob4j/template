@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>Add user</title>
+</h:head>
+<h:body>
+	<ui:composition template="/template/layout.xhtml">
+		<ui:define name="content">
+
+			<h2>Add user</h2>
+			<h:form enctype="multipart/form-data">
+		Name:
+		<h:inputText value="#{adminController.name}" />
+		Username:
+		<h:inputText value="#{adminController.username}" />
+		Password:
+		<h:inputSecret value="#{adminController.password}" />
+		Email:
+		<h:inputText value="#{adminController.email}" />
+				<h:commandButton value="Add"
+					actionListener="#{adminController.save}"
+					action="/admin/admin-users" />
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

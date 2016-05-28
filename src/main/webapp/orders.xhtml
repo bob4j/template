@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Orders</title>
+	<link rel="stylesheet" href="../css/styles.css" />
+</h:head>
+<h:body>
+	<ui:composition template="/template/layout.xhtml">
+		<ui:define name="content">
+
+			<h2>Orders</h2>
+			<h:form>
+				<table class="entityTable">
+					<thead class="entityTableHeader">
+						<tr>
+							<td>ID</td>
+							<td>Date</td>
+							<td>Status</td>
+							<td>Actions</td>
+						</tr>
+					</thead>
+					<tbody class="entityTableOddRow,entityTableEvenRow">
+						<c:forEach var="o" items="${adminOrderController.all}">
+							<tr>
+								<td>${o.id}</td>
+								<td>${o.modifiedPretty}</td>
+								<td>${o.status}</td>
+								<td><c:choose>
+										<c:when test="${o.status eq 'PLACED'}">
+											<h:commandLink
+												actionListener="${adminOrderController.approve(o.id)}"
+												value="Approve">
+											</h:commandLink>
+										</c:when>
+										<c:when test="${o.status eq 'APPROVED'}">
+											<h:commandLink
+												actionListener="${adminOrderController.ship(o.id)}"
+												value="Ship" />
+										</c:when>
+									</c:choose></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
