@@ -83,7 +83,7 @@ h6 { font-size: 12px; margin: 0 0 5px; padding: 0; }
 	background: url(../images/templatemo_main_bg.png) repeat-y
 }
 
-#content { width: 690px }
+#content { width: 690px ; margin:8px}
 #sidebar { width: 220px }
 
 #templatemo_footer {
@@ -196,7 +196,7 @@ h6 { font-size: 12px; margin: 0 0 5px; padding: 0; }
 }
 
 #contact_form { padding: 0; width: 300px; margin-bottom: 40px }
-#contact_form form { margin: 0px; padding: 0px; }
+#contact_form form { margin-left: 10px; padding: 0px; }
 
 #contact_form form .input_field { 
 	font-family: Arial, Helvetica, sans-serif;
@@ -350,6 +350,15 @@ a.nivo-prevNav {
 	font-size:11px; 
 	cursor: pointer;
 }
+
+#add_admin_form form p { 
+	margin-top: 10px;
+}
+
+#add_admin_form{
+	margin-left: 10px;
+}
+
 #costumerPrice{
 	width: 50px;
 }

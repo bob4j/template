@@ -11,12 +11,11 @@
    padding:2px;
 }
 
-.entityTableOddRow{
-   text-align:center;
-   background:none repeat scroll 0 0 #FFFFFFF;	
+tr:nth-child(even) {
+    background:none repeat scroll 0 0 #D3D3D3;
+	text-align:center;
 }
-
-.entityTableEvenRow{
-   text-align:center;
-   background:none repeat scroll 0 0 #D3D3D3;
+tr:nth-child(odd) {
+	text-align:center;
+    background:none repeat scroll 0 0 #FFFFFFF;	
 }

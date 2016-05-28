@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
@@ -14,27 +15,29 @@
 	<ui:composition template="/template/layout.xhtml">
 		<ui:define name="content">
 
-			<h2>Cities</h2>
+			<h1>Cities</h1>
 			<h:form>
-				<h:dataTable value="#{cityController.all}" var="c"
-					styleClass="entityTable" headerClass="entityTableHeader"
-					rowClasses="entityTableOddRow,entityTableEvenRow">
-					<h:column>
-						<f:facet name="header">ID</f:facet>
-	        	 #{c.id}
-	      	</h:column>
-					<h:column>
-						<f:facet name="header">Name</f:facet>
-						<h:commandLink action="#{cityController.load(c)}"
-							value="#{c.name}" />
-					</h:column>
-					<h:column>
-						<f:facet name="header">Delete</f:facet>
-						<h:commandButton action="#{cityController.delete(c)}"
-							value="Delete" />
-					</h:column>
-				</h:dataTable>
-				<h:commandButton action="/admin/add-city" value="Add city" />
+			<table class="entityTable" width="680px" cellspacing="0" cellpadding="5">
+					<thead class="entityTableHeader">
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody class="entityTableOddRow,entityTableEvenRow">
+						<c:forEach var="c" items="#{cityController.all}">
+							<tr>
+								<td>#{c.id}</td>
+								<td><h:commandLink action="#{cityController.load(c)}" value="#{c.name}" /></td>
+								<td><h:commandButton
+										action="#{cityController.delete(c)}" value="Delete" /></td>
+
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				<h:commandButton action="add-city" value="Add city" />
 			</h:form>
 		</ui:define>
 	</ui:composition>

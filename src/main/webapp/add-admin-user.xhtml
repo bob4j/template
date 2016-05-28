@@ -13,20 +13,24 @@
 	<ui:composition template="/template/layout.xhtml">
 		<ui:define name="content">
 
-			<h2>Add user</h2>
-			<h:form enctype="multipart/form-data">
-		Name:
-		<h:inputText value="#{adminController.name}" />
-		Username:
-		<h:inputText value="#{adminController.username}" />
-		Password:
-		<h:inputSecret value="#{adminController.password}" />
-		Email:
-		<h:inputText value="#{adminController.email}" />
-				<h:commandButton value="Add"
-					actionListener="#{adminController.save}"
-					action="/admin/admin-users" />
-			</h:form>
+			<h1>Add Admin</h1>
+			<div class="content_half float_l checkout" id="add_admin_form">
+
+				<h:form enctype="multipart/form-data">
+					<p>Name:</p>
+					<h:inputText value="#{adminController.name}" />
+					<p>User name:</p>
+					<h:inputText value="#{adminController.username}" />
+					<p>Password:</p>
+					<h:inputSecret value="#{adminController.password}" />
+					<p>Email:</p>
+					<h:inputText value="#{adminController.email}" />
+					<p></p>
+					<h:commandButton value="Add"
+						actionListener="#{adminController.save}"
+						action="/admin/admin-users" />
+				</h:form>
+			</div>
 		</ui:define>
 	</ui:composition>
 </h:body>

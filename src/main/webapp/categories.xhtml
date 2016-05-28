@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
@@ -13,32 +14,31 @@
 	<ui:composition template="/template/layout.xhtml">
 		<ui:define name="content">
 
-			<h2>Categories</h2>
+			<h1>Categories</h1>
 			<h:form>
-				<h:dataTable value="#{adminCategoryController.all}" var="c"
-					styleClass="entityTable" headerClass="entityTableHeader"
-					rowClasses="entityTableOddRow,entityTableEvenRow">
-					<h:column>
-						<f:facet name="header">ID</f:facet>
-	        	 #{c.id}
-	      	</h:column>
-					<h:column>
-						<f:facet name="header">Name</f:facet>
-						<h:commandLink action="category"
-							actionListener="#{adminCategoryController.load(c)}"
-							value="#{c.name}" />
-					</h:column>
-					<h:column>
-						<f:facet name="header">Image</f:facet>
-						<h:graphicImage url="/#{c.image.name}" />
-					</h:column>
-					<h:column>
-						<f:facet name="header">Delete</f:facet>
-						<h:commandButton action="#{adminCategoryController.delete(c)}"
-							value="Delete" />
-					</h:column>
-				</h:dataTable>
-				<h:commandButton action="/admin/add-category" value="Add category" />
+				<table class="entityTable" width="680px" cellspacing="0" cellpadding="5">
+					<thead class="entityTableHeader">
+						<tr>
+							<th>Name</th>
+							<th>Image</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody class="entityTableOddRow,entityTableEvenRow">
+						<c:forEach var="o" items="#{adminCategoryController.all}">
+							<tr>
+								<td>#{o.name}</td>
+								<!-- TODO SHAHAR replace with "/#{o.image.name}" -->
+								<td><h:graphicImage url="/static/product1.jpg" /></td>
+								<td><h:commandButton
+										action="#{adminCategoryController.delete(o)}" value="Delete" /></td>
+
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+
+				<h:commandButton action="add-category" value="Add category" />
 			</h:form>
 		</ui:define>
 	</ui:composition>
