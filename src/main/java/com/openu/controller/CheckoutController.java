@@ -48,7 +48,8 @@ public class CheckoutController implements Serializable {
         Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
         Order order = customer.getShoppingCart();
         // return order.getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
-        return order.getTotalPrice();
+        
+        return order != null ? order.getTotalPrice():0;
     }
 
     @Transactional
