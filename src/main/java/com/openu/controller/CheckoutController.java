@@ -24,80 +24,81 @@ import com.openu.util.CustomerTransaction;
 
 @Component
 @Scope("view")
-public class CheckoutController implements Serializable {
+public class CheckoutController extends abstractAjustedController implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1376107656785623353L;
+	
+	private CreditCardInfo ccInfo;
+	private Address shippingAddress;
+	private Long cityId;
+	@Resource
+	private SessionBean sessionBean;
+	@Resource
+	private CustomerRepository customerRepository;
+	@Resource
+	private CityRepository cityRepository;
 
-    private CreditCardInfo ccInfo;
-    private Address shippingAddress;
-    private Long cityId;
-    @Resource
-    private SessionBean sessionBean;
-    @Resource
-    private CustomerRepository customerRepository;
-    @Resource
-    private CityRepository cityRepository;
+	public CheckoutController() {
+		ccInfo = new CreditCardInfo();
+		shippingAddress = new Address();
+	}
 
-    public CheckoutController() {
-        ccInfo = new CreditCardInfo();
-        shippingAddress = new Address();
-    }
+	@Transactional
+	public Double getTotalPrice() {
+		Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
+		Order order = customer.getShoppingCart();
+		// return order.getItems().stream().map(i ->
+		// i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
 
-    @Transactional
-    public Double getTotalPrice() {
-        Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
-        Order order = customer.getShoppingCart();
-        // return order.getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
-        
-        return order != null ? order.getTotalPrice():0;
-    }
+		return order != null ? order.getTotalPrice() : 0;
+	}
 
-    @Transactional
-    @CustomerTransaction
-    public void order() {
-        Customer customer = sessionBean.loadCustomer();
-        Order order = customer.getShoppingCart();
-        order.setStatus(OrderStatus.PLACED);
-        order.setCcInfo(ccInfo);
-        order.setModified(System.currentTimeMillis());
-        order.setShippingAddress(getAddress());
-        customerRepository.save(customer);
-    }
+	@Transactional
+	@CustomerTransaction
+	public void order() {
+		Customer customer = sessionBean.loadCustomer();
+		Order order = customer.getShoppingCart();
+		order.setStatus(OrderStatus.PLACED);
+		order.setCcInfo(ccInfo);
+		order.setModified(System.currentTimeMillis());
+		order.setShippingAddress(getAddress());
+		customerRepository.save(customer);
+	}
 
-    private Address getAddress() {
-        shippingAddress.setCity(cityRepository.findOne(cityId));
-        return shippingAddress;
-    }
+	private Address getAddress() {
+		shippingAddress.setCity(cityRepository.findOne(cityId));
+		return shippingAddress;
+	}
 
-    public List<CreditCardType> getCcTypes() {
-        return Stream.of(CreditCardType.values()).collect(Collectors.toList());
-    }
+	public List<CreditCardType> getCcTypes() {
+		return Stream.of(CreditCardType.values()).collect(Collectors.toList());
+	}
 
-    public List<City> getCities() {
-        return (List<City>) cityRepository.findAll();
-    }
+	public List<City> getCities() {
+		return (List<City>) cityRepository.findAll();
+	}
 
-    public CreditCardInfo getCcInfo() {
-        return ccInfo;
-    }
+	public CreditCardInfo getCcInfo() {
+		return ccInfo;
+	}
 
-    public void setCcInfo(CreditCardInfo ccInfo) {
-        this.ccInfo = ccInfo;
-    }
+	public void setCcInfo(CreditCardInfo ccInfo) {
+		this.ccInfo = ccInfo;
+	}
 
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
+	public Address getShippingAddress() {
+		return shippingAddress;
+	}
 
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
+	public void setShippingAddress(Address shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
 
-    public Long getCityId() {
-        return cityId;
-    }
+	public Long getCityId() {
+		return cityId;
+	}
 
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
-    }
+	public void setCityId(Long cityId) {
+		this.cityId = cityId;
+	}
 }

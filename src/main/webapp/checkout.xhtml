@@ -18,46 +18,54 @@
 						<strong>Payment details</strong>
 					</h5>
 					<div class="content_half float_l checkout">
-						<p style="margin-top:15px">Credit card type:</p>
-						<h:selectOneMenu value="#{checkoutController.ccInfo.type}" required="true" id="cctype">
+						<p style="margin-top: 15px">Credit card type:</p>
+						<h:selectOneMenu value="#{checkoutController.ccInfo.type}"
+							required="true" id="cctype">
 							<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 							<f:selectItems value="#{checkoutController.ccTypes}" />
 						</h:selectOneMenu>
-						<p style="margin-top:15px">Number:</p>
-						<h:inputText value="#{checkoutController.ccInfo.number}" required="true" style="width: 300px;" id="ccnumber"/>
-						<p style="margin-top:15px">Owner name:</p>
-						<h:inputText value="#{checkoutController.ccInfo.ownerName}" required="true" id="ccowner" style="width: 300px;" />
-						<p style="margin-top:15px">CVV:</p>
-						<h:inputText value="#{checkoutController.ccInfo.cvv}" required="true" id="cccvv" style="width: 300px;" />
+						<p style="margin-top: 15px">Number:</p>
+						<h:inputText value="#{checkoutController.ccInfo.number}"
+							required="true" style="width: 300px;" id="ccnumber" />
+						<p style="margin-top: 15px">Owner name:</p>
+						<h:inputText value="#{checkoutController.ccInfo.ownerName}"
+							required="true" id="ccowner" style="width: 300px;" />
+						<p style="margin-top: 15px">CVV:</p>
+						<h:inputText value="#{checkoutController.ccInfo.cvv}"
+							required="true" id="cccvv" style="width: 300px;" />
 					</div>
-					<div class="cleaner h50" />
-					<div class="content_half float_l checkout">
-						<h5>
-							<strong>Shipping Address</strong>
-						</h5>
-						City: 
-						<h:selectOneMenu value="#{checkoutController.cityId}" required="true" id="city" style="width:112px;">
-							<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
-							<f:selectItems value="#{checkoutController.cities}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
-						</h:selectOneMenu>
-						<br /> <br /> 
-						Address: 
-						<h:inputText value="#{checkoutController.shippingAddress.address}" required="true" id="address" style="width: 300px;" /> 
-						<br /> <br /> 
-						Phone: 
-						<input type="text" style="width: 300px;" />
-					</div>
-					<div class="cleaner h50" />
-					<h3>SHOPPING CART</h3>
-					<h4>
-						TOTAL AMOUNT: <strong>$ ${checkoutController.totalPrice}</strong>
-					</h4>
-					<p>
-						<input type="checkbox" /> I accept the <a href="#">terms of use</a> of this website.
-					</p>
-					
-					<h:commandButton value="Place order" actionListener="${checkoutController.order()}" action="myaccount" />
-					
+					<c:if test="${checkoutController.admin == null}">
+						<div class="cleaner h50" />
+						<div class="content_half float_l checkout">
+							<h5>
+								<strong>Shipping Address</strong>
+							</h5>
+							City:
+							<h:selectOneMenu value="#{checkoutController.cityId}"
+								required="true" id="city" style="width:112px;">
+								<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+								<f:selectItems value="#{checkoutController.cities}" var="c"
+									itemLabel="#{c.name}" itemValue="#{c.id}" />
+							</h:selectOneMenu>
+							<br /> <br /> Address:
+							<h:inputText
+								value="#{checkoutController.shippingAddress.address}"
+								required="true" id="address" style="width: 300px;" />
+							<br /> <br /> Phone: <input type="text" style="width: 300px;" />
+						</div>
+						<div class="cleaner h50" />
+						<h3>SHOPPING CART</h3>
+						<h4>
+							TOTAL AMOUNT: <strong>$ ${checkoutController.totalPrice}</strong>
+						</h4>
+						<p>
+							<input type="checkbox" /> I accept the <a href="#">terms of
+								use</a> of this website.
+						</p>
+					</c:if>
+					<h:commandButton value="Place order"
+						actionListener="${checkoutController.order()}" action="myaccount" />
+
 					<!-- TODO remove the following block -->
 					<!-- <br/>
 					<table style="border: 1px solid #CCCCCC;" width="100%">

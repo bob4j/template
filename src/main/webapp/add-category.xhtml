@@ -2,18 +2,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
 	<title>Add Category</title>
 	<link rel="stylesheet" href="css/styles.css" />
 </h:head>
 <h:body>
-	<h:form enctype="multipart/form-data">
-		Category Name:
-		<h:inputText value="#{adminCategoryController.categoryName}" />
-		Category Image:
-		<h:inputFile value="#{adminCategoryController.imagePart}" />
-		<h:commandButton value="Add" actionListener="#{adminCategoryController.save}" action="/admin/categories"/>
-	</h:form>
+	<ui:composition template="/template/layout.xhtml">
+		<ui:define name="content">
+			<h:form enctype="multipart/form-data">
+				<table class="entityTable" width="680px" cellspacing="0"
+					cellpadding="5">
+
+					<thead class="entityTableHeader">
+						<tr>
+							<th>Category Name</th>
+							<th>Category Image</th>
+							<th>Add</th>
+						</tr>
+					</thead>
+					<tbody class="entityTableOddRow,entityTableEvenRow">
+						<tr>
+							<td><h:inputText
+									value="#{adminCategoryController.categoryName}" /></td>
+							<td><h:inputFile
+									value="#{adminCategoryController.imagePart}" /></td>
+							<td><h:commandButton value="Add"
+									actionListener="#{adminCategoryController.save}"
+									action="categories" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</ui:define>
+	</ui:composition>
 </h:body>
 </html>

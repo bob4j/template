@@ -3,15 +3,22 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 	<title>Add City</title>
 </h:head>
 <h:body>
-	<h2>Add City</h2>
-	<h:form>
-		<h:inputText id="inputName" value="#{cityController.cityName}" />
-		<h:commandButton action="/admin/cities" actionListener="${cityController.save}" value="Add" />
-	</h:form>
+	<ui:composition template="/template/layout.xhtml">
+		<ui:define name="content">
+
+			<h2>Add City</h2>
+			<h:form>
+				<h:inputText id="inputName" value="#{cityController.cityName}" />
+				<h:commandButton action="cities"
+					actionListener="${cityController.save}" value="Add" />
+			</h:form>
+		</ui:define>
+	</ui:composition>
 </h:body>
 </html>

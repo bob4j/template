@@ -30,8 +30,10 @@
 							</c:when>
 							<c:when test="${sessionBean.admin != null}">
 								<p>
-									<h:link outcome="admin/orders" value="Orders"/> | 
-									<h:link outcome="admin/categories" value="Categories"/> |
+									<h:link outcome="orders" value="Orders"/> | 
+									<h:link outcome="categories" value="Categories"/> |
+									<h:link outcome="cities" value="Cities"/> | 
+									<h:link outcome="admin-users" value="Users"/> |
 									
 									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
 								</p>
