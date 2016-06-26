@@ -1,10 +1,15 @@
 package com.openu.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +36,11 @@ import com.openu.util.Utils;
 public class ProductController implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static final int MAX_RELATED = 6;
+
+    @Resource
+    private EntityManagerFactory entityManagerFactory;
 
     @Resource
     private ProductRepository productRepository;
@@ -104,6 +114,18 @@ public class ProductController implements Serializable {
     }
 
     /**
+     * called from the homepage
+     */
+    public Iterable<Product> getMostOrdered() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        TypedQuery<Product> query = em.createQuery(
+                "select p1 from Product p1 where p1 in (select oi.product from OrderItem oi group by oi.product order by sum(oi.quantity) desc)",
+                Product.class);
+        query.setMaxResults(5);
+        return query.getResultList();
+    }
+
+    /**
      * Loads the product by the request parameters - productdetail.jsf?category_id=<ID>
      */
     public Product getProduct() {
@@ -112,6 +134,26 @@ public class ProductController implements Serializable {
             currentProduct = productRepository.findOne(Long.valueOf(productId));
         }
         return currentProduct;
+    }
+
+    private Product loadProduct(String productId) {
+        return productRepository.findOne(Long.valueOf(productId));
+    }
+
+    /**
+     * @return returns products from the same category (excluding the product itself)
+     */
+    @Transactional
+    public List<Product> getRelated() {
+        List<Product> related = new ArrayList<>();
+        Product product = loadProduct(Utils.getRequest().getParameter("product_id"));
+        product.getCategories().forEach(c -> related.addAll(c.getProducts()));
+        Collections.shuffle(related);
+        related.remove(product);
+        if (related.isEmpty() || related.size() < MAX_RELATED) {
+            return related;
+        }
+        return related.subList(0, MAX_RELATED);
     }
 
     /**

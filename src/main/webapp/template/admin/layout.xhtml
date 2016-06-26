@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Shoes Store</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" href="../css/templatemo_style.css" type="text/css" />
+	<link rel="stylesheet" href="../css/styles.css" />
+	<link rel="stylesheet" href="../css/nivo-slider.css" type="text/css"
+		media="screen" />
+	<link rel="stylesheet" type="text/css" href="../css/ddsmoothmenu.css" />
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/ddsmoothmenu.js">
+		/***********************************************
+		 * Smooth Navigational Menu- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+		 * This notice MUST stay intact for legal use
+		 * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+		 ***********************************************/
+	</script>
+	<script type="text/javascript">
+		ddsmoothmenu.init({
+			mainmenuid : "top_nav", //menu DIV id
+			orientation : 'h', //Horizontal or vertical menu: Set to "h" or "v"
+			classname : 'ddsmoothmenu', //class added to menu's outer DIV
+			//customtheme: ["#1c5a80", "#18374a"],
+			contentsource : "markup" //"markup" or ["container_id", "path_to_menu_file"]
+		})
+		function search(){
+			window.location.href='products.jsf?search='+$('#keyword').val();
+		}
+	</script>
+</h:head>
+
+<h:body>
+
+	<div id="templatemo_body_wrapper">
+		<div id="templatemo_wrapper">
+
+			<ui:insert name="header">
+				<ui:include src="/template/admin/header.xhtml" />
+			</ui:insert>
+
+			<ui:insert name="menu">
+				<ui:include src="/template/admin/menu.xhtml" />
+			</ui:insert>
+
+			<div id="templatemo_main">
+
+				<ui:insert name="content">
+					<!-- here comes the main content -->
+				</ui:insert>
+
+				<div class="cleaner"></div>
+			</div>
+			<!-- END of templatemo_main -->
+
+			<ui:insert name="footer">
+				<ui:include src="/template/admin/footer.xhtml" />
+			</ui:insert>
+
+		</div>
+		<!-- END of templatemo_wrapper -->
+	</div>
+	<!-- END of templatemo_body_wrapper -->
+
+</h:body>
+</html>

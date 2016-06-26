@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html">
-<h:head>
-	<title>Cities</title>
-	<link rel="stylesheet" href="css/styles.css" />
-</h:head>
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-	<h2>Cities</h2>
-	<h:form>
-		<h:dataTable value="#{cityController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
-					rowClasses="entityTableOddRow,entityTableEvenRow">
-			<h:column>
-				<f:facet name="header">ID</f:facet>
-	        	 #{c.id}
-	      	</h:column>
-			<h:column>
-				<f:facet name="header">Name</f:facet>
-				<h:commandLink action="#{cityController.load(c)}" value="#{c.name}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">Delete</f:facet>
-				<h:commandButton action="#{cityController.delete(c)}" value="Delete" />
-			</h:column>
-		</h:dataTable>
-		<h:commandButton action="/admin/add-city" value="Add city" />
-	</h:form>
+	<ui:composition template="/template/admin/layout.xhtml">
+		<ui:define name="content">
+			<div id="content" class="float_l">
+				<h2>Cities</h2>
+				<h:form>
+					<h:dataTable value="#{cityController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader"
+								rowClasses="entityTableOddRow,entityTableEvenRow">
+						<h:column>
+							<f:facet name="header">ID</f:facet>
+				        	 #{c.id}
+				      	</h:column>
+						<h:column>
+							<f:facet name="header">Name</f:facet>
+							<h:commandLink action="city" actionListener="#{cityController.load(c)}" value="#{c.name}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">Delete</f:facet>
+							<h:commandButton action="#{cityController.delete(c)}" value="Delete" />
+						</h:column>
+					</h:dataTable>
+					<h:commandButton action="/admin/add-city" value="Add city" />
+				</h:form>
+			</div>
+			<div class="cleaner"></div>
+
+		</ui:define>
+	</ui:composition>
 </h:body>
 </html>
+	
