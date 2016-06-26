@@ -13,13 +13,4 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
     @Query("from Product where name like %:term% or description like %:term%")
     List<Product> search(@Param("term") String term);
 
-    // select * from product where id in (
-    // select product_id from orderitem group by product_id
-    // order by sum(quantity) desc
-    // limit 10
-    // );
-
-    // @Query("select p1 from Product p1 where p1 in (select oi.product from OrderItem oi group by oi.product order by sum(oi.quantity) desc limit 5)")
-    // List<Product> getMostOrdered();
-
 }

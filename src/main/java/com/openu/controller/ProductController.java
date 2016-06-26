@@ -131,7 +131,7 @@ public class ProductController implements Serializable {
     public Product getProduct() {
         String productId = Utils.getRequest().getParameter("product_id");
         if (productId != null) {
-            currentProduct = productRepository.findOne(Long.valueOf(productId));
+            currentProduct = loadProduct(productId);
         }
         return currentProduct;
     }
