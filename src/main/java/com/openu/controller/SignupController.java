@@ -1,17 +1,21 @@
 package com.openu.controller;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.openu.model.Customer;
 import com.openu.repository.CustomerRepository;
+import com.openu.util.EmailValidator;
 
-@ManagedBean
 @Component
-@SessionScoped
+@Scope("view")
 public class SignupController {
 
     @Autowired
@@ -25,9 +29,35 @@ public class SignupController {
     private String email;
     private String phoneNumber;
 
+    public void validate(ComponentSystemEvent e) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (!fc.getMessageList().isEmpty()) {
+            return;
+        }
+        UIForm form = (UIForm) e.getComponent();
+        if (!getField(e, "password").equals(getField(e, "passwordAgain"))) {
+            fc.addMessage(form.getClientId(), new FacesMessage("Passwords do not match"));
+        }
+        if (repository.findByUsername(getField(e, "username")) != null) {
+            fc.addMessage(form.getClientId(), new FacesMessage("Username is already taken"));
+        }
+        if (!EmailValidator.valid(getField(e, "email"))) {
+            fc.addMessage(form.getClientId(), new FacesMessage("Invalid email"));
+        }
+        if (!fc.getMessageList().isEmpty()) {
+            fc.renderResponse();
+        }
+    }
+
+    private static <T> T getField(ComponentSystemEvent e, String fieldName) {
+        UIForm form = (UIForm) e.getComponent();
+        UIInput input = (UIInput) form.findComponent(fieldName);
+        return (T) input.getValue();
+    }
+
     public String signup() {
-        if (!password.equals(passwordAgain)) {
-            throw new RuntimeException("Passwords do not match...");
+        if (repository.findByUsername(username) != null) {
+            throw new RuntimeException("username is already taken");
         }
         Customer customer = new Customer();
         customer.setFirstName(firstName);

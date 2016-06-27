@@ -122,7 +122,11 @@ public class ProductController implements Serializable {
                 "select p1 from Product p1 where p1 in (select oi.product from OrderItem oi group by oi.product order by sum(oi.quantity) desc)",
                 Product.class);
         query.setMaxResults(5);
-        return query.getResultList();
+        try {
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     /**
@@ -146,7 +150,11 @@ public class ProductController implements Serializable {
     @Transactional
     public List<Product> getRelated() {
         List<Product> related = new ArrayList<>();
-        Product product = loadProduct(Utils.getRequest().getParameter("product_id"));
+        String productId = Utils.getRequest().getParameter("product_id");
+        if (productId == null) {
+            return related;
+        }
+        Product product = loadProduct(productId);
         product.getCategories().forEach(c -> related.addAll(c.getProducts()));
         Collections.shuffle(related);
         related.remove(product);
