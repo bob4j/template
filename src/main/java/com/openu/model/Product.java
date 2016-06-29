@@ -1,5 +1,6 @@
 package com.openu.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -45,6 +47,33 @@ public class Product {
     @JoinTable(name = "category_product", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") })
     @ManyToMany
     private List<Category> categories;
+
+    @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    private List<StockItem> stockItems = new ArrayList<>();
+
+    public Image getImageSmall() {
+        return imageSmall;
+    }
+
+    public void setImageSmall(Image imageSmall) {
+        this.imageSmall = imageSmall;
+    }
+
+    public Image getImageLarge() {
+        return imageLarge;
+    }
+
+    public void setImageLarge(Image imageLarge) {
+        this.imageLarge = imageLarge;
+    }
+
+    public List<StockItem> getStockItems() {
+        return stockItems;
+    }
+
+    public void setStockItems(List<StockItem> stockItems) {
+        this.stockItems = stockItems;
+    }
 
     public Long getId() {
         return id;

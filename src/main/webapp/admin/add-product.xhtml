@@ -11,23 +11,34 @@
 		<ui:define name="content">
 
 			<div id="content" class="float_l">
-				<h:form id="checkout-form" name="checkout-form">
-					<h:messages></h:messages>
+				<h:form id="checkout-form" name="checkout-form" enctype="multipart/form-data">
+				
+					<h:messages style="color:red;"></h:messages>
 					<h2>Add new product</h2>
 					<h5>
 						<strong>Details</strong>
 					</h5>
 					<div class="content_half float_l checkout">
-						<p style="margin-top:15px">Manufacturer:</p>
-						<h:inputText value="" required="true" style="width: 300px;" id="manufacturer"/>
+						<p style="margin-top:15px">Brand:</p>
+						<h:inputText value="#{adminProductController.brand}" required="true" style="width: 300px;" id="brand"/>
+						
 						<p style="margin-top:15px">Model:</p>
-						<h:inputText value="" required="true" style="width: 300px;" id="model"/>
+						<h:inputText value="#{adminProductController.model}" required="true" style="width: 300px;" id="model"/>
+						
 						<p style="margin-top:15px">Description:</p>
-						<h:inputTextarea value="" required="true" style="width: 300px;" id="description"/>
+						<h:inputTextarea value="#{adminProductController.description}" required="true" style="width: 300px;" id="description"/>
+						
 						<p style="margin-top:15px">Image:</p>
-						<h:inputFile value="" />
+						<h:inputFile value="#{adminProductController.imagePart}" required="true"/>
+						
 						<p style="margin-top:15px">Price:</p>
-						$ <h:inputText value="" required="true" style="width: 100px;" id="price"/>
+						$ <h:inputText value="#{adminProductController.price}" required="true" style="width: 100px;" id="price"/>
+						
+						<p style="margin-top:15px">Categories:</p>
+						<h:selectManyListbox value="#{adminProductController.categoryIds}">
+							<f:selectItems value="#{adminProductController.allCategories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
+						</h:selectManyListbox>
+						
 					</div>
 					<div class="cleaner h50" />
 					<div class="content_half float_l checkout">
@@ -51,7 +62,28 @@
 							<input type="text" style="width: 20px;" />
 						</div> -->
 						<div style="float:left;width:400px">
-							Color:
+						    <h:dataTable id="tblFields" value="#{adminProductController.stockItems}" var="si">
+						        <h:column>
+						            <h:selectOneMenu value="#{si.color}" required="true">
+						                <f:selectItems value="#{adminProductController.colors}" />
+						            </h:selectOneMenu>
+						        </h:column>
+								<h:column>
+						            <h:selectOneMenu value="#{si.size}" required="true">
+						                <f:selectItems value="#{adminProductController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}"/>
+						            </h:selectOneMenu>
+						        </h:column>
+						        <h:column>
+						            <h:inputText value="#{si.quantity}" />
+						        </h:column>
+						    </h:dataTable>
+							
+							<h:commandButton value="Add stock item">
+						        <f:ajax listener="#{adminProductController.addStockItem}" execute="tblFields" render="tblFields" /> 
+						    </h:commandButton>
+						    <!-- <h:graphicImage value="images/plus.png" style="padding-left:10px;height:20px;"/> -->
+						    
+							<!-- Color:
 							<h:selectOneMenu value="" id="color" style="width:84px;margin-right:10px">
 								<f:selectItem itemValue="#{null}" itemLabel="select one" />
 								<f:selectItem itemValue="" itemLabel="black" />
@@ -65,13 +97,12 @@
 							</h:selectOneMenu>
 							Quantity:
 							<input type="text" style="width: 20px;" />
-							<h:graphicImage value="images/plus.png" style="padding-left:10px;height:20px;"/>
+							<h:graphicImage value="images/plus.png" style="padding-left:10px;height:20px;"/> -->
 						</div>
 					</div>
 					<div class="cleaner h50" />
 					
-					<h:commandButton value="Add" action="myaccount" />
-					
+					<h:commandButton value="Add" actionListener="#{adminProductController.save}" action="/admin/products" />
 				</h:form>
 			</div>
 			<div class="cleaner"></div>

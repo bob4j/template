@@ -28,6 +28,17 @@ public class StockItem {
 
     private Integer quantity;
 
+    public StockItem() {
+
+    }
+
+    public StockItem(Product product, ProductSize size, ProductColor color, Integer quantity) {
+        this.product = product;
+        this.size = size;
+        this.color = color;
+        this.quantity = quantity;
+    }
+
     public Long getId() {
         return id;
     }

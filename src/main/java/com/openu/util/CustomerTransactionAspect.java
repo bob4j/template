@@ -28,7 +28,8 @@ public class CustomerTransactionAspect {
     public Object intercept(ProceedingJoinPoint pjp) throws Throwable {
         Customer customer = sessionBean.getCustomer();
         if (customer == null) {
-            throw new IllegalArgumentException();
+            // throw new IllegalArgumentException("no logged in customer");
+            return pjp.proceed();
         }
         try {
             NamedLock.lock(customer.getUsername());

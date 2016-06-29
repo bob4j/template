@@ -150,11 +150,7 @@ public class ProductController implements Serializable {
     @Transactional
     public List<Product> getRelated() {
         List<Product> related = new ArrayList<>();
-        String productId = Utils.getRequest().getParameter("product_id");
-        if (productId == null) {
-            return related;
-        }
-        Product product = loadProduct(productId);
+        Product product = getProduct();
         product.getCategories().forEach(c -> related.addAll(c.getProducts()));
         Collections.shuffle(related);
         related.remove(product);
