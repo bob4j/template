@@ -16,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 public class Product {
 
@@ -45,10 +48,12 @@ public class Product {
     private Double price;
 
     @JoinTable(name = "category_product", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") })
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> categories;
 
-    @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE })
+    @Fetch(FetchMode.SELECT)
     private List<StockItem> stockItems = new ArrayList<>();
 
     public Image getImageSmall() {

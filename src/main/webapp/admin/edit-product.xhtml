@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="/template/admin/layout.xhtml">
+		<ui:define name="content">
+
+			<div id="content" class="float_l">
+				<h:form id="checkout-form" name="checkout-form" enctype="multipart/form-data">
+				
+					<h:messages style="color:red;"></h:messages>
+					<h2>Edit product</h2>
+					<h5>
+						<strong>Details</strong>
+					</h5>
+					<div class="content_half float_l checkout">
+						<p style="margin-top:15px">Brand:</p>
+						<h:inputText value="#{adminProductController.entity.brand}" required="true" style="width: 300px;" id="brand"/>
+						
+						<p style="margin-top:15px">Model:</p>
+						<h:inputText value="#{adminProductController.entity.name}" required="true" style="width: 300px;" id="model"/>
+						
+						<p style="margin-top:15px">Description:</p>
+						<h:inputTextarea value="#{adminProductController.entity.description}" required="true" style="width: 300px;" id="description"/>
+						
+						<h:graphicImage url="/#{adminProductController.entity.image.name}" />
+						<p style="margin-top:15px">Image:</p>
+						<h:inputFile value="#{adminProductController.imagePart}" required="true"/>
+						
+						<p style="margin-top:15px">Price:</p>
+						$ <h:inputText value="#{adminProductController.entity.price}" required="true" style="width: 100px;" id="price"/>
+						
+						<!-- TODO marks the existing categories -->
+						<p style="margin-top:15px">Categories:</p>
+						<h:selectManyListbox value="#{adminProductController.categoryIds}" required="true">
+							<f:selectItems value="#{adminProductController.allCategories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
+						</h:selectManyListbox>
+						
+					</div>
+					<div class="cleaner h50" />
+					<div class="content_half float_l checkout">
+						<h5>
+							<strong>Stock information</strong>
+						</h5>
+						<div style="float:left;width:400px">
+						    <h:dataTable id="tblFields" value="#{adminProductController.stockItems}" var="si">
+						        <h:column>
+						            <h:selectOneMenu value="#{si.color}" required="true">
+						                <f:selectItems value="#{adminProductController.colors}" />
+						            </h:selectOneMenu>
+						        </h:column>
+								<h:column>
+						            <h:selectOneMenu value="#{si.size}" required="true">
+						                <f:selectItems value="#{adminProductController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}"/>
+						            </h:selectOneMenu>
+						        </h:column>
+						        <h:column>
+						            <h:inputText value="#{si.quantity}" />
+						        </h:column>
+						    </h:dataTable>
+							
+							<h:commandButton value="Add stock item">
+						        <f:ajax listener="#{adminProductController.addStockItem}" execute="tblFields" render="tblFields" /> 
+						    </h:commandButton>
+						</div>
+					</div>
+					<div class="cleaner h50" />
+					
+					<h:commandButton value="Save" actionListener="#{adminProductController.update}" action="/admin/products" />
+				</h:form>
+			</div>
+			<div class="cleaner"></div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.openu.model.Category;
 import com.openu.model.Image;
@@ -26,6 +27,7 @@ import com.openu.model.ProductSize;
 import com.openu.model.StockItem;
 import com.openu.repository.CategoryRepository;
 import com.openu.repository.ProductRepository;
+import com.openu.util.Utils;
 
 @Component
 @Scope("view")
@@ -39,10 +41,6 @@ public class AdminProductController extends AbstractCrudController<Product> impl
     private Double price;
     private Part imagePart;
 
-    private List<Long> categoryIds = new ArrayList<>();
-
-    // categories,stockitems
-
     @Resource
     private ProductRepository productRepository;
 
@@ -55,18 +53,24 @@ public class AdminProductController extends AbstractCrudController<Product> impl
     @Value("${static.content.dir.web}")
     private String staticContentDirWeb;
 
-    public List<SItem> stockItems = new ArrayList<>();
+    private List<Long> categoryIds = new ArrayList<>();
+    public List<StockItem> stockItems = new ArrayList<>();
+
+    @PostConstruct
+    public void init() {
+        staticContentDir = staticContentDir.replace("~", System.getProperty("user.home"));
+        String productId = Utils.getRequest().getParameter("product_id");
+        if (productId != null) {
+            entity = productRepository.findOne(Long.valueOf(productId));
+            categoryIds = entity.getCategories().stream().map(c -> c.getId()).collect(Collectors.toList());
+            stockItems = new ArrayList<>(entity.getStockItems());
+        } else {
+            stockItems.add(new StockItem());
+        }
+    }
 
     public void addStockItem(AjaxBehaviorEvent event) {
-        stockItems.add(new SItem());
-    }
-
-    public List<SItem> getStockItems() {
-        return stockItems;
-    }
-
-    public void setStockItems(List<SItem> stockItems) {
-        this.stockItems = stockItems;
+        stockItems.add(new StockItem());
     }
 
     public List<ProductColor> getColors() {
@@ -75,43 +79,6 @@ public class AdminProductController extends AbstractCrudController<Product> impl
 
     public List<ProductSize> getSizes() {
         return Stream.of(ProductSize.values()).collect(Collectors.toList());
-    }
-
-    public static class SItem implements Serializable {
-        ProductColor color;
-        ProductSize size;
-        Integer quantity = 1;
-
-        public ProductColor getColor() {
-            return color;
-        }
-
-        public void setColor(ProductColor color) {
-            this.color = color;
-        }
-
-        public ProductSize getSize() {
-            return size;
-        }
-
-        public void setSize(ProductSize size) {
-            this.size = size;
-        }
-
-        public Integer getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(Integer quantity) {
-            this.quantity = quantity;
-        }
-
-    }
-
-    @PostConstruct
-    public void init() {
-        staticContentDir = staticContentDir.replace("~", System.getProperty("user.home"));
-        stockItems.add(new SItem());
     }
 
     @Override
@@ -130,8 +97,23 @@ public class AdminProductController extends AbstractCrudController<Product> impl
         Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
         p.setImage(new Image(staticContentDirWeb + "/" + filename));
         p.setCategories(categoryIds.stream().map(id -> categoryRepository.findOne(id)).collect(Collectors.toList()));
-        stockItems.forEach(si -> p.getStockItems().add(new StockItem(p, si.size, si.color, si.quantity)));
+        stockItems.forEach(si -> si.setProduct(p));
+        p.setStockItems(stockItems);
         return p;
+    }
+
+    public void update() throws Exception {
+        if (!StringUtils.isEmpty(imagePart.getSubmittedFileName())) {
+            String filename = System.currentTimeMillis() + getImageSuffix();
+            Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
+            entity.setImage(new Image(staticContentDirWeb + "/" + filename));
+        }
+        entity.getCategories().clear();
+        entity.setCategories(categoryIds.stream().map(id -> categoryRepository.findOne(id)).collect(Collectors.toList()));
+        entity.getStockItems().clear();
+        stockItems.forEach(si -> si.setProduct(entity));
+        entity.setStockItems(stockItems);
+        productRepository.save(entity);
     }
 
     public Iterable<Category> getAllCategories() {
@@ -189,6 +171,14 @@ public class AdminProductController extends AbstractCrudController<Product> impl
 
     public void setCategoryIds(List<Long> categoryIds) {
         this.categoryIds = categoryIds;
+    }
+
+    public List<StockItem> getStockItems() {
+        return stockItems;
+    }
+
+    public void setStockItems(List<StockItem> stockItems) {
+        this.stockItems = stockItems;
     }
 
 }

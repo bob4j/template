@@ -1,5 +1,6 @@
 package com.openu.controller;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public abstract class AbstractCrudController<T> {
@@ -19,7 +20,7 @@ public abstract class AbstractCrudController<T> {
      * Retrieves all entities to be presented on the {entity}-list page
      */
     public Iterable<T> getAll() {
-        return getRepository().findAll();
+        return getRepository().findAll(new Sort("id"));
     }
 
     /**

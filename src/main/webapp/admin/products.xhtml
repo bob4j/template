@@ -11,50 +11,42 @@
 		<ui:define name="content">
 
 			<div id="content" class="float_l">
-				<h:form id="checkout-form" name="checkout-form">
-					<h:messages></h:messages>
-					<h2>Products</h2>
-					
-					<table>
-						<thead class="entityTableHeader">
-							<tr>
-								<td>ID</td>
-								<td>Manufacturer</td>
-								<td>Model</td>
-								<td>Image</td>
-								<td>Actions</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>Nike</td>
-								<td>Free 5.0</td>
-								<td><h:graphicImage value="/images/product/01.jpg"/></td>
-								<td>
-									<h:graphicImage value="/images/edit.png" style="height:20px"/> 
-									<h:graphicImage value="/images/delete.png" style="height:20px"/>
-								</td>
-							</tr>
+				<h:form>
+					<h:dataTable value="#{adminProductController.all}" var="c"
+						headerClass="entityTableHeader"
+						rowClasses="entityTableOddRow,entityTableEvenRow">
+						<h:column>
+							<f:facet name="header">ID</f:facet>
+	        	 			#{c.id}
+	      				</h:column>
+						<h:column>
+							<f:facet name="header" style="width:148px;">Brand</f:facet>
+							#{c.brand}
+						</h:column>
+						<h:column>
+							<f:facet name="header" style="width:152px;">Model</f:facet>
+							#{c.name}
+						</h:column>
+						<h:column>
+							<f:facet name="header">Image</f:facet>
+							<h:graphicImage url="/#{c.image.name}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header" style="width:50px;">Actions</f:facet>
+							<!-- <h:commandLink action="edit-product"
+								actionListener="#{adminProductController.load(c)}">
+								<h:graphicImage value="/images/edit.png" style="height:20px"/> 
+							</h:commandLink> -->
+							<h:link outcome="edit-product">
+								<f:param name="product_id" value="${c.id}" />
+								<h:graphicImage value="/images/edit.png" style="height:20px"/>
+							</h:link>	
+						</h:column>
 						
-							<tr>
-								<td>2</td>
-								<td>Nike</td>
-								<td>Pegasus 32</td>
-								<td><h:graphicImage value="/images/product/02.jpg"/></td>
-								<td>
-									<h:graphicImage value="/images/edit.png" style="height:20px"/> 
-									<h:graphicImage value="/images/delete.png" style="height:20px"/>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<div class="cleaner h50" />
-
+					</h:dataTable>
 					<h:commandButton value="Add new product" action="add-product" />
-
 				</h:form>
+				
 			</div>
 			<div class="cleaner"></div>
 
