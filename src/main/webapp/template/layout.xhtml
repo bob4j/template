@@ -49,7 +49,14 @@
 			</ui:insert>
 
 			<ui:insert name="menu">
-				<ui:include src="/template/menu.xhtml" />
+				<ui:include src="/template/menu.xhtml">
+					<ui:param name="homeClass" value="${homeClass}"/>
+					<ui:param name="categoriesClass" value="${categoriesClass}"/>
+					<ui:param name="aboutClass" value="${aboutClass}"/>
+					<ui:param name="faqClass" value="${faqClass}"/>
+					<ui:param name="myaccountClass" value="${myaccountClass}"/>
+					<ui:param name="contactusClass" value="${contactusClass}"/>
+				</ui:include>
 			</ui:insert>
 
 			<div id="templatemo_main">

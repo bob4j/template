@@ -23,7 +23,7 @@
 									<a href="#">My Wishlist</a> | 
 									<h:link outcome="shoppingcart" value="My Cart"/> | 
 									<h:link outcome="checkout" value="Checkout"/> |
-									<h:commandLink action="${loginManager.doLogout()}" value="Logout" />
+									<h:commandLink actionListener="${loginManager.doLogout()}" action="home" value="Logout" />
 								</p>
 								<p>Welcome ${sessionBean.customer.firstName}, 
 									Shopping Cart: <strong>${customerController.numberOfShoppingItems} items</strong> ( 
@@ -31,9 +31,11 @@
 								</p>
 							</c:when>
 							<c:otherwise>
-								<h:commandLink action="login" value="Login" />
+								<!-- <h:commandLink action="login" value="Login" /> -->
+								<h:link outcome="login" value="Login" />
 								|
-								<h:commandLink action="signup" value="Sign up" />
+								<!-- <h:commandLink action="signup" value="Sign up" /> -->
+								<h:link outcome="signup" value="Sign up" />
 							</c:otherwise>
 						</c:choose>
 

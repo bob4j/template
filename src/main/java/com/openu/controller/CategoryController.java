@@ -1,18 +1,15 @@
 package com.openu.controller;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.openu.model.Category;
 import com.openu.repository.CategoryRepository;
 import com.openu.util.Utils;
 
-@ManagedBean
-@RequestScoped
 @Component
+@Scope("view")
 public class CategoryController {
 
     @Autowired
@@ -20,7 +17,10 @@ public class CategoryController {
 
     public Category getCategory() {
         String categoryId = Utils.getRequest().getParameter("category_id");
-        return categoryRepository.findOne(Long.valueOf(categoryId));
+        if (categoryId != null) {
+            return categoryRepository.findOne(Long.valueOf(categoryId));
+        }
+        return null;
     }
 
     public Iterable<Category> getAll() {

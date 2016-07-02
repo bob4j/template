@@ -9,7 +9,7 @@
 <h:body>
 
 	<ui:composition template="/template/layout.xhtml">
-
+		<ui:param name="categoriesClass" value="selected"/>
 		<ui:define name="content">
 			<div id="content" class="float_r">
 				<c:set var="category" value="${categoryController.category}" scope="request" />
