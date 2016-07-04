@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,6 +35,8 @@ public class CheckoutController implements Serializable {
     private CreditCardInfo ccInfo;
     private Address shippingAddress;
     private Long cityId;
+    private Boolean acceptTerms;
+
     @Resource
     private SessionBean sessionBean;
     @Resource
@@ -38,9 +44,15 @@ public class CheckoutController implements Serializable {
     @Resource
     private CityRepository cityRepository;
 
-    public CheckoutController() {
+    @PostConstruct
+    public void init() {
         ccInfo = new CreditCardInfo();
-        shippingAddress = new Address();
+        Address customerAddress = sessionBean.loadCustomer().getAddress();
+        if (customerAddress != null) {
+            shippingAddress = new Address(customerAddress.getCity(), customerAddress.getAddress());
+        } else {
+            shippingAddress = new Address();
+        }
     }
 
     @Transactional
@@ -98,5 +110,20 @@ public class CheckoutController implements Serializable {
 
     public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public Boolean getAcceptTerms() {
+        return acceptTerms;
+    }
+
+    public void setAcceptTerms(Boolean acceptTerms) {
+        this.acceptTerms = acceptTerms;
+    }
+
+    public void validateTerms(FacesContext fc, UIComponent uiComponent, Object o) {
+        if (o == null || !(Boolean) o) {
+            fc.addMessage(null, new FacesMessage("You must accept terms of use"));
+            fc.renderResponse();
+        }
     }
 }

@@ -11,6 +11,14 @@ public class Address {
 
     private String address;
 
+    public Address() {
+    }
+
+    public Address(City city, String address) {
+        this.city = city;
+        this.address = address;
+    }
+
     public City getCity() {
         return city;
     }

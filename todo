@@ -1,8 +1,37 @@
-* paging
+# PAGES TO ADD
+	MyAccount -> Wishlist
+		add flow of adding items to the wishlist
+	MyAccount -> EditProfile
+		edit personal info (name, email, address)
+		reset password
 
-* authentication
 
-* product:
-	promotion
-	size, width, color, multiple images (small + regular)
+# SEARCH
+	sometimes does not work
+	
+# signup
+	store customer's address
+	
 
+# Admin "approves" the order
+	if there is no items in the order -> cancel the order (send email???)
+	
+# admin::orders.xhtml
+	add columns for user-id/user-name
+	add actions
+		view
+		ship
+		cancel
+		approve
+		
+# admin::products
+	filter by category
+	sort by popularity/most recent
+	show statistics - #of orders
+	search box
+	paging (nice to have)
+	
+# admin::categories
+	edit
+	add description	  				
+	
