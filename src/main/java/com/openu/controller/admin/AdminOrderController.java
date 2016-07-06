@@ -13,6 +13,7 @@ import com.openu.controller.AbstractCrudController;
 import com.openu.model.Order;
 import com.openu.model.OrderStatus;
 import com.openu.repository.OrderRepository;
+import com.openu.util.Utils;
 
 @Component
 @Scope("view")
@@ -20,6 +21,14 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     @Resource
     private OrderRepository orderRepository;
+
+    public Order getOrder() {
+        String orderId = Utils.getRequest().getParameter("order_id");
+        if (orderId != null) {
+            return orderRepository.findOne(Long.valueOf(orderId));
+        }
+        return null;
+    }
 
     @Transactional
     public void approve(long orderId) {

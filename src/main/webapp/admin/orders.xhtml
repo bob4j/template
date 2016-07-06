@@ -19,6 +19,7 @@
 								<td>ID</td>
 								<td>Date</td>
 								<td>Status</td>
+								<td>Customer</td>
 								<td>Actions</td>
 							</tr>
 						</thead>
@@ -28,8 +29,12 @@
 									<td>${o.id}</td>
 									<td>${o.modifiedPretty}</td>
 									<td>${o.status}</td>
+									<td>${o.customer.firstName} ${o.customer.lastName}</td>
 									<td>
-										<h:graphicImage value="/images/view.png" style="height:20px"/> 
+										<h:link outcome="order">
+											<f:param name="order_id" value="${o.id}"/>
+											<h:graphicImage value="/images/view.png" style="height:20px"/>
+										</h:link> 
 										<c:choose>
 											<c:when test="${o.status eq 'PLACED'}">
 												<h:commandLink

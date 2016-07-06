@@ -19,6 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity(name = "order_")
 public class Order {
 
@@ -37,10 +40,11 @@ public class Order {
     @Embedded
     private Address shippingAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     private List<OrderItem> items = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -71,9 +75,20 @@ public class Order {
         return modified;
     }
 
+    public String getCreatedPretty() {
+        return toPrettyDate(created);
+    }
+
     public String getModifiedPretty() {
+        return toPrettyDate(modified);
+    }
+
+    private static String toPrettyDate(Long date) {
+        if (date == null) {
+            return null;
+        }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return df.format(new Date(modified));
+        return df.format(new Date(date));
     }
 
     public void setModified(Long modified) {
