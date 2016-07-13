@@ -349,3 +349,8 @@ a.nivo-prevNav {
 	font-size:11px; 
 	cursor: pointer;
 }
+.sort_button{
+	width: 10px;
+	hight: 10px;
+	float: right;
+}

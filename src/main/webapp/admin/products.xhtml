@@ -12,11 +12,24 @@
 
 			<div id="content" class="float_l">
 				<h:form>
-					<h:dataTable value="#{adminProductController.all}" var="c"
+					<h:dataTable value="#{adminProductController.all}" var="c" id="table_product"
 						headerClass="entityTableHeader"
 						rowClasses="entityTableOddRow,entityTableEvenRow">
-						<h:column>
-							<f:facet name="header">ID</f:facet>
+						<h:column style="width:148px;">
+							<f:facet name="header"  style="float:right;">ID
+							<div style="float:right; width:10px;">
+								<h:commandButton  class= "sort_button"
+						   		  action="#{adminProductController.setIdUp()}"
+								  image="/images/arrow-up.png">
+								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+								</h:commandButton>
+								 <h:commandButton   class= "sort_button"
+						   		  action="#{adminProductController.setIdDown()}"
+								  image="/images/arrow-down.png">
+								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+								</h:commandButton >
+							</div>
+							</f:facet>
 	        	 			#{c.id}
 	      				</h:column>
 						<h:column>
@@ -32,12 +45,7 @@
 							<h:graphicImage url="/#{c.image.name}" />
 						</h:column>
 						<h:column>
-							<f:facet name="header" style="width:50px;">Actions</f:facet>
-							<!-- <h:commandLink action="edit-product"
-								actionListener="#{adminProductController.load(c)}">
-								<h:graphicImage value="/images/edit.png" style="height:20px"/> 
-							</h:commandLink> -->
-							<h:link outcome="edit-product">
+						<h:link outcome="edit-product">
 								<f:param name="product_id" value="${c.id}" />
 								<h:graphicImage value="/images/edit.png" style="height:20px"/>
 							</h:link>	

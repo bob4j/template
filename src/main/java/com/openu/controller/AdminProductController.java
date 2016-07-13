@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -180,5 +181,8 @@ public class AdminProductController extends AbstractCrudController<Product> impl
     public void setStockItems(List<StockItem> stockItems) {
         this.stockItems = stockItems;
     }
+    
+    
+    
 
 }
