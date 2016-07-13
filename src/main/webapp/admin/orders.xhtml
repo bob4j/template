@@ -9,54 +9,108 @@
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
 		<ui:define name="content">
-
 			<div id="content" class="float_l">
-				<h2>Orders</h2>
 				<h:form>
-					<table >
-						<thead class="entityTableHeader">
-							<tr>
-								<td>ID</td>
-								<td>Date</td>
-								<td>Status</td>
-								<td>Customer</td>
-								<td>Actions</td>
-							</tr>
-						</thead>
-						<tbody >
-							<c:forEach var="o" items="${adminOrderController.all}">
-								<tr>
-									<td>${o.id}</td>
-									<td>${o.modifiedPretty}</td>
-									<td>${o.status}</td>
-									<td>${o.customer.firstName} ${o.customer.lastName}</td>
-									<td>
-										<h:link outcome="order">
-											<f:param name="order_id" value="${o.id}"/>
-											<h:graphicImage value="/images/view.png" style="height:20px"/>
-										</h:link> 
-										<c:choose>
-											<c:when test="${o.status eq 'PLACED'}">
-												<h:commandLink
-													actionListener="${adminOrderController.approve(o.id)}"
-													value="Approve">
-												</h:commandLink>
-											</c:when>
-											<c:when test="${o.status eq 'APPROVED'}">
-												<h:commandLink
-													actionListener="${adminOrderController.ship(o.id)}"
-													value="Ship" />
-											</c:when>
-										</c:choose></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+					<h:dataTable value="#{adminOrderController.all}" var="o" id="table_product"
+						headerClass="entityTableHeader"
+						rowClasses="entityTableOddRow,entityTableEvenRow">
+						<h:column >
+							<f:facet name="header" class= "header_with_sorter">ID
+							<div class = "arrow_sort_container" >
+								<h:commandButton  class= "sort_button"
+						   		  action="#{adminOrderController.idUp()}"
+								  image="/images/arrow-up.png">
+								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+								</h:commandButton>
+								 <h:commandButton   class= "sort_button"
+						   		  action="#{adminOrderController.idDown()}"
+								  image="/images/arrow-down.png">
+								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+								</h:commandButton >
+							</div>
+							</f:facet>
+	        	 			#{o.id}
+	      				</h:column>
+						<h:column>
+							<f:facet name="header" style="width:148px;">Date
+								<div class = "arrow_sort_container" >
+									<h:commandButton  class= "sort_button"
+							   		  action="#{adminOrderController.modifiedUp()}"
+									  image="/images/arrow-up.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton>
+									 <h:commandButton   class= "sort_button"
+							   		  action="#{adminOrderController.modifiedDown()}"
+									  image="/images/arrow-down.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton >
+								</div>
+							</f:facet>
+							#{o.modifiedPretty}
+						</h:column>
+						<h:column>
+							<f:facet name="header" style="width:152px;">Status
+								<div class = "arrow_sort_container" >
+									<h:commandButton  class= "sort_button"
+							   		  action="#{adminOrderController.statusUp()}"
+									  image="/images/arrow-up.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton>
+									 <h:commandButton   class= "sort_button"
+							   		  action="#{adminOrderController.statusDown()}"
+									  image="/images/arrow-down.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton >
+								</div>
+							</f:facet>
+							#{o.status}
+						</h:column>
+						<h:column>
+							<f:facet name="header" style="width:152px;">Customer
+								<div class = "arrow_sort_container" >
+									<h:commandButton  class= "sort_button"
+							   		  action="#{adminOrderController.customerUp()}"
+									  image="/images/arrow-up.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton>
+									 <h:commandButton   class= "sort_button"
+							   		  action="#{adminOrderController.customerDown()}"
+									  image="/images/arrow-down.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton >
+								</div>
+							</f:facet>
+							#{o.customer.firstName} #{o.customer.lastName}
+						</h:column>
+						<h:column>
+						       <f:facet name="header" >Action</f:facet>
+								<c:if test="${o.status eq 'PLACED'}">
+									<h:commandLink 
+										actionListener="#{adminOrderController.approve(o.id)}"
+										value="Approve"/>
+								</c:if>
+								<c:if test="${o.status eq 'APPROVED'}">
+									<h:commandLink style="float:right;"
+										actionListener="#{adminOrderController.ship(o.id)}"
+										value="Ship" />
+								</c:if>
+						</h:column>
+						<h:column>
+							<f:facet name="header" >Order Details</f:facet>
+						
+							<h:link outcome="order" >
+								<f:param name="order_id" value="${o.id}" />
+								<h:graphicImage value="/images/view.png" style="height:20px;" />
+							</h:link>
+						</h:column>
+					</h:dataTable>
 				</h:form>
+				
 			</div>
 			<div class="cleaner"></div>
 
 		</ui:define>
+		<div class="cleaner"></div>
 	</ui:composition>
 </h:body>
 </html>

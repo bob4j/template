@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,36 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     @Override
     protected Order createEntity() throws Exception {
         throw new UnsupportedOperationException();
+    }
+    
+    public void statusUp() {
+	setSortBy("status");
+	setDirection(Direction.ASC);
+    }
+
+    public void statusDown() {
+	setSortBy("status");
+	setDirection(Direction.DESC);
+    }
+    
+    public void modifiedUp() {
+	setSortBy("modified");
+	setDirection(Direction.ASC);
+    }
+
+    public void modifiedDown() {
+	setSortBy("modified");
+	setDirection(Direction.DESC);
+    }
+    
+    public void customerUp() {
+	setSortBy("customer");
+	setDirection(Direction.ASC);
+    }
+
+    public void customerDown() {
+	setSortBy("customer");
+	setDirection(Direction.DESC);
     }
 
 }
