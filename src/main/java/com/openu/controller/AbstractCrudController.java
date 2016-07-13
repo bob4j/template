@@ -7,7 +7,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public abstract class AbstractCrudController<T> {
 
     private static final String ID = "id";
+    private static final String NAME = "name";
     protected T entity;
+    
+    //initialize sort parameters
     private String sortBy = ID;
     private Direction direction = Direction.ASC;
 
@@ -55,16 +58,25 @@ public abstract class AbstractCrudController<T> {
 	return entity;
     }
 
-    public void setIdUp() {
+    public void idUp() {
 	setSortBy(ID);
 	setDirection(Direction.ASC);
     }
 
-    public void setIdDown() {
+    public void idDown() {
 	setSortBy(ID);
 	setDirection(Direction.DESC);
     }
 
+    public void NameUp() {
+	setSortBy(NAME);
+	setDirection(Direction.ASC);
+    }
+
+    public void nameDown() {
+	setSortBy(NAME);
+	setDirection(Direction.DESC);
+    }
     public String getSortBy() {
 	return sortBy;
     }

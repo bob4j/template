@@ -15,16 +15,16 @@
 					<h:dataTable value="#{adminProductController.all}" var="c" id="table_product"
 						headerClass="entityTableHeader"
 						rowClasses="entityTableOddRow,entityTableEvenRow">
-						<h:column style="width:148px;">
-							<f:facet name="header"  style="float:right;">ID
-							<div style="float:right; width:10px;">
+						<h:column >
+							<f:facet name="header" class= "header_with_sorter">ID
+							<div class = "arrow_sort_container" >
 								<h:commandButton  class= "sort_button"
-						   		  action="#{adminProductController.setIdUp()}"
+						   		  action="#{adminProductController.idUp()}"
 								  image="/images/arrow-up.png">
 								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
 								</h:commandButton>
 								 <h:commandButton   class= "sort_button"
-						   		  action="#{adminProductController.setIdDown()}"
+						   		  action="#{adminProductController.idDown()}"
 								  image="/images/arrow-down.png">
 								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
 								</h:commandButton >
@@ -33,11 +33,37 @@
 	        	 			#{c.id}
 	      				</h:column>
 						<h:column>
-							<f:facet name="header" style="width:148px;">Brand</f:facet>
+							<f:facet name="header" style="width:148px;">Brand
+								<div class = "arrow_sort_container" >
+									<h:commandButton  class= "sort_button"
+							   		  action="#{adminProductController.brandUp()}"
+									  image="/images/arrow-up.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton>
+									 <h:commandButton   class= "sort_button"
+							   		  action="#{adminProductController.brandDown()}"
+									  image="/images/arrow-down.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton >
+								</div>
+							</f:facet>
 							#{c.brand}
 						</h:column>
 						<h:column>
-							<f:facet name="header" style="width:152px;">Model</f:facet>
+							<f:facet name="header" style="width:152px;">Model
+								<div class = "arrow_sort_container" >
+									<h:commandButton  class= "sort_button"
+							   		  action="#{adminProductController.modelUp()}"
+									  image="/images/arrow-up.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton>
+									 <h:commandButton   class= "sort_button"
+							   		  action="#{adminProductController.modelDown()}"
+									  image="/images/arrow-down.png">
+									  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
+									</h:commandButton >
+								</div>
+							</f:facet>
 							#{c.name}
 						</h:column>
 						<h:column>

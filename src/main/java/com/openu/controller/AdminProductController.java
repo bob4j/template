@@ -16,6 +16,7 @@ import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,8 @@ import com.openu.util.Utils;
 @Component
 @Scope("view")
 public class AdminProductController extends AbstractCrudController<Product> implements Serializable {
+
+    private static final String BRAND = "brand";
 
     private static final long serialVersionUID = 1L;
 
@@ -182,6 +185,15 @@ public class AdminProductController extends AbstractCrudController<Product> impl
         this.stockItems = stockItems;
     }
     
+    public void brandUp() {
+	setSortBy(BRAND);
+	setDirection(Direction.ASC);
+    }
+
+    public void brandDown() {
+	setSortBy(BRAND);
+	setDirection(Direction.DESC);
+    }
     
     
 
