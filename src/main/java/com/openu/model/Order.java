@@ -1,9 +1,12 @@
 package com.openu.model;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,6 +27,8 @@ import org.hibernate.annotations.FetchMode;
 
 @Entity(name = "order_")
 public class Order {
+
+    public static final String ORDER_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Id
     @SequenceGenerator(name = "order_seq", sequenceName = "order_seq", allocationSize = 1, initialValue = 100)
@@ -87,7 +92,7 @@ public class Order {
         if (date == null) {
             return null;
         }
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat df = new SimpleDateFormat(ORDER_DATE_FORMAT);
         return df.format(new Date(date));
     }
 
@@ -138,5 +143,7 @@ public class Order {
     public Double getTotalPrice() {
         return getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
     }
+    
+   
 
 }

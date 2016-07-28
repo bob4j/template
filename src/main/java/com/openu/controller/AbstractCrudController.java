@@ -1,5 +1,9 @@
 package com.openu.controller;
 
+import java.util.List;
+
+import javax.persistence.criteria.Predicate;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.PagingAndSortingRepository;

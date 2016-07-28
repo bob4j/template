@@ -34,6 +34,7 @@ public class OrderController implements Serializable {
                 cb.notEqual(root.get("status"), OrderStatus.OPEN)), new Sort("id"));
     }
 
+    
     public void cancelOrder(Long id) {
         Customer customer = sessionBean.loadCustomer();
         Order order = orderRepository.findOne(id);

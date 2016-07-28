@@ -21,6 +21,7 @@ public class ImageServlet extends HttpServlet {
         Long id = Long.valueOf(request.getPathInfo().substring(1));
         Image image = AppContextProvider.getApplicationContext().getBean(ImageRepository.class).findOne(id);
         response.setContentType(getServletContext().getMimeType("some-name"));
+        //TODO remove if not needed
         // response.setContentLength(image.getData().length);
         // response.getOutputStream().write(image.getData());
         // response.setContentLength(image.getValue().length());
