@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.openu.controller.AbstractCrudController;
+import com.openu.controller.Constants;
 import com.openu.model.Month;
 import com.openu.model.Order;
 import com.openu.model.OrderStatus;
@@ -40,13 +41,8 @@ import org.primefaces.event.SelectEvent;
 @Scope("view")
 public class AdminOrderController extends AbstractCrudController<Order> {
 
-    private static final String CREATED = "created";
-    private static final String MODIFIED = "modified";
-    private static final String STATUS = "status";
-    private static final String ALL = "All";
-    private static final String CUSTOMER = "customer";
-    private static final int NO_YEAR_SELECTED = -1;
-    private static final int NO_DAY_SELECTED = -1;
+    
+    
     @Resource
     private OrderRepository orderRepository;
     @Resource
@@ -54,8 +50,8 @@ public class AdminOrderController extends AbstractCrudController<Order> {
      
     private OrderStatus selectedStatus = OrderStatus.NOT_SLECTED;
     private Month selectedCreationMonth = Month.All;
-    private int selectedCreationYear = NO_YEAR_SELECTED;
-    private int selectedCreationDay = NO_DAY_SELECTED ;
+    private int selectedCreationYear = Constants.NO_YEAR_SELECTED;
+    private int selectedCreationDay = Constants.NO_DAY_SELECTED ;
     private Date date;
     private ArrayList<String> statusesList;
     private String selectedCustomer = "";
@@ -100,7 +96,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public List<Order> getPlacedOrders() {
-        return orderRepository.findAll((root, query, cb) -> cb.and(cb.notEqual(root.get(STATUS), OrderStatus.PLACED)));
+        return orderRepository.findAll((root, query, cb) -> cb.and(cb.notEqual(root.get(Constants.STATUS), OrderStatus.PLACED)));
     }
 
     @Override
@@ -114,42 +110,42 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
     
     public void statusUp() {
-	setSortBy(STATUS);
+	setSortBy(Constants.STATUS);
 	setDirection(Direction.ASC);
     }
 
     public void statusDown() {
-	setSortBy(STATUS);
+	setSortBy(Constants.STATUS);
 	setDirection(Direction.DESC);
     }
     
     public void modifiedUp() {
-	setSortBy(MODIFIED);
+	setSortBy(Constants.MODIFIED);
 	setDirection(Direction.ASC);
     }
 
     public void modifiedDown() {
-	setSortBy(MODIFIED);
+	setSortBy(Constants.MODIFIED);
 	setDirection(Direction.DESC);
     }
     
     public void creationUp() {
-	setSortBy(CREATED);
+	setSortBy(Constants.CREATED);
 	setDirection(Direction.ASC);
     }
 
     public void creationDown() {
-	setSortBy(CREATED);
+	setSortBy(Constants.CREATED);
 	setDirection(Direction.DESC);
     }
     
     public void customerUp() {
-	setSortBy(CUSTOMER);
+	setSortBy(Constants.CUSTOMER);
 	setDirection(Direction.ASC);
     }
 
     public void customerDown() {
-	setSortBy(CUSTOMER);
+	setSortBy(Constants.CUSTOMER);
 	setDirection(Direction.DESC);
     }
     
@@ -178,7 +174,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     private Predicate getStatusPredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
 	if (selectedStatus != OrderStatus.NOT_SLECTED) {
-	    return criteriaBuilder.equal(root.<OrderStatus>get(STATUS), selectedStatus);
+	    return criteriaBuilder.equal(root.<OrderStatus>get(Constants.STATUS), selectedStatus);
 	} else {
 	    return null;
 	}
@@ -186,34 +182,19 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     
     private Predicate getCustomerPredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
 	if (!selectedCustomer.isEmpty() ) {
-	    return criteriaBuilder.equal(root.<OrderStatus>get(CUSTOMER), selectedCustomer);
+	    return criteriaBuilder.equal(root.<OrderStatus>get(Constants.CUSTOMER), selectedCustomer);
 	} else {
 	    return null;
 	}
     }
     
     private Predicate getCreationDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-	return getDatePredicate(criteriaBuilder, root, selectedCreationYear, selectedCreationMonth, selectedCreationDay);
+	return getDatePredicate(criteriaBuilder, root, selectedCreationYear, selectedCreationMonth, selectedCreationDay, Constants.CREATED);
     }
     
     private Predicate getModifiedDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-	return getDatePredicate(criteriaBuilder, root, selectedCreationYear, selectedCreationMonth, selectedCreationDay);
+	return getDatePredicate(criteriaBuilder, root, selectedCreationYear, selectedCreationMonth, selectedCreationDay,Constants.MODIFIED);
     }
-    
-    private Predicate getDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root,int selectedCreationYear,Month selectedCreationMonth ,int selectedCreationDay){
-	if (selectedCreationYear != NO_YEAR_SELECTED){
-	    if (selectedCreationMonth != Month.All ){
-		if (selectedCreationDay != NO_DAY_SELECTED){
-		    GregorianCalendar maxHourInSelectedDate = new GregorianCalendar(selectedCreationYear,selectedCreationMonth.ordinal(),selectedCreationDay,23,59,59);
-		    GregorianCalendar minHourInSelectedDate = new GregorianCalendar(selectedCreationYear,selectedCreationMonth.ordinal(),selectedCreationDay,0,0,0);
-		     return criteriaBuilder.between(root.<Long>get(CREATED), minHourInSelectedDate.getTimeInMillis(), maxHourInSelectedDate.getTimeInMillis());
-		}
-	    }
-	}
-	return null;
-    }
-    
-    
     
     public List<String> getStatusesList(){
 	statusesList = new ArrayList<String>();
@@ -249,7 +230,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
      */
     public  List<Integer> getDaysInMonth(int year, Month month ){
 	ArrayList<Integer> days = new ArrayList<Integer>();
-	if (!month.equals(Month.All) && !(year == NO_YEAR_SELECTED)){
+	if (!month.equals(Month.All) && !(year == Constants.NO_YEAR_SELECTED)){
 	    GregorianCalendar calendar = new GregorianCalendar(year,month.ordinal(),1);
 	    int actualMaximumDaysInMonth = calendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 	    for (int i =1; i<= actualMaximumDaysInMonth; i++){
@@ -263,27 +244,40 @@ public class AdminOrderController extends AbstractCrudController<Order> {
      * 
      * @return list of  years 
      */
-    public List<Integer> getYearsList() {
+    public List<Integer> getYearsList(String filteredField) {
 	ArrayList<Integer> years = new ArrayList<Integer>();
-	Iterable<Order> findAll = getRepository().findAll(new Sort(Direction.ASC, CREATED));
+	Iterable<Order> findAll = getRepository().findAll(new Sort(Direction.ASC, filteredField));
 	Iterator<Order> iterator = findAll.iterator();
-	Long minDate = Long.MIN_VALUE;
-	int minYear = 0;
-	while (iterator.hasNext() && (minDate == Long.MIN_VALUE)) {
-	    Calendar cal = Calendar.getInstance();
-	    minDate = iterator.next().getCreated();
-	    cal.setTimeInMillis(minDate);
-	    minYear = cal.get(Calendar.YEAR);
-	}
-	Calendar currentTime = Calendar.getInstance();
-	currentTime.setTimeInMillis(System.currentTimeMillis());
-	int currentYear = currentTime.get(Calendar.YEAR);
-	if (minYear != 0) {
-	    for (int i = minYear; i <= currentYear; i++) {
+	int minYear = getMinYear(iterator);
+	int maxYear=getMaxYear(iterator);
+	if (minYear != 0 && maxYear != 0) {
+	    for (int i = minYear; i <= maxYear; i++) {
 		years.add(i);
 	    }
 	}
 	return years;
+    }
+    
+    public List<Integer> getCreatedYearsList() {
+	return getYearsList(Constants.CREATED);
+    }
+    private int getMinYear(Iterator<Order> iterator) {
+	Long minDate = Long.MIN_VALUE;
+	if (iterator.hasNext()) {
+	    minDate = iterator.next().getCreated();
+	}
+	Calendar cal = Calendar.getInstance();
+	cal.setTimeInMillis(minDate);
+	return minDate != Long.MIN_VALUE ? cal.get(Calendar.YEAR) : 0;
+    }
+    private int getMaxYear(Iterator<Order> iterator) {
+	Long MaxDate = Long.MIN_VALUE;
+	while (iterator.hasNext() ) {
+	    MaxDate = iterator.next().getCreated();
+	 }
+	Calendar cal = Calendar.getInstance();
+	cal.setTimeInMillis( MaxDate);
+	return MaxDate != Long.MIN_VALUE ? cal.get(Calendar.YEAR) : 0;
     }
 
     public  List<Integer> getDaysInMonthForSelectedMonthCreation(){

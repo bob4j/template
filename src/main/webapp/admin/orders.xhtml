@@ -12,7 +12,7 @@
 		<ui:define name="content">
 			<div id="content" class="float_l">
 				<h:form id="table_product_form" style="display:flex;">
-					<h:dataTable value="#{adminOrderController.all}" var="o" style="width: 66%;"
+					<h:dataTable value="#{adminOrderController.all}" var="o" style="width: 60%;"
 						id="table_product" headerClass="entityTableHeader"
 						rowClasses="entityTableOddRow,entityTableEvenRow" class="float_l">
 						<h:column>
@@ -109,19 +109,19 @@
 							</f:facet>
 							#{o.customer.firstName} #{o.customer.lastName}
 						</h:column>
-						<h:column>
-							<f:facet name="header">Action</f:facet>
-							<c:if test="${o.status eq 'PLACED'}">
-								<h:commandLink
-									actionListener="#{adminOrderController.approve(o.id)}"
-									value="Approve" />
-							</c:if>
-							<c:if test="${o.status eq 'APPROVED'}">
-								<h:commandLink style="float:right;"
-									actionListener="#{adminOrderController.ship(o.id)}"
-									value="Ship" />
-							</c:if>
-						</h:column>
+<!-- 						<h:column> -->
+<!-- 							<f:facet name="header">Action</f:facet> -->
+<!-- 							<c:if test="${o.status eq 'PLACED'}"> -->
+<!-- 								<h:commandLink -->
+<!-- 									actionListener="#{adminOrderController.approve(o.id)}" -->
+<!-- 									value="Approve" /> -->
+<!-- 							</c:if> -->
+<!-- 							<c:if test="${o.status eq 'APPROVED'}"> -->
+<!-- 								<h:commandLink style="float:right;" -->
+<!-- 									actionListener="#{adminOrderController.ship(o.id)}" -->
+<!-- 									value="Ship" /> -->
+<!-- 							</c:if> -->
+<!-- 						</h:column> -->
 						<h:column>
 							<f:facet name="header">Order Details</f:facet>
 
@@ -131,7 +131,7 @@
 							</h:link>
 						</h:column>
 					</h:dataTable>
-					<div id="sidebar" class="float_r" style="width: 33%">
+					<div id="sidebar" class="float_r" style="width: 40%">
 			<div class="sidebar_box">
 				<span class="bottom"></span>
 				<h3>Filter Yours Orders</h3>
@@ -147,38 +147,49 @@
 				</ul>
 						<div class="cleaner"></div>
 				<h4>Filter By Creation Date</h4>
-			
-				<ul class="sidebar_list float_l">
-					<h:outputText class="float_l" value="Year"></h:outputText>
-					<h:selectOneMenu class="float_l" id="creationYearStatusFilter" style="width:10px;"
-						value="#{adminOrderController.selectedCreationYear}">
-						<f:ajax execute="creationYearStatusFilter" render="table_product" />
-						<f:selectItems value="#{adminOrderController.getYearsList()}"
-							var="s" itemLabel="#{c}" itemValue="#{c}" />
-					</h:selectOneMenu>
-				</ul>
-				<ul class="sidebar_list float_l">
-					<h:outputText class="float_l" value="Month"></h:outputText>
-					<h:selectOneMenu class="float_l" id="creationMonthStatusFilter" style="width:10px;"
-						value="#{adminOrderController.selectedCreationMonth}">
-						<f:ajax
-							execute="creationMonthStatusFilter creationDayStatusFilter"
-							render="table_product creationDayStatusFilter" />
-						<f:selectItems value="${adminOrderController.months}" var="s"
-							itemLabel="#{c}" itemValue="#{c}" />
-					</h:selectOneMenu>
-				</ul>
-				<ul class="sidebar_list float_l">
-					<h:outputText class="float_l" value="Day"></h:outputText>
-					<h:selectOneMenu class="float_l" id="creationDayStatusFilter" style="width:10px;"
-						value="#{adminOrderController.selectedCreationDay}">
-						<f:ajax execute="creationDayStatusFilter" render="table_product" />
-						<f:selectItems
-							value="#{adminOrderController.getDaysInMonthForSelectedMonthCreation()}"
-							var="s" itemLabel="#{c}" itemValue="#{c}" />
-					</h:selectOneMenu>
-				</ul>
-										<div class="cleaner"></div>
+							<div>
+								<div class="float_l" style="width: 30%">
+								<h5>Year</h5>
+								<ul class="sidebar_list float_l" >
+									<h:selectOneMenu class="float_l" id="creationYearStatusFilter" style="width: 70px"
+										value="#{adminOrderController.selectedCreationYear}">
+										<f:ajax execute="creationYearStatusFilter"
+											render="table_product" />
+										<f:selectItems
+											value="#{adminOrderController.getCreatedYearsList()}" var="s"
+											itemLabel="#{c}" itemValue="#{c}" />
+									</h:selectOneMenu>
+								</ul>
+								</div>
+								<div class="float_l" style="width: 30%">
+								<h5>Month</h5>
+
+								<ul class="sidebar_list float_l" >
+									<h:selectOneMenu class="float_l" id="creationMonthStatusFilter" style="width: 70px"
+										value="#{adminOrderController.selectedCreationMonth}">
+										<f:ajax
+											execute="creationMonthStatusFilter creationDayStatusFilter"
+											render="table_product creationDayStatusFilter" />
+										<f:selectItems value="${adminOrderController.months}" var="s"
+											itemLabel="#{c}" itemValue="#{c}" />
+									</h:selectOneMenu>
+								</ul>
+								</div >
+								<div class="float_l" style="width: 30%">
+								<h5>Day</h5>
+								<ul class="sidebar_list float_l" >
+									<h:selectOneMenu class="float_l" id="creationDayStatusFilter" style="width: 70px"
+										value="#{adminOrderController.selectedCreationDay}">
+										<f:ajax execute="creationDayStatusFilter"
+											render="table_product" />
+										<f:selectItems
+											value="#{adminOrderController.getDaysInMonthForSelectedMonthCreation()}"
+											var="s" itemLabel="#{c}" itemValue="#{c}" />
+									</h:selectOneMenu>
+								</ul>
+								</div>
+							</div>
+							<div class="cleaner"></div>
 				
 			</div>
 		</div>
