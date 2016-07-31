@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Metamodel;
 
 public class FilterUtils<T> {
     private Root<T> root;
@@ -24,6 +25,10 @@ public class FilterUtils<T> {
         setCriteriaBuilder(getEm().getCriteriaBuilder());
         setCriteriaQuery(getCriteriaBuilder().createQuery(objectClass));
         setRoot(getCriteriaQuery().from(objectClass));
+    }
+
+    public Metamodel getMetamodel() {
+	return em.getMetamodel();
     }
     
     public Iterable<T> getQueryResultList() {

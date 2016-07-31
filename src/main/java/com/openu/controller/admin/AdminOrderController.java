@@ -16,8 +16,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
@@ -28,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.openu.controller.AbstractCrudController;
 import com.openu.controller.Constants;
+import com.openu.model.Customer;
 import com.openu.model.Month;
 import com.openu.model.Order;
 import com.openu.model.OrderStatus;
@@ -52,6 +58,9 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private Month selectedCreationMonth = Month.All;
     private int selectedCreationYear = Constants.NO_YEAR_SELECTED;
     private int selectedCreationDay = Constants.NO_DAY_SELECTED ;
+    private Month selectedModifiedMonth = Month.All;
+    private int selectedModifiedYear = Constants.NO_YEAR_SELECTED;
+    private int selectedModifiedDay = Constants.NO_DAY_SELECTED ;
     private Date date;
     private ArrayList<String> statusesList;
     private String selectedCustomer = "";
@@ -165,7 +174,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	CriteriaBuilder criteriaBuilder = orderFilter.getCriteriaBuilder();
 	Root<Order> root = orderFilter.getRoot();
 	Predicate statusPredicate = getStatusPredicate(criteriaBuilder, root);
-	Predicate customerPredicate = getCustomerPredicate(criteriaBuilder, root);
+	Predicate customerPredicate = getCustomerPredicate(orderFilter);
 	Predicate creationDatePredicate = getCreationDatePredicate(criteriaBuilder, root);
 	Predicate modifiedDatePredicate = getModifiedDatePredicate(criteriaBuilder, root);
 
@@ -180,12 +189,12 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	}
     }
     
-    private Predicate getCustomerPredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-	if (!selectedCustomer.isEmpty() ) {
-	    return criteriaBuilder.equal(root.<OrderStatus>get(Constants.CUSTOMER), selectedCustomer);
-	} else {
-	    return null;
+    private Predicate getCustomerPredicate( FilterUtils<Order> orderFilter) {
+	//TODO add predicate
+	if (!getSelectedCustomer().isEmpty() ) {
 	}
+	    return null;
+	
     }
     
     private Predicate getCreationDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
@@ -193,7 +202,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
     
     private Predicate getModifiedDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-	return getDatePredicate(criteriaBuilder, root, selectedCreationYear, selectedCreationMonth, selectedCreationDay,Constants.MODIFIED);
+	return getDatePredicate(criteriaBuilder, root, selectedModifiedYear, selectedModifiedMonth, selectedModifiedDay,Constants.MODIFIED);
     }
     
     public List<String> getStatusesList(){
@@ -242,14 +251,15 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     
     /**
      * 
+     * @param fielsToFilter 
      * @return list of  years 
      */
-    public List<Integer> getYearsList(String filteredField) {
+    public List<Integer> getYearsList(String fielsToFilter) {
 	ArrayList<Integer> years = new ArrayList<Integer>();
-	Iterable<Order> findAll = getRepository().findAll(new Sort(Direction.ASC, filteredField));
+	Iterable<Order> findAll = getRepository().findAll(new Sort(Direction.ASC, fielsToFilter));
 	Iterator<Order> iterator = findAll.iterator();
-	int minYear = getMinYear(iterator);
-	int maxYear=getMaxYear(iterator);
+	int minYear = getMinYear(iterator, fielsToFilter);
+	int maxYear=getMaxYear(iterator, fielsToFilter);
 	if (minYear != 0 && maxYear != 0) {
 	    for (int i = minYear; i <= maxYear; i++) {
 		years.add(i);
@@ -258,31 +268,65 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	return years;
     }
     
+    
     public List<Integer> getCreatedYearsList() {
-	return getYearsList(Constants.CREATED);
+	List<Integer> years = getYearsList(Constants.CREATED);
+	if (years.size() == 1){
+	    setSelectedCreationYear(years.get(0));
+	}
+	return years;
     }
-    private int getMinYear(Iterator<Order> iterator) {
+    
+    public List<Integer> getModifiedYearsList() {
+	List<Integer> years =  getYearsList(Constants.MODIFIED);
+	if (years.size() == 1){
+	    setSelectedModifiedYear(years.get(0));
+	}
+	return years;
+
+    }
+    private int getMinYear(Iterator<Order> iterator, String fielsToFilter) {
 	Long minDate = Long.MIN_VALUE;
 	if (iterator.hasNext()) {
-	    minDate = iterator.next().getCreated();
+	    minDate = getDate(iterator,fielsToFilter);
 	}
 	Calendar cal = Calendar.getInstance();
 	cal.setTimeInMillis(minDate);
 	return minDate != Long.MIN_VALUE ? cal.get(Calendar.YEAR) : 0;
     }
-    private int getMaxYear(Iterator<Order> iterator) {
+    private int getMaxYear(Iterator<Order> iterator, String fielsToFilter) {
 	Long MaxDate = Long.MIN_VALUE;
 	while (iterator.hasNext() ) {
-	    MaxDate = iterator.next().getCreated();
+	    MaxDate = getDate(iterator ,fielsToFilter);
 	 }
 	Calendar cal = Calendar.getInstance();
 	cal.setTimeInMillis( MaxDate);
 	return MaxDate != Long.MIN_VALUE ? cal.get(Calendar.YEAR) : 0;
     }
+    private Long getDate(Iterator<Order> iterator, String fielsToFilter) {
+	Long date;
+	switch (fielsToFilter) {
+	case Constants.MODIFIED:
+		date = iterator.next().getModified();
+	    break;
+	case Constants.CREATED:
+		date = iterator.next().getCreated();
+	    break;
+	default:
+		date = Long.MIN_VALUE;
+	    break;
+	}
+	return date;
+    }
 
     public  List<Integer> getDaysInMonthForSelectedMonthCreation(){
 	return getDaysInMonth(getSelectedCreationYear(), getSelectedCreationMonth() );
     }
+    
+    public  List<Integer> getDaysInMonthForSelectedModifiedCreation(){
+	return getDaysInMonth(getSelectedModifiedYear(), getSelectedModifiedMonth() );
+    }
+    
     public int getSelectedCreationYear() {
 	return selectedCreationYear;
     }
@@ -305,6 +349,42 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     public void setDate(Date date) {
 	this.date = date;
+    }
+    public Month getSelectedModifiedMonth() {
+	return selectedModifiedMonth;
+    }
+    public void setSelectedModifiedMonth(Month selectedModifiedMonth) {
+	this.selectedModifiedMonth = selectedModifiedMonth;
+    }
+    public int getSelectedModifiedYear() {
+	return selectedModifiedYear;
+    }
+    public void setSelectedModifiedYear(int selectedModifiedYear) {
+	this.selectedModifiedYear = selectedModifiedYear;
+    }
+    public int getSelectedModifiedDay() {
+	return selectedModifiedDay;
+    }
+    public void setSelectedModifiedDay(int selectedModifiedDay) {
+	this.selectedModifiedDay = selectedModifiedDay;
+    }
+    public String getSelectedCustomer() {
+	return selectedCustomer;
+    }
+    public void setSelectedCustomer(String selectedCustomer) {
+	this.selectedCustomer = selectedCustomer;
+    }
+    
+    public void clearFilter(){
+	selectedCreationDay = Constants.NO_DAY_SELECTED;
+	selectedCreationMonth = Month.All;
+	selectedCreationYear = Constants.NO_YEAR_SELECTED;
+	selectedModifiedDay = Constants.NO_DAY_SELECTED;
+	selectedModifiedMonth = Month.All;
+	selectedModifiedYear = Constants.NO_YEAR_SELECTED;
+	selectedCustomer = "";
+	selectedStatus = OrderStatus.NOT_SLECTED;
+		
     }
     
 
