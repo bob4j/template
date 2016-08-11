@@ -1,4 +1,4 @@
-package com.openu.controller.admin;
+package com.openu.util;
 
 import java.util.ArrayList;
 import java.util.List;

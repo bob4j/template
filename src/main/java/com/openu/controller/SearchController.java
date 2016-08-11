@@ -13,11 +13,11 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.openu.controller.admin.FilterManager;
 import com.openu.model.Product;
 import com.openu.model.ProductColor;
 import com.openu.model.ProductSize;
 import com.openu.repository.ProductRepository;
+import com.openu.util.FilterManager;
 import com.openu.util.Utils;
 
 @Component

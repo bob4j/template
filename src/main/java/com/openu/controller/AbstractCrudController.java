@@ -10,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.openu.controller.admin.FilterManager;
 import com.openu.model.Month;
+import com.openu.util.FilterManager;
 
 public abstract class AbstractCrudController<T> {
 
