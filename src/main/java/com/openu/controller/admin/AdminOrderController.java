@@ -11,19 +11,13 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -33,14 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.openu.controller.AbstractCrudController;
 import com.openu.controller.Constants;
-import com.openu.model.Customer;
 import com.openu.model.Month;
 import com.openu.model.Order;
 import com.openu.model.OrderStatus;
 import com.openu.repository.OrderRepository;
 import com.openu.util.Utils;
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
  
 
 @Component
@@ -161,16 +152,22 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     @Override
     public Iterable<Order> getAll() {
         
-        FilterUtils<Order> orderFilter = new FilterUtils<Order>(Order.class,entityManagerFactory);
+        FilterManager<Order> orderFilter = getFilterManager();
         createPredicatesList(orderFilter);
-        if (orderFilter.getPredicates().isEmpty()){
+        if (orderFilter.getPredicatesList().isEmpty()){
             return super.getAll();
         }
         return orderFilter.getQueryResultList();
     }
+    
+    @Override
+    protected FilterManager<Order> getFilterManager() {
+	FilterManager<Order> orderFilter = new FilterManager<Order>(Order.class,entityManagerFactory);
+	return orderFilter;
+    }
    
-
-    private void createPredicatesList(FilterUtils<Order> orderFilter) {
+    @Override
+    protected void createPredicatesList(FilterManager<Order> orderFilter) {
 	CriteriaBuilder criteriaBuilder = orderFilter.getCriteriaBuilder();
 	Root<Order> root = orderFilter.getRoot();
 	Predicate statusPredicate = getStatusPredicate(criteriaBuilder, root);
@@ -189,7 +186,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	}
     }
     
-    private Predicate getCustomerPredicate( FilterUtils<Order> orderFilter) {
+    private Predicate getCustomerPredicate( FilterManager<Order> orderFilter) {
 	//TODO add predicate
 	if (!getSelectedCustomer().isEmpty() ) {
 	}

@@ -13,5 +13,14 @@ public enum ProductSize {
     public String getLabel() {
         return label;
     }
+    
+    public static ProductSize getSizeByLable(String label) {
+   	for (ProductSize size : ProductSize.values()) {
+   	    if (size.label.equalsIgnoreCase(label)) {
+   		return size;
+   	    }
+   	}
+   	return null;
+       }
 
 }

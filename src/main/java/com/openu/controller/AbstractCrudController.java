@@ -1,7 +1,6 @@
 package com.openu.controller;
 
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -11,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.openu.controller.admin.FilterManager;
 import com.openu.model.Month;
-import com.openu.model.Order;
 
 public abstract class AbstractCrudController<T> {
 
@@ -37,8 +36,27 @@ public abstract class AbstractCrudController<T> {
     /**
      * Retrieves all entities to be presented on the {entity}-list page
      */
+    
     public Iterable<T> getAll() {
+
+	FilterManager<T> filterManager = getFilterManager();
+	if (filterManager != null) {
+	    createPredicatesList(filterManager);
+	    if (!filterManager.getPredicatesList().isEmpty()) {
+		return filterManager.getQueryResultList();
+	    }
+	}
 	return getRepository().findAll(new Sort(getDirection(), getSortBy()));
+        
+        
+    }
+
+    protected void createPredicatesList(FilterManager<T> orderFilter) {
+	
+    }
+
+    protected FilterManager<T> getFilterManager() {
+	return null;
     }
 
     /**
