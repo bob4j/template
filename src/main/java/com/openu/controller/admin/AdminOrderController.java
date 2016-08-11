@@ -56,6 +56,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private Date date;
     private ArrayList<String> statusesList;
     private String selectedCustomer = "";
+    private FilterManager<Order> filterManager = new FilterManager<Order>(Order.class,entityManagerFactory);
     public Order getOrder() {
         String orderId = Utils.getRequest().getParameter("order_id");
         if (orderId != null) {
@@ -151,32 +152,19 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
     
     @Override
-    public Iterable<Order> getAll() {
-        
-        FilterManager<Order> orderFilter = getFilterManager();
-        createPredicatesList(orderFilter);
-        if (orderFilter.getPredicatesList().isEmpty()){
-            return super.getAll();
-        }
-        return orderFilter.getQueryResultList();
-    }
-    
-    @Override
     protected FilterManager<Order> getFilterManager() {
-	FilterManager<Order> orderFilter = new FilterManager<Order>(Order.class,entityManagerFactory);
-	return orderFilter;
+	return filterManager;
     }
    
     @Override
-    protected void createPredicatesList(FilterManager<Order> orderFilter) {
-	CriteriaBuilder criteriaBuilder = orderFilter.getCriteriaBuilder();
-	Root<Order> root = orderFilter.getRoot();
+    protected void createPredicatesList() {
+	CriteriaBuilder criteriaBuilder = filterManager.getCriteriaBuilder();
+	Root<Order> root = filterManager.getRoot();
 	Predicate statusPredicate = getStatusPredicate(criteriaBuilder, root);
-	Predicate customerPredicate = getCustomerPredicate(orderFilter);
+	Predicate customerPredicate = getCustomerPredicate();
 	Predicate creationDatePredicate = getCreationDatePredicate(criteriaBuilder, root);
 	Predicate modifiedDatePredicate = getModifiedDatePredicate(criteriaBuilder, root);
-
-	orderFilter.addPredicates( statusPredicate, creationDatePredicate,customerPredicate, modifiedDatePredicate);
+	filterManager.addPredicates( statusPredicate, creationDatePredicate,customerPredicate, modifiedDatePredicate);
     }
 
     private Predicate getStatusPredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
@@ -187,7 +175,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	}
     }
     
-    private Predicate getCustomerPredicate( FilterManager<Order> orderFilter) {
+    private Predicate getCustomerPredicate() {
 	//TODO add predicate
 	if (!getSelectedCustomer().isEmpty() ) {
 	}

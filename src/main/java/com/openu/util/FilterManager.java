@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -19,10 +18,6 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.openu.model.Product;
-import com.openu.model.ProductColor;
-import com.openu.model.StockItem;
 
 public class FilterManager<T> {
     private static final String VALUE = "value";

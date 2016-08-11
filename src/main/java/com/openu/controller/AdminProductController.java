@@ -32,7 +32,7 @@ import com.openu.util.Utils;
 
 @Component
 @Scope("view")
-public class AdminProductController extends AbstractCrudController<Product> implements Serializable {
+public class AdminProductController extends AbstractSearchController implements Serializable {
 
     private static final String BRAND = "brand";
 

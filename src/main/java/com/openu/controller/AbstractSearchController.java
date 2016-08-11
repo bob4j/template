@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.Predicate;
@@ -20,9 +21,8 @@ import com.openu.repository.ProductRepository;
 import com.openu.util.FilterManager;
 import com.openu.util.Utils;
 
-@Component
-@Scope("view")
-public class SearchController  {
+
+public abstract class AbstractSearchController extends AbstractCrudController<Product>  {
 
     private static final String PRICE_IS_BIGGER = "price>";
 
@@ -42,24 +42,30 @@ public class SearchController  {
 
     private static final String STOCK_ITEMS = "stockItems";
 
-    FilterManager<Product> filterManager;
-    Map<String, String[]> parameterMap;
     @Resource
-    private ProductRepository productRepository;
+    protected ProductRepository productRepository;
        
     @Resource
     private EntityManagerFactory entityManagerFactory;
     
-    public List<Product> getProducts() {
-	
-        parameterMap = Utils.getRequest().getParameterMap();
-        filterManager = new FilterManager<Product>(Product.class, entityManagerFactory);
-        createSearchPredicates();
-         return filterManager.getPredicatesList().isEmpty() ?null: (List<Product>) filterManager.getQueryResultList();
+    FilterManager<Product> filterManager;
+
+    Map<String, String[]> parameterMap ;
+    
+    @Override
+    public FilterManager<Product> getFilterManager() {
+	return filterManager;
     }
-
-
-    private void createSearchPredicates(   ) {
+     
+    @Override
+    public Iterable<Product> getAll() {
+	filterManager = new FilterManager<>(Product.class, entityManagerFactory);
+	return super.getAll();
+    }
+    
+    @Override
+    protected void createPredicatesList(){
+	parameterMap  = Utils.getRequest().getParameterMap(); 
 	getNamePredicate();
 	getDescriptorPredicate();
 	getColorPredicate();

@@ -41,7 +41,7 @@ public abstract class AbstractCrudController<T> {
 
 	FilterManager<T> filterManager = getFilterManager();
 	if (filterManager != null) {
-	    createPredicatesList(filterManager);
+	    createPredicatesList();
 	    if (!filterManager.getPredicatesList().isEmpty()) {
 		return filterManager.getQueryResultList();
 	    }
@@ -51,7 +51,7 @@ public abstract class AbstractCrudController<T> {
         
     }
 
-    protected void createPredicatesList(FilterManager<T> orderFilter) {
+    protected void createPredicatesList() {
 	
     }
 
