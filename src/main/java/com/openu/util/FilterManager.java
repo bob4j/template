@@ -18,6 +18,7 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort.Direction;
 
 public class FilterManager<T> {
     private static final String VALUE = "value";
@@ -44,6 +45,25 @@ public class FilterManager<T> {
 	getCriteriaQuery().where(getPredicatesList().toArray(new Predicate[] {}));
 	TypedQuery<T> query = getEm().createQuery(getCriteriaQuery());
 	return query.getResultList();
+    }
+    
+    public Iterable<T> getQueryResultList(Direction direction , String sortBy) {
+	getCriteriaQuery().where(getPredicatesList().toArray(new Predicate[] {}));
+	sortResult(direction, sortBy);
+	TypedQuery<T> query = getEm().createQuery(getCriteriaQuery());
+	return query.getResultList();
+    }
+
+    private void sortResult(Direction direction, String sortBy) {
+	switch (direction) {
+	case ASC:
+	    getCriteriaQuery().orderBy(getCriteriaBuilder().asc(getRoot().get(sortBy)));
+	    break;
+	case DESC:
+	    getCriteriaQuery().orderBy(getCriteriaBuilder().desc(getRoot().get(sortBy)));
+	default:
+	    break;
+	}
     }
 
     public List<Predicate> getPredicatesList() {

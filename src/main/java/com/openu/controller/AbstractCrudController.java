@@ -43,7 +43,7 @@ public abstract class AbstractCrudController<T> {
 	if (filterManager != null) {
 	    createPredicatesList();
 	    if (!filterManager.getPredicatesList().isEmpty()) {
-		return filterManager.getQueryResultList();
+		return filterManager.getQueryResultList(getDirection(), getSortBy());
 	    }
 	}
 	return getRepository().findAll(new Sort(getDirection(), getSortBy()));
