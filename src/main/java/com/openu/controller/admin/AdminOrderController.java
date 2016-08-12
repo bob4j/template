@@ -30,6 +30,7 @@ import com.openu.controller.Constants;
 import com.openu.model.Month;
 import com.openu.model.Order;
 import com.openu.model.OrderStatus;
+import com.openu.model.ProductColor;
 import com.openu.repository.OrderRepository;
 import com.openu.util.FilterManager;
 import com.openu.util.Utils;
@@ -41,6 +42,9 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     
     
+    private static final String CUSTOMER_FIRST_NAME = "firstName";
+    private static final String CUSTOMER_LAST_NAME = "lastName";
+    private static final String CUSTOMER = "customer";
     @Resource
     private OrderRepository orderRepository;
     @Resource
@@ -158,6 +162,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
    
     @Override
     protected void createPredicatesList() {
+	super.createPredicatesList();
 	CriteriaBuilder criteriaBuilder = filterManager.getCriteriaBuilder();
 	Root<Order> root = filterManager.getRoot();
 	Predicate statusPredicate = getStatusPredicate(criteriaBuilder, root);
@@ -176,11 +181,11 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
     
     private Predicate getCustomerPredicate() {
-	//TODO add predicate
-	if (!getSelectedCustomer().isEmpty() ) {
-	}
-	    return null;
-	
+	String[] customerArray = new String[1]; 
+	customerArray[0]= selectedCustomer;
+	Predicate firstNamePredicate = filterManager.getJoinStringFieldPredicate(customerArray,CUSTOMER,CUSTOMER_FIRST_NAME, "%value%");
+	Predicate lastNamePredicate = filterManager.getJoinStringFieldPredicate(customerArray,CUSTOMER,CUSTOMER_LAST_NAME, "%value%");
+	return filterManager.getCriteriaBuilder().or(firstNamePredicate,lastNamePredicate);
     }
     
     private Predicate getCreationDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {

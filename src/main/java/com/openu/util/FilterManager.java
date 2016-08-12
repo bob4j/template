@@ -106,13 +106,13 @@ public class FilterManager<T> {
 	}
 	Predicate fieldPredicate = null;
 	Join<T, Q> join = root.join(joinByField);
-	R objectValue = getParamByNameFunction.apply(params[0]);
+	R objectValue = getObjectValue(params,0, getParamByNameFunction);
 	if (objectValue != null) {
 	    //create the first predicate
 	    fieldPredicate = criteriaBuilderFunction.apply(join.<Q>get(fieldName), objectValue);
 	    for (int i = 1; i < params.length; i++) {
 		//aggregated all the relevant predicate with OR operator
-		objectValue = getParamByNameFunction.apply(params[i]);
+		objectValue = getObjectValue(params,i,getParamByNameFunction);
 		if (objectValue != null) {
 		    fieldPredicate = criteriaBuilder.or(fieldPredicate,
 			    criteriaBuilderFunction.apply(join.<Q>get(fieldName), objectValue));
@@ -122,23 +122,53 @@ public class FilterManager<T> {
 	return fieldPredicate;
     }
     
+    public  <Q> Predicate getJoinStringFieldPredicate(String[] params, String joinByField,String fieldName, String likeTemple) {
+	if (params == null || params.length == 0 ) {
+	    return null;
+	}
+	Predicate fieldPredicate = null;
+	Join<T, Q> join = root.join(joinByField);
+	StringBuilder paramAsString = new StringBuilder(likeTemple);
+	getLikeTemplateWithValue(params, paramAsString, 0);
+	    //create the first predicate
+	    fieldPredicate = criteriaBuilder.like(criteriaBuilder.lower(join.<String>get(fieldName)), paramAsString.toString());
+	    for (int i = 1; i < params.length; i++) {
+		//aggregated all the relevant predicate with OR operator
+		getLikeTemplateWithValue(params, paramAsString, i);
+		    fieldPredicate = criteriaBuilder.or(fieldPredicate,
+			    criteriaBuilder.like(criteriaBuilder.lower(join.<String>get(fieldName)), paramAsString.toString()));
+
+	}
+	return fieldPredicate;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <R> R getObjectValue(String[] params,int index, Function<String, R> getParamByNameFunction) {
+	return getParamByNameFunction != null ?getParamByNameFunction.apply(params[index]):(R)params[index] ;
+    }
+    
     public  <R, Q> Predicate getStringFieldPredicate(String[] params,String likeTemple, String fieldName) {
 	if (params == null || params.length == 0 ) {
 	    return null;
 	}
 	StringBuilder paramAsString = new StringBuilder(likeTemple);
-	int indexOfValue = paramAsString.indexOf(VALUE);
-	paramAsString.replace(indexOfValue, indexOfValue+VALUE.length(), params[0]);
+	getLikeTemplateWithValue(params, paramAsString, 0);
 	Predicate fieldPredicate = null;
 	if (paramAsString != null) {
 	    fieldPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.<String>get(fieldName)), paramAsString.toString());
 	    for (int i = 1; i < params.length; i++) {
-		paramAsString.replace(indexOfValue, indexOfValue+VALUE.length(), params[i]);
-		    fieldPredicate = criteriaBuilder.or(fieldPredicate,
+		getLikeTemplateWithValue(params, paramAsString, i);
+		fieldPredicate = criteriaBuilder.or(fieldPredicate,
 			    criteriaBuilder.like(criteriaBuilder.lower(root.<String>get(fieldName)), paramAsString.toString()));
 	    }
 	}
 	return fieldPredicate;
+    }
+
+
+    private void getLikeTemplateWithValue(String[] params, StringBuilder paramAsString, int index) {
+	int indexOfValue = paramAsString.indexOf(VALUE);
+	paramAsString.replace( indexOfValue, indexOfValue+VALUE.length(), params[index]);
     }
     
     public  <R> Predicate getPrimitiveFieldPredicate(String[] params,Function<String, R> getParamByNameFunction,

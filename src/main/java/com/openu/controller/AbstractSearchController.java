@@ -65,6 +65,7 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
     
     @Override
     protected void createPredicatesList(){
+	super.createPredicatesList();
 	parameterMap  = Utils.getRequest().getParameterMap(); 
 	getNamePredicate();
 	getDescriptorPredicate();
