@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.openu.model.Order;
 import com.openu.model.Product;
 import com.openu.model.ProductColor;
 import com.openu.model.ProductSize;
@@ -54,15 +55,12 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
     
     @Override
     public FilterManager<Product> getFilterManager() {
+	if (filterManager == null){
+	    filterManager = new FilterManager<Product>(Product.class,entityManagerFactory);
+	}
 	return filterManager;
     }
      
-    @Override
-    public Iterable<Product> getAll() {
-	filterManager = new FilterManager<>(Product.class, entityManagerFactory);
-	return super.getAll();
-    }
-    
     @Override
     protected void createPredicatesList(){
 	super.createPredicatesList();

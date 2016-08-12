@@ -60,7 +60,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private Date date;
     private ArrayList<String> statusesList;
     private String selectedCustomer = "";
-    private FilterManager<Order> filterManager = new FilterManager<Order>(Order.class,entityManagerFactory);
+    private FilterManager<Order> filterManager; 
     public Order getOrder() {
         String orderId = Utils.getRequest().getParameter("order_id");
         if (orderId != null) {
@@ -157,6 +157,9 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     
     @Override
     protected FilterManager<Order> getFilterManager() {
+	if (filterManager == null){
+	    filterManager = new FilterManager<Order>(Order.class,entityManagerFactory);
+	}
 	return filterManager;
     }
    
