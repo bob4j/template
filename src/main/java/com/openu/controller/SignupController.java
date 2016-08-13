@@ -1,5 +1,8 @@
 package com.openu.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
@@ -10,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.openu.model.Address;
+import com.openu.model.City;
 import com.openu.model.Customer;
+import com.openu.repository.CityRepository;
 import com.openu.repository.CustomerRepository;
 import com.openu.util.EmailValidator;
 
@@ -20,6 +26,9 @@ public class SignupController {
 
     @Autowired
     private CustomerRepository repository;
+    
+    @Resource
+    private CityRepository cityRepository;
 
     private String firstName;
     private String lastName;
@@ -28,6 +37,11 @@ public class SignupController {
     private String passwordAgain;
     private String email;
     private String phoneNumber;
+    private String addressLine;
+    private Long cityId;
+
+
+    
 
     public void validate(ComponentSystemEvent e) {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -66,6 +80,7 @@ public class SignupController {
         customer.setPassword(password);
         customer.setEmail(email);
         customer.setPhoneNumber(phoneNumber);
+        customer.setAddress(getCustomerAddress());
         repository.save(customer);
         return null;
     }
@@ -124,6 +139,30 @@ public class SignupController {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    
+    public List<City> getCities() {
+        return (List<City>) cityRepository.findAll();
+    }
+
+    public Long getCityId() {
+	return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+	this.cityId = cityId;
+    }
+    
+    private Address getCustomerAddress() {
+	return new Address(cityRepository.findOne(cityId),getAddressLine());
+    }
+
+    public String getAddressLine() {
+	return addressLine;
+    }
+
+    public void setAddressLine(String addressLine) {
+	this.addressLine = addressLine;
     }
 
 }

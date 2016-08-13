@@ -36,8 +36,18 @@
 						<h:inputText id="email" required="true" requiredMessage="Please enter email" style="width: 300px;" 
 							value="#{signupController.email}"/>
 						<p>Phone number:</p>
-						<h:inputText id="phoneNumber" required="true" requiredMessage="Please enter phone number" style="width: 300px;" 
-							value="#{signupController.phoneNumber}"/>
+						<h:inputText id="phoneNumber" required="true"
+							requiredMessage="Please enter phone number" style="width: 300px;"
+							value="#{signupController.phoneNumber}" />
+						<p>City:</p>
+							<h:selectOneMenu value="#{signupController.cityId}" required="true" id="city" style="width:112px;" 
+										requiredMessage="Please enter city">
+								<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+								<f:selectItems value="#{signupController.cities}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
+							</h:selectOneMenu>
+							<p>Address:</p>
+							<h:inputText value="#{signupController.addressLine}" required="true" id="address" 
+												style="width: 300px;" requiredMessage="Please enter address line"/> 
 						<h:commandButton id="submit" class="submit_btn" value="Signup"
 							type="submit" action="home" actionListener="#{signupController.signup()}"
 							style="margin-top:20px;" />
