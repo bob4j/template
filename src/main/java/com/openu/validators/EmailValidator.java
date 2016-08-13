@@ -1,4 +1,4 @@
-package com.openu.util;
+package com.openu.validators;
 
 import java.util.regex.Pattern;
 

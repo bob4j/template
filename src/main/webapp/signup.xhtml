@@ -38,9 +38,11 @@
 						<p>Phone number:</p>
 						<h:inputText id="phoneNumber" required="true"
 							requiredMessage="Please enter phone number" style="width: 300px;"
-							value="#{signupController.phoneNumber}" />
+							value="#{signupController.phoneNumber}">
+							<f:validator validatorId="com.openu.validators.PhoneValidator"></f:validator>
+						</h:inputText>
 						<p>City:</p>
-							<h:selectOneMenu value="#{signupController.cityId}" required="true" id="city" style="width:112px;" 
+						<h:selectOneMenu value="#{signupController.cityId}" required="true" id="city" style="width:112px;" 
 										requiredMessage="Please enter city">
 								<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 								<f:selectItems value="#{signupController.cities}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>

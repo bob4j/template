@@ -18,7 +18,7 @@ import com.openu.model.City;
 import com.openu.model.Customer;
 import com.openu.repository.CityRepository;
 import com.openu.repository.CustomerRepository;
-import com.openu.util.EmailValidator;
+import com.openu.validators.EmailValidator;
 
 @Component
 @Scope("view")
