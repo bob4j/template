@@ -25,6 +25,7 @@ public class PhoneValidator implements Validator {
 	             FacesMessage msg =
 	        	     new FacesMessage("Invalid Phone format. Valid format is:  09-9999999 or 099-9999999","Phone validation failed");
 	             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+	             facesContext.renderResponse();
 	             throw new ValidatorException(msg);
 	         }
     }

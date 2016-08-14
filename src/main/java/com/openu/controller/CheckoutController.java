@@ -36,6 +36,8 @@ public class CheckoutController implements Serializable {
     private Address shippingAddress;
     private Long cityId;
     private Boolean acceptTerms;
+    private Boolean useCustomerAddress = true;
+
 
     @Resource
     private SessionBean sessionBean;
@@ -48,7 +50,7 @@ public class CheckoutController implements Serializable {
     public void init() {
         ccInfo = new CreditCardInfo();
         Address customerAddress = sessionBean.loadCustomer().getAddress();
-        if (customerAddress != null) {
+        if (customerAddress != null && Boolean.TRUE.equals(useCustomerAddress)) {
             shippingAddress = new Address(customerAddress.getCity(), customerAddress.getAddress());
         } else {
             shippingAddress = new Address();
@@ -71,11 +73,14 @@ public class CheckoutController implements Serializable {
         order.setStatus(OrderStatus.PLACED);
         order.setCcInfo(ccInfo);
         order.setModified(System.currentTimeMillis());
-        order.setShippingAddress(getAddress());
+        order.setShippingAddress(getAddress(customer));
         customerRepository.save(customer);
     }
 
-    private Address getAddress() {
+    private Address getAddress(Customer customer) {
+	if (Boolean.TRUE.equals(useCustomerAddress)){
+	  return customer.getAddress();  
+	}
         shippingAddress.setCity(cityRepository.findOne(cityId));
         return shippingAddress;
     }
@@ -126,4 +131,17 @@ public class CheckoutController implements Serializable {
             fc.renderResponse();
         }
     }
+
+    public Boolean getUseCustomerAddress() {
+	return useCustomerAddress;
+    }
+
+    public void setUseCustomerAddress(Boolean useCustomerAddress) {
+	this.useCustomerAddress = useCustomerAddress;
+    }
+    
+    public void onUseCustomerAddressPressed() {
+	this.useCustomerAddress = !this.useCustomerAddress;
+    }
+
 }
