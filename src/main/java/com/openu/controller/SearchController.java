@@ -5,19 +5,19 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 
 import com.openu.model.Product;
+
 @Component
 @Scope("view")
-public class searchController extends AbstractSearchController {
+public class SearchController extends AbstractSearchController {
 
     @Override
     protected PagingAndSortingRepository<Product, Long> getRepository() {
-	return productRepository;
+        return productRepository;
     }
 
     @Override
     protected Product createEntity() throws Exception {
-	// TODO Auto-generated method stub
-	return null;
+        return null;
     }
 
 }
