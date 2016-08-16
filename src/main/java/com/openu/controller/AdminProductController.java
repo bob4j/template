@@ -105,7 +105,7 @@ public class AdminProductController extends AbstractSearchController implements 
         return p;
     }
 
-    public void update() throws Exception {
+    public String update() throws Exception {
         if (!StringUtils.isEmpty(imagePart.getSubmittedFileName())) {
             String filename = System.currentTimeMillis() + getImageSuffix();
             Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
@@ -117,6 +117,7 @@ public class AdminProductController extends AbstractSearchController implements 
         stockItems.forEach(si -> si.setProduct(entity));
         entity.setStockItems(stockItems);
         productRepository.save(entity);
+        return "/admin/products?faces-redirect=true";
     }
 
     public Iterable<Category> getAllCategories() {
@@ -183,17 +184,15 @@ public class AdminProductController extends AbstractSearchController implements 
     public void setStockItems(List<StockItem> stockItems) {
         this.stockItems = stockItems;
     }
-    
+
     public void brandUp() {
-	setSortBy(BRAND);
-	setDirection(Direction.ASC);
+        setSortBy(BRAND);
+        setDirection(Direction.ASC);
     }
 
     public void brandDown() {
-	setSortBy(BRAND);
-	setDirection(Direction.DESC);
+        setSortBy(BRAND);
+        setDirection(Direction.DESC);
     }
-    
-    
 
 }
