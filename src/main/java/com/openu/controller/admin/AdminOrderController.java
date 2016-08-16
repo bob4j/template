@@ -1,25 +1,17 @@
 package com.openu.controller.admin;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
@@ -27,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.openu.controller.AbstractCrudController;
 import com.openu.controller.Constants;
-import com.openu.model.Month;
 import com.openu.model.Order;
 import com.openu.model.OrderStatus;
 import com.openu.repository.OrderRepository;
@@ -43,15 +34,10 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private static final String CUSTOMER = "customer";
 
     private OrderStatus selectedStatus = OrderStatus.NOT_SLECTED;
-    private Month selectedCreationMonth = Month.All;
-    private int selectedCreationYear = Constants.NO_YEAR_SELECTED;
-    private int selectedCreationDay = Constants.NO_DAY_SELECTED;
-    private Month selectedModifiedMonth = Month.All;
-    private int selectedModifiedYear = Constants.NO_YEAR_SELECTED;
-    private int selectedModifiedDay = Constants.NO_DAY_SELECTED;
-    private Date date;
     private ArrayList<String> statusesList;
     private String selectedCustomer = "";
+    private Date selectedCreationDate;
+    private Date selectedModifiedDate;
 
     @Resource
     private OrderRepository orderRepository;
@@ -64,19 +50,6 @@ public class AdminOrderController extends AbstractCrudController<Order> {
             return orderRepository.findOne(Long.valueOf(orderId));
         }
         return null;
-    }
-
-    public void onDateSelect(SelectEvent event) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", format.format(event.getObject())));
-    }
-
-    public void click() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-
-        requestContext.update("form:display");
-        requestContext.execute("PF('dlg').show()");
     }
 
     @Transactional
@@ -187,11 +160,22 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     private Predicate getCreationDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        return getDatePredicate(criteriaBuilder, root, selectedCreationYear, selectedCreationMonth, selectedCreationDay, Constants.CREATED);
+        return getDatePredicate(criteriaBuilder, root, selectedCreationDate, "created");
     }
 
     private Predicate getModifiedDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        return getDatePredicate(criteriaBuilder, root, selectedModifiedYear, selectedModifiedMonth, selectedModifiedDay, Constants.MODIFIED);
+        return getDatePredicate(criteriaBuilder, root, selectedModifiedDate, "modified");
+    }
+
+    private Predicate getDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root, Date date, String field) {
+        if (date == null) {
+            return null;
+        }
+        Calendar until = Calendar.getInstance();
+        until.setTime(date);
+        until.set(Calendar.HOUR, 23);
+        until.set(Calendar.MINUTE, 59);
+        return criteriaBuilder.between(root.get(field), date.getTime(), until.getTimeInMillis());
     }
 
     public List<String> getStatusesList() {
@@ -211,162 +195,6 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         this.selectedStatus = OrderStatus.getValueByNameForUI(selectedStatus);
     }
 
-    public Month getSelectedCreationMonth() {
-        return selectedCreationMonth;
-    }
-
-    public void setSelectedCreationMonth(Month selectedCreationMonth) {
-        this.selectedCreationMonth = selectedCreationMonth;
-    }
-
-    public Month[] getMonths() {
-        return Month.values();
-    }
-
-    /**
-     *
-     * @return list of the days in the given month and year
-     */
-    public List<Integer> getDaysInMonth(int year, Month month) {
-        ArrayList<Integer> days = new ArrayList<>();
-        if (!month.equals(Month.All) && !(year == Constants.NO_YEAR_SELECTED)) {
-            GregorianCalendar calendar = new GregorianCalendar(year, month.ordinal(), 1);
-            int actualMaximumDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            for (int i = 1; i <= actualMaximumDaysInMonth; i++) {
-                days.add(i);
-            }
-        }
-        return days;
-    }
-
-    /**
-     *
-     * @param fielsToFilter
-     * @return list of years
-     */
-    public List<Integer> getYearsList(String fielsToFilter) {
-        ArrayList<Integer> years = new ArrayList<>();
-        Iterable<Order> findAll = getRepository().findAll(new Sort(Direction.ASC, fielsToFilter));
-        Iterator<Order> iterator = findAll.iterator();
-        int minYear = getMinYear(iterator, fielsToFilter);
-        int maxYear = getMaxYear(iterator, fielsToFilter);
-        if (minYear != 0 && maxYear != 0) {
-            for (int i = minYear; i <= maxYear; i++) {
-                years.add(i);
-            }
-        }
-        return years;
-    }
-
-    public List<Integer> getCreatedYearsList() {
-        List<Integer> years = getYearsList(Constants.CREATED);
-        if (years.size() == 1) {
-            setSelectedCreationYear(years.get(0));
-        }
-        return years;
-    }
-
-    public List<Integer> getModifiedYearsList() {
-        List<Integer> years = getYearsList(Constants.MODIFIED);
-        if (years.size() == 1) {
-            setSelectedModifiedYear(years.get(0));
-        }
-        return years;
-
-    }
-
-    private int getMinYear(Iterator<Order> iterator, String fielsToFilter) {
-        Long minDate = Long.MIN_VALUE;
-        if (iterator.hasNext()) {
-            minDate = getDate(iterator, fielsToFilter);
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(minDate);
-        return minDate != Long.MIN_VALUE ? cal.get(Calendar.YEAR) : 0;
-    }
-
-    private int getMaxYear(Iterator<Order> iterator, String fielsToFilter) {
-        Long MaxDate = Long.MIN_VALUE;
-        while (iterator.hasNext()) {
-            MaxDate = getDate(iterator, fielsToFilter);
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(MaxDate);
-        return MaxDate != Long.MIN_VALUE ? cal.get(Calendar.YEAR) : 0;
-    }
-
-    private Long getDate(Iterator<Order> iterator, String fielsToFilter) {
-        Long date;
-        switch (fielsToFilter) {
-        case Constants.MODIFIED:
-            date = iterator.next().getModified();
-            break;
-        case Constants.CREATED:
-            date = iterator.next().getCreated();
-            break;
-        default:
-            date = Long.MIN_VALUE;
-            break;
-        }
-        return date;
-    }
-
-    public List<Integer> getDaysInMonthForSelectedMonthCreation() {
-        return getDaysInMonth(getSelectedCreationYear(), getSelectedCreationMonth());
-    }
-
-    public List<Integer> getDaysInMonthForSelectedModifiedCreation() {
-        return getDaysInMonth(getSelectedModifiedYear(), getSelectedModifiedMonth());
-    }
-
-    public int getSelectedCreationYear() {
-        return selectedCreationYear;
-    }
-
-    public void setSelectedCreationYear(int selectedCreationYear) {
-        this.selectedCreationYear = selectedCreationYear;
-    }
-
-    public int getSelectedCreationDay() {
-        return selectedCreationDay;
-    }
-
-    public void setSelectedCreationDay(int selectedCreationDay) {
-        this.selectedCreationDay = selectedCreationDay;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Month getSelectedModifiedMonth() {
-        return selectedModifiedMonth;
-    }
-
-    public void setSelectedModifiedMonth(Month selectedModifiedMonth) {
-        this.selectedModifiedMonth = selectedModifiedMonth;
-    }
-
-    public int getSelectedModifiedYear() {
-        return selectedModifiedYear;
-    }
-
-    public void setSelectedModifiedYear(int selectedModifiedYear) {
-        this.selectedModifiedYear = selectedModifiedYear;
-    }
-
-    public int getSelectedModifiedDay() {
-        return selectedModifiedDay;
-    }
-
-    public void setSelectedModifiedDay(int selectedModifiedDay) {
-        this.selectedModifiedDay = selectedModifiedDay;
-    }
-
     public String getSelectedCustomer() {
         return selectedCustomer;
     }
@@ -376,14 +204,26 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public void clearFilter() {
-        selectedCreationDay = Constants.NO_DAY_SELECTED;
-        selectedCreationMonth = Month.All;
-        selectedCreationYear = Constants.NO_YEAR_SELECTED;
-        selectedModifiedDay = Constants.NO_DAY_SELECTED;
-        selectedModifiedMonth = Month.All;
-        selectedModifiedYear = Constants.NO_YEAR_SELECTED;
         selectedCustomer = "";
         selectedStatus = OrderStatus.NOT_SLECTED;
+        selectedCreationDate = null;
+        selectedModifiedDate = null;
+    }
+
+    public Date getSelectedCreationDate() {
+        return selectedCreationDate;
+    }
+
+    public void setSelectedCreationDate(Date selectedCreationDate) {
+        this.selectedCreationDate = selectedCreationDate;
+    }
+
+    public Date getSelectedModifiedDate() {
+        return selectedModifiedDate;
+    }
+
+    public void setSelectedModifiedDate(Date selectedModifiedDate) {
+        this.selectedModifiedDate = selectedModifiedDate;
     }
 
 }

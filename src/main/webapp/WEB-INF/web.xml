@@ -49,7 +49,28 @@
 	        org.apache.myfaces.NUMBER_OF_VIEWS_IN_SESSION
 	    </param-name>
 	    <param-value>20</param-value>
-	</context-param>  
+	</context-param>
+	
+	
+	<filter>
+		<filter-name>MyFacesExtensionsFilter</filter-name>
+		<filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	    <filter-name>MyFacesExtensionsFilter</filter-name>
+	    <servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	<filter-mapping>
+	    <filter-name>MyFacesExtensionsFilter</filter-name>
+	    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+	</filter-mapping>	
+	<filter-mapping>
+	    <filter-name>MyFacesExtensionsFilter</filter-name>
+	    <url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+  	
+  	
+
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
