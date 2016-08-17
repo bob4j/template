@@ -50,7 +50,7 @@ public class CheckoutController implements Serializable {
     public void init() {
         ccInfo = new CreditCardInfo();
         Address customerAddress = sessionBean.loadCustomer().getAddress();
-        if (customerAddress != null ){//&& Boolean.TRUE.equals(useCustomerAddress)) {
+        if (customerAddress != null && Boolean.TRUE.equals(useCustomerAddress)) {
             shippingAddress = new Address(customerAddress.getCity(), customerAddress.getAddress());
         } else {
             shippingAddress = new Address();
@@ -140,8 +140,9 @@ public class CheckoutController implements Serializable {
 	this.useCustomerAddress = useCustomerAddress;
     }
     
-    public void onUseCustomerAddressPressed() {
-	this.useCustomerAddress = !this.useCustomerAddress;
+    public boolean ShowAdressField (){
+	return !useCustomerAddress;
     }
+    
 
 }

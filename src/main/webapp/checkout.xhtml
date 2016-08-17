@@ -33,47 +33,54 @@
 							<h:inputText value="#{checkoutController.ccInfo.cvv}" required="true" id="cccvv" style="width: 300px;" requiredMessage="Please enter credit card CVV"/>
 						</div>
 						<div class="cleaner h50" />
-						<p>
-							<h:selectBooleanCheckbox
-								value="#{checkoutController.useCustomerAddress}">
-								 <f:ajax listener="#{checkoutController.onUseCustomerAddressPressed()}"  ></f:ajax>
-								</h:selectBooleanCheckbox>
-							Use customer address
-						</p>
-<!-- 						<h:form id="c_containers" > -->
-<!-- 						<c:if test="#{checkoutController.useCustomerAddress  eq true}"> -->
-<!-- 								<div class="content_half float_l checkout" id="address_container" > -->
-<!-- 									<h5> -->
-<!-- 										<strong>Shipping Address</strong> -->
-<!-- 									</h5> -->
-<!-- 									City: -->
-<!-- 									<h:selectOneMenu value="#{checkoutController.cityId}" -->
-<!-- 										required="true" id="city" style="width:112px;" -->
-<!-- 										requiredMessage="Please enter city"> -->
-<!-- 										<f:selectItem itemValue="#{null}" itemLabel="select one " /> -->
-<!-- 										<f:selectItems value="#{checkoutController.cities}" var="c" -->
-<!-- 											itemLabel="#{c.name}" itemValue="#{c.id}" /> -->
-<!-- 									</h:selectOneMenu> -->
-<!-- 									<br /> <br /> Address: -->
-<!-- 									<h:inputText value="#{checkoutController.shippingAddress.address}" -->
-<!-- 										required="true" id="address" style="width: 300px;" -->
-<!-- 										requiredMessage="Please enter address line" /> -->
-<!-- 									<br /> <br /> Phone: <input type="text" style="width: 300px;" /> -->
-<!-- 								</div> -->
-<!-- 								</c:if> -->
-<!-- 								</h:form> -->
+						<h:panelGroup id="address_form">
+								<p>
+									<h:selectBooleanCheckbox
+										value="#{checkoutController.useCustomerAddress}">
+										<f:ajax event="click" render="address_form"></f:ajax>
+									</h:selectBooleanCheckbox>
+									Use customer address
+								</p>
+								<h:panelGroup
+									rendered="#{checkoutController.ShowAdressField() }">
+									<div class="content_half float_l checkout"
+										id="address_container">
+										<h5>
+											<strong>Shipping Address</strong>
+										</h5>
+										City:
+										<h:selectOneMenu value="#{checkoutController.cityId}"
+											required="true" id="city" style="width:112px;"
+											requiredMessage="Please enter city">
+											<f:selectItem itemValue="#{null}"
+												itemLabel="-- select one --" />
+											<f:selectItems value="#{checkoutController.cities}" var="c"
+												itemLabel="#{c.name}" itemValue="#{c.id}" />
+										</h:selectOneMenu>
+										<br /> <br /> Address:
+										<h:inputText
+											value="#{checkoutController.shippingAddress.address}"
+											required="true" id="address" style="width: 300px;"
+											requiredMessage="Please enter address line" />
+										<br /> <br /> Phone: <input type="text"
+											style="width: 300px;" />
+									</div>
+								</h:panelGroup>
+							</h:panelGroup>>
 							<div class="cleaner h50" />
-						<h3>SHOPPING CART</h3>
-						<h4>
-							TOTAL AMOUNT: <strong>$ ${checkoutController.totalPrice}</strong>
-						</h4>
-						<p>
-							<h:selectBooleanCheckbox  
-								validator="#{checkoutController.validateTerms}" value="#{checkoutController.acceptTerms}"/>
-							I accept the <a href="#">terms of use</a> of this website.
-						</p>
-						
-						<h:commandButton value="Place order" actionListener="#{checkoutController.order()}" action="myaccount" />
+							<h3>SHOPPING CART</h3>
+							<h4>
+								TOTAL AMOUNT: <strong>$
+									${checkoutController.totalPrice}</strong>
+							</h4>
+							<p>
+								<h:selectBooleanCheckbox
+									validator="#{checkoutController.validateTerms}"
+									value="#{checkoutController.acceptTerms}" />
+								I accept the <a href="#">terms of use</a> of this website.
+							</p>
+
+							<h:commandButton value="Place order" actionListener="#{checkoutController.order()}" action="myaccount" />
 						
 					</h:form>
 				</div>
