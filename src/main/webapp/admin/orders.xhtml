@@ -5,7 +5,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
@@ -150,96 +151,24 @@
 							<div class="cleaner"></div>
 							<h4>Creation Date</h4>
 							<div>
-								<div class="float_l" style="width: 30%">
-									<h5>Year</h5>
-									<ul class="sidebar_list float_l">
-										<h:selectOneMenu class="float_l" id="creationYearStatusFilter" 
-											style="width: 70px"
-											value="#{adminOrderController.selectedCreationYear}">
-											<f:ajax execute="creationYearStatusFilter"
-												render="table_product" />
-											<f:selectItems
-												value="#{adminOrderController.getCreatedYearsList()}"
-												var="s" itemLabel="#{c}" itemValue="#{c}" />
-										</h:selectOneMenu>
-									</ul>
-								</div>
-								<div class="float_l" style="width: 30%">
-									<h5>Month</h5>
-
-									<ul class="sidebar_list float_l">
-										<h:selectOneMenu class="float_l"
-											id="creationMonthStatusFilter" style="width: 70px" 
-											value="#{adminOrderController.selectedCreationMonth}">
-											<f:ajax
-												execute="creationMonthStatusFilter creationDayStatusFilter"
-												render="table_product creationDayStatusFilter" />
-											<f:selectItems value="${adminOrderController.months}" var="s"
-												itemLabel="#{c}" itemValue="#{c}" />
-										</h:selectOneMenu>
-									</ul>
-								</div>
-								<div class="float_l" style="width: 30%">
-									<h5>Day</h5>
-									<ul class="sidebar_list float_l">
-										<h:selectOneMenu class="float_l" id="creationDayStatusFilter" 
-											style="width: 70px"
-											value="#{adminOrderController.selectedCreationDay}">
-											<f:ajax execute="creationDayStatusFilter"
-												render="table_product" />
-											<f:selectItems
-												value="#{adminOrderController.getDaysInMonthForSelectedMonthCreation()}"
-												var="s" itemLabel="#{c}" itemValue="#{c}" />
-										</h:selectOneMenu>
-									</ul>
-								</div>
+								<t:inputCalendar id="creationDateFilter" name="creationDateFilter" 
+								    value="#{adminOrderController.selectedCreationDate}"
+								    renderAsPopup="true"
+								    renderPopupButtonAsImage="true" 
+								    popupDateFormat="MM/dd/yyyy">
+								    <f:ajax execute="creationDateFilter" render="table_product" />
+								</t:inputCalendar>
 							</div>
 							<div class="cleaner"></div>
 							<h4>Last Modified Date</h4>
 							<div>
-								<div class="float_l" style="width: 30%">
-									<h5>Year</h5>
-									<ul class="sidebar_list float_l">
-										<h:selectOneMenu class="float_l" id="modifiedYearStatusFilter"
-											style="width: 70px"
-											value="#{adminOrderController.selectedModifiedYear}">
-											<f:ajax execute="modifiedYearStatusFilter"
-												render="table_product" />
-											<f:selectItems
-												value="#{adminOrderController.getModifiedYearsList()}"
-												var="s" itemLabel="#{c}" itemValue="#{c}" />
-										</h:selectOneMenu>
-									</ul>
-								</div>
-								<div class="float_l" style="width: 30%">
-									<h5>Month</h5>
-
-									<ul class="sidebar_list float_l">
-										<h:selectOneMenu class="float_l"
-											id="modifiedMonthStatusFilter" style="width: 70px"
-											value="#{adminOrderController.selectedModifiedMonth}">
-											<f:ajax
-												execute="modifiedMonthStatusFilter modifiedDayStatusFilter"
-												render="table_product modifiedDayStatusFilter" />
-											<f:selectItems value="${adminOrderController.months}" var="s"
-												itemLabel="#{c}" itemValue="#{c}" />
-										</h:selectOneMenu>
-									</ul>
-								</div>
-								<div class="float_l" style="width: 30%">
-									<h5>Day</h5>
-									<ul class="sidebar_list float_l">
-										<h:selectOneMenu class="float_l" id="modifiedDayStatusFilter" 
-											style="width: 70px"
-											value="#{adminOrderController.selectedModifiedDay}">
-											<f:ajax execute="modifiedDayStatusFilter"
-												render="table_product" />
-											<f:selectItems
-												value="#{adminOrderController.getDaysInMonthForSelectedModifiedCreation()}"
-												var="s" itemLabel="#{c}" itemValue="#{c}" />
-										</h:selectOneMenu>
-									</ul>
-								</div>
+								<t:inputCalendar id="modifiedDateFilter" name="modifiedDateFilter" 
+								    value="#{adminOrderController.selectedModifiedDate}"
+								    renderAsPopup="true"
+								    renderPopupButtonAsImage="true" 
+								    popupDateFormat="MM/dd/yyyy">
+								    <f:ajax execute="modifiedDateFilter" render="table_product" />
+								</t:inputCalendar>
 							</div>
 							<div class="cleaner"></div>
 							<h4>FilterCustomer Name</h4>
@@ -251,12 +180,11 @@
 										render="table_product " />
 								</h:inputText>
 							</ul>
-						<h:commandButton action="#{adminOrderController.clearFilter()}" value="Clear Filter"> 
-										<f:ajax execute="table_product" event="click"
-											render=
-											"table_product orderCustomerFilter creationMonthStatusFilter creationDayStatusFilter modifiedYearStatusFilter modifiedDayStatusFilter modifiedMonthStatusFilter">
-										</f:ajax>
-						</h:commandButton>
+							<h:commandButton action="#{adminOrderController.clearFilter()}" value="Clear Filter"> 
+								<f:ajax execute="table_product" event="click"
+									render="table_product orderCustomerFilter creationDateFilter modifiedDateFilter">
+								</f:ajax>
+							</h:commandButton>
 						</div>
 					</div>
 				</h:form>
@@ -266,9 +194,6 @@
 
 		</ui:define>
 		<div class="cleaner"></div>
-
-
-
 	</ui:composition>
 </h:body>
 </html>

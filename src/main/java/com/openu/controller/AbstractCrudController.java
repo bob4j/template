@@ -148,7 +148,7 @@ public abstract class AbstractCrudController<T> {
     private Predicate filterYear(CriteriaBuilder criteriaBuilder, Root<T> root, int selectedYear, String fieldToFilter) {
         GregorianCalendar maxMonthInSelectedDate = new GregorianCalendar(selectedYear, Month.December.ordinal(), 1, 23, 59, 59);
         maxMonthInSelectedDate
-                .set(selectedYear, Month.December.ordinal(), maxMonthInSelectedDate.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        .set(selectedYear, Month.December.ordinal(), maxMonthInSelectedDate.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
         GregorianCalendar minMonthInSelectedDate = new GregorianCalendar(selectedYear, Month.January.ordinal(), 1, 0, 0, 0);
         return criteriaBuilder.between(root.<Long> get(fieldToFilter), minMonthInSelectedDate.getTimeInMillis(),
                 maxMonthInSelectedDate.getTimeInMillis());
