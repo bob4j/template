@@ -1,5 +1,6 @@
 package com.openu.controller;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -22,7 +23,10 @@ import com.openu.validators.EmailValidator;
 
 @Component
 @Scope("view")
-public class SignupController {
+public class SignupController implements Serializable {
+
+   
+    private static final long serialVersionUID = 5223230780931409024L;
 
     @Autowired
     private CustomerRepository repository;
