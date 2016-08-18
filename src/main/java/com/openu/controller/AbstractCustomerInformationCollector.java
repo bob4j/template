@@ -24,18 +24,8 @@ public abstract class AbstractCustomerInformationCollector extends AbstractInfor
     }
 
     public String apply() {
-	Iterable<Customer> findAll = getAll();
-        System.err.println("--------BEFORE-------------");
-        for (Customer customer : findAll) {
-            System.out.println(customer);
-	}
         addFieldsToCustomer();
         getRepository().save(customer);
-        findAll = repository.findAll();
-        System.err.println("--------AFTER-------------");
-        for (Customer customer : findAll) {
-            System.out.println(customer);
-	}
         return null;
     }
 
