@@ -24,8 +24,6 @@
 							requiredMessage="Please enter  name" style="width: 300px;"
 							value="#{adminEditInformationController.name}" />
 						<h:messages style="color:red;" for="name" />
-
-						<p>Last name:</p>
 						<p>password:</p>
 						<h:inputSecret id="password" required="true"
 							requiredMessage="Please enter password" style="width: 300px;"
@@ -35,7 +33,9 @@
 						<p>Email:</p>
 						<h:inputText id="email" required="true"
 							requiredMessage="Please enter email" style="width: 300px;"
-							value="#{adminEditInformationController.email}" />
+							value="#{adminEditInformationController.email}" >
+							<f:validator validatorId="EmailValidator"></f:validator>
+							</h:inputText>
 						<h:messages style="color:red;" for="email" />
 
 
