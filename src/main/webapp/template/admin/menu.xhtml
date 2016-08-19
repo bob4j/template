@@ -10,14 +10,20 @@
 	<ui:composition>
 		<div id="templatemo_menubar">
 				<div id="top_nav" class="ddsmoothmenu">
-					<ul>
-						<li><h:link outcome="products" value="Products" class="selected" /></li>
-						<li><h:link outcome="categories" value="Categories"  /></li>
-						<li><h:link outcome="cities" value="Cities"  /></li>
-						<li><h:link outcome="admin-users" value="Admin users"  /></li>
-						<li><h:link outcome="orders" value="Orders"  /></li>
-					</ul>
-					<br style="clear: left" />
+				<ul>
+					<li><h:link outcome="products" value="Products"
+							class="selected" /></li>
+					<li><h:link outcome="categories" value="Categories" /></li>
+					<li><h:link outcome="cities" value="Cities" /></li>
+					<li><h:link outcome="admin-users" value="Admin users" /></li>
+					<li><h:link outcome="orders" value="Orders" /></li>
+					<li><a href="#" class="myaccountClass">My Account</a>
+						<ul>
+							<li><h:link outcome="editAdminPersonalInformation"
+									value="Edit Details" /></li>
+						</ul></li>
+				</ul>
+				<br style="clear: left" />
 				</div>
 				<div id="templatemo_search">
 						<input type="text" value="" name="keyword" id="keyword"

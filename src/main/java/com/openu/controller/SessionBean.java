@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.openu.model.Administrator;
 import com.openu.model.Customer;
 import com.openu.model.User;
+import com.openu.repository.AdministratorRepository;
 import com.openu.repository.CustomerRepository;
 
 @ManagedBean
@@ -19,6 +20,8 @@ public class SessionBean {
 
     @Resource
     private CustomerRepository customerRepository;
+    @Resource
+    private AdministratorRepository adminRepository;
 
     public User getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -34,6 +37,14 @@ public class SessionBean {
             return null;
         }
         return customerRepository.findOne(customer.getId());
+    }
+    
+    public Administrator loadAdmin() {
+        Administrator admin = getAdmin();
+        if (admin == null) {
+            return null;
+        }
+        return adminRepository.findOne(admin.getId());
     }
 
     public Customer getCustomer() {

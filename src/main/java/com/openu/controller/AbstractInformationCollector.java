@@ -1,56 +1,23 @@
 package com.openu.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 
-import com.openu.model.Address;
-import com.openu.model.Administrator;
-import com.openu.model.City;
-import com.openu.model.Customer;
-import com.openu.repository.CityRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import com.openu.model.User;
 import com.openu.validators.EmailValidator;
 
-public abstract class AbstractInformationCollector extends  AbstractCrudController<Customer> {
+public abstract  class  AbstractInformationCollector<R extends User> {
    
-    
-    @Resource
-    private CityRepository cityRepository;
-
-    private String firstName;
-    private String lastName;
     private String username;
     private String password;
     private String passwordAgain;
     private String email;
-    private String phoneNumber;
-    private String addressLine;
-    private Long cityId;
-
-
-
-
-    public void validate(ComponentSystemEvent e) {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        if (!fc.getMessageList().isEmpty()) {
-            return;
-        }
-        UIForm form = (UIForm) e.getComponent();
-        if (!getField(e, "password").equals(getField(e, "passwordAgain"))) {
-            fc.addMessage(form.getClientId(), new FacesMessage("Passwords do not match"));
-        }
-        if (!EmailValidator.valid(getField(e, "email"))) {
-            fc.addMessage(form.getClientId(), new FacesMessage("Invalid email"));
-        }
-        if (!fc.getMessageList().isEmpty()) {
-            fc.renderResponse();
-        }
-    }
+    
 
     @SuppressWarnings("unchecked")
     protected static <T> T getField(ComponentSystemEvent e, String fieldName) {
@@ -93,54 +60,19 @@ public abstract class AbstractInformationCollector extends  AbstractCrudControll
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    
+    /**
+     * store the information that in the form to the User database
+     */
+    abstract protected void addFieldsToUser();
+    
+    public String apply() {
+        addFieldsToUser();
+        getRepository().save(getUser());
+        return null;
     }
     
-    public List<City> getCities() {
-         List<City> a = (List<City>) cityRepository.findAll();
-         return a;
-    }
-
-    public Long getCityId() {
-	return cityId;
-    }
-
-    public void setCityId(Long cityId) {
-	this.cityId = cityId;
-    }
-    
-    public Address getCustomerAddress() {
-	return new Address(cityRepository.findOne(cityId),getAddressLine());
-    }
-
-    public String getAddressLine() {
-	return addressLine;
-    }
-
-    public void setAddressLine(String addressLine) {
-	this.addressLine = addressLine;
-    }
-
+   abstract  PagingAndSortingRepository<R, Long> getRepository();
+   
+   abstract R getUser();
 }

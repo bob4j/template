@@ -16,44 +16,65 @@
 
 				<div class="content_half float_l checkout" id="signup_form">
 					<h:form id="signupFormId" prependId="false">
-						<h:messages style="color:red;" />
 						<p>First name:</p>
-						<h:inputText id="firstName" required="true" requiredMessage="Please enter first name" 
-							style="width: 300px;" value="#{signupController.firstName}"/>
+						<h:inputText id="firstName" required="true"
+							requiredMessage="Please enter first name" style="width: 300px;"
+							value="#{signupController.firstName}" />
+						<h:messages style="color:red;" for="firstName" />
 						<p>Last name:</p>
-						<h:inputText id="lastName" required="true" requiredMessage="Please enter last name" 
-							style="width: 300px;" value="#{signupController.lastName}"/>
+						<h:inputText id="lastName" required="true"
+							requiredMessage="Please enter last name" style="width: 300px;"
+							value="#{signupController.lastName}" />
+						<h:messages style="color:red;" for="lastName" />
 						<p>Username:</p>
-						<h:inputText id="username" required="true" requiredMessage="Please enter username" 
-							style="width: 300px;" value="#{signupController.username}"/>
+						<h:inputText id="username" required="true"
+							requiredMessage="Please enter username" style="width: 300px;"
+							value="#{signupController.username}" />
+						<h:messages style="color:red;" for="username" />
 						<p>Password:</p>
-						<h:inputSecret id="password" required="true" requiredMessage="Please enter password" 
-							style="width: 300px;" value="#{signupController.password}"/>
+						<h:inputSecret id="password" required="true"
+							requiredMessage="Please enter password" style="width: 300px;"
+							value="#{signupController.password}" />
+						<h:messages style="color:red;" for="password" />
 						<p>Repeat password:</p>
-						<h:inputSecret id="passwordAgain" required="true" requiredMessage="Please enter password again" 
-							style="width: 300px;" value="#{signupController.passwordAgain}"/>
+						<h:inputSecret id="passwordAgain" required="true"
+							requiredMessage="Please enter password again"
+							style="width: 300px;" value="#{signupController.passwordAgain}" />
+						<h:messages style="color:red;" for="passwordAgain" />
 						<p>Email:</p>
-						<h:inputText id="email" required="true" requiredMessage="Please enter email" style="width: 300px;" 
-							value="#{signupController.email}"/>
+						<h:inputText id="email" required="true"
+							requiredMessage="Please enter email" style="width: 300px;"
+							value="#{signupController.email}" >
+							<f:validator validatorId="EmailValidator"></f:validator>
+							</h:inputText>
+						<h:messages style="color:red;" for="email"  />
 						<p>Phone number:</p>
 						<h:inputText id="phoneNumber" required="true"
 							requiredMessage="Please enter phone number" style="width: 300px;"
 							value="#{signupController.phoneNumber}">
-							<f:validator validatorId="com.openu.validators.PhoneValidator"></f:validator>
+							<f:validator validatorId="PhoneValidator"></f:validator>
 						</h:inputText>
+						<h:messages style="color:red;" for="phoneNumber" />
 						<p>City:</p>
-						<h:selectOneMenu value="#{signupController.cityId}" required="true" id="city" style="width:112px;" 
-										requiredMessage="Please enter city">
-								<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
-								<f:selectItems value="#{signupController.cities}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
-							</h:selectOneMenu>
-							<p>Address:</p>
-							<h:inputText value="#{signupController.addressLine}" required="true" id="address" 
-												style="width: 300px;" requiredMessage="Please enter address line"/> 
+						<h:selectOneMenu value="#{signupController.cityId}"
+							required="true" id="city" style="width:112px;"
+							requiredMessage="Please enter city">
+							<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
+							<f:selectItems value="#{signupController.cities}" var="c"
+								itemLabel="#{c.name}" itemValue="#{c.id}" />
+						</h:selectOneMenu>
+						<h:messages style="color:red;" for="city" />
+						<p>Address:</p>
+						<h:inputText value="#{signupController.addressLine}"
+							required="true" id="address" style="width: 300px;"
+							requiredMessage="Please enter address line" />
+						<h:messages style="color:red;" for="address" />
 						<h:commandButton id="submit" class="submit_btn" value="Signup"
-							type="submit" action="home" actionListener="#{signupController.apply()}"
+							type="submit" action="home"
+							actionListener="#{signupController.apply()}"
 							style="margin-top:20px;" />
-						<f:event type="postValidate" listener="#{signupController.validate}" />
+						<f:event type="postValidate"
+							listener="#{signupController.validate}" />
 					</h:form>
 				</div>
 				<div class="cleaner h50"></div>

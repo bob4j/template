@@ -8,7 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-@FacesValidator("com.openu.validators.PhoneValidator")
+@FacesValidator("PhoneValidator")
 public class PhoneValidator implements Validator {
     private static final String MOBILE_PHONE_STRING_PATTERN = "[0]"+"[0-9]"+"[0-9]"+"-"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]";
     private static final String STATIC_PHONE_STRING_PATTERN = "[0]"+"[0-9]"+"-"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]"+"[0-9]";

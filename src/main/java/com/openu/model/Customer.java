@@ -1,5 +1,6 @@
 package com.openu.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,14 @@ import javax.persistence.OneToMany;
 import com.google.common.collect.Lists;
 
 @Entity
-public class Customer extends User {
+public class Customer extends User implements Serializable {
+
+   
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     private String firstName;
 
@@ -99,5 +107,9 @@ public class Customer extends User {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-
+    
+    @Override
+    public String toString() {
+	return "Customer [firstName=" + firstName + ", lastName=" + lastName+"] " ;
+    }
 }
