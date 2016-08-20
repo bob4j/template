@@ -29,7 +29,9 @@
 						<p>Username:</p>
 						<h:inputText id="username" required="true"
 							requiredMessage="Please enter username" style="width: 300px;"
-							value="#{signupController.username}" />
+							value="#{signupController.username}"  >
+							<f:validator binding="#{customerUserNameValidator}"></f:validator>
+							</h:inputText>
 						<h:messages style="color:red;" for="username" />
 						<p>Password:</p>
 						<h:inputSecret id="password" required="true"
@@ -39,7 +41,9 @@
 						<p>Repeat password:</p>
 						<h:inputSecret id="passwordAgain" required="true"
 							requiredMessage="Please enter password again"
-							style="width: 300px;" value="#{signupController.passwordAgain}" />
+							style="width: 300px;" value="#{signupController.passwordAgain}" >
+							<f:validator validatorId="PasswordAgainValidator"></f:validator>
+							</h:inputSecret>
 						<h:messages style="color:red;" for="passwordAgain" />
 						<p>Email:</p>
 						<h:inputText id="email" required="true"
@@ -73,8 +77,6 @@
 							type="submit" action="home"
 							actionListener="#{signupController.apply()}"
 							style="margin-top:20px;" />
-						<f:event type="postValidate"
-							listener="#{signupController.validate}" />
 					</h:form>
 				</div>
 				<div class="cleaner h50"></div>

@@ -23,26 +23,6 @@ public class SignupController  extends AbstractCustomerInformationCollector impl
 
  
     private static final long serialVersionUID = -4695924797588821274L;
-
-    public void validate(ComponentSystemEvent e) {
-	FacesContext fc = FacesContext.getCurrentInstance();
-        if (!fc.getMessageList().isEmpty()) {
-            return;
-        }
-        UIForm form = (UIForm) e.getComponent();
-       
-        String userNamefield = getField(e, "username");
-	if (getRepository().findByUsername(userNamefield) != null) {
-            fc.addMessage(form.getClientId(), new FacesMessage("Username is already taken"));
-        }
-	 if (!getField(e, "password").equals(getField(e, "passwordAgain"))) {
-           fc.addMessage(form.getClientId(), new FacesMessage("Passwords do not match"));
-       }
-        
-        if (!fc.getMessageList().isEmpty()) {
-            fc.renderResponse();
-        }
-    }
     
     @Override
     protected void addFieldsToUser() {
