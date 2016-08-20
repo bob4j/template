@@ -1,10 +1,18 @@
 package com.openu.controller;
 
+import java.io.IOException;
+import java.util.Map;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -69,10 +77,16 @@ public abstract  class  AbstractInformationCollector<R extends User> {
     public String apply() {
         addFieldsToUser();
         getRepository().save(getUser());
+        doAfterApply();
         return null;
     }
     
-   abstract  PagingAndSortingRepository<R, Long> getRepository();
+    //should be ovveriten if needed
+   protected void doAfterApply() {	
+    }
+
+abstract  PagingAndSortingRepository<R, Long> getRepository();
    
    abstract R getUser();
+   
 }

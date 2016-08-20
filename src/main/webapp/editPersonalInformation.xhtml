@@ -63,7 +63,7 @@
 							required="true" id="address" style="width: 300px;"
 							requiredMessage="Please enter address line" />
 						<h:messages style="color:red;" for="address" />
-						<h:commandButton id="submit" class="submit_btn" value="Apply"
+						<h:commandButton id="submit" class="submit_btn" value="Apply" 
 							type="submit" action="home"
 							actionListener="#{editInformationController.apply()}"
 							style="margin-top:20px;" />
@@ -73,8 +73,6 @@
 						<h:commandButton id="cancel" class="submit_btn" value="Cancel"
 							immediate="true" action="home"
 							style="margin-top:20px; margin-left: 10px;" />
-						<f:event type="postValidate"
-							listener="#{editInformationController.validate}" />
 					</h:form>
 				</div>
 				<div class="cleaner h50"></div>

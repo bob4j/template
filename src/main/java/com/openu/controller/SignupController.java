@@ -1,11 +1,18 @@
 package com.openu.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -45,4 +52,19 @@ public class SignupController  extends AbstractCustomerInformationCollector impl
         }
         customer.setUsername(getUsername());
     }
+    
+    protected void doAfterApply() {
+          try {
+              ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+              RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/login");
+	      dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
+	      FacesContext.getCurrentInstance().responseComplete();
+	} catch (ServletException | IOException e) {
+	    e.printStackTrace();
+	    
+	}
+
+      }
+    
+    
 }
