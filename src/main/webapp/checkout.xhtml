@@ -25,12 +25,18 @@
 								<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 								<f:selectItems value="#{checkoutController.ccTypes}" />
 							</h:selectOneMenu>
+							<h:messages style="color:red;" for="cctype" />
 							<p style="margin-top:15px">Number:</p>
 							<h:inputText value="#{checkoutController.ccInfo.number}" required="true" style="width: 300px;" id="ccnumber" requiredMessage="Please enter credit card number"/>
+							<h:messages style="color:red;" for="ccnumber" />
 							<p style="margin-top:15px">Owner name:</p>
 							<h:inputText value="#{checkoutController.ccInfo.ownerName}" required="true" id="ccowner" style="width: 300px;" requiredMessage="Please enter credit card owner name"/>
+							<h:messages style="color:red;" for="ccowner" />
 							<p style="margin-top:15px">CVV:</p>
-							<h:inputText value="#{checkoutController.ccInfo.cvv}" required="true" id="cccvv" style="width: 300px;" requiredMessage="Please enter credit card CVV"/>
+							<h:inputText value="#{checkoutController.ccInfo.cvv}" required="true" id="cvv" style="width: 300px;" requiredMessage="Please enter credit card CVV">
+							<f:validateLongRange  for="cvv" minimum="100" maximum="999"/>
+							</h:inputText>
+							<h:messages style="color:red;" for="cvv" />
 						</div>
 						<div class="cleaner h50" />
 						<h:panelGroup id="address_form">
@@ -57,16 +63,24 @@
 											<f:selectItems value="#{checkoutController.cities}" var="c"
 												itemLabel="#{c.name}" itemValue="#{c.id}" />
 										</h:selectOneMenu>
+										<h:messages style="color:red;" for="city" />
 										<br /> <br /> Address:
 										<h:inputText
 											value="#{checkoutController.shippingAddress.address}"
 											required="true" id="address" style="width: 300px;"
 											requiredMessage="Please enter address line" />
-										<br /> <br /> Phone: <input type="text"
-											style="width: 300px;" />
+										<h:messages style="color:red;" for="address" />
+										<p>Phone number:</p>
+										<h:inputText id="phoneNumber" required="true"
+											requiredMessage="Please enter phone number"
+											style="width: 300px;"
+											value="#{checkoutController.phoneNumber}">
+											<f:validator validatorId="PhoneValidator"></f:validator>
+										</h:inputText>
+										<h:messages style="color:red;" for="phoneNumber" />
 									</div>
 								</h:panelGroup>
-							</h:panelGroup>>
+							</h:panelGroup>
 							<div class="cleaner h50" />
 							<h3>SHOPPING CART</h3>
 							<h4>
@@ -74,12 +88,13 @@
 									${checkoutController.totalPrice}</strong>
 							</h4>
 							<p>
-								<h:selectBooleanCheckbox
-									validator="#{checkoutController.validateTerms}"
-									value="#{checkoutController.acceptTerms}" />
+								<h:selectBooleanCheckbox id="acceptTerms"
+									value="#{checkoutController.acceptTerms}" >
+								<f:validator validatorId="AcceptTermsValidator"></f:validator>
+									</h:selectBooleanCheckbox>
 								I accept the <a href="#">terms of use</a> of this website.
 							</p>
-
+							<h:messages style="color:red;" for="acceptTerms" />
 							<h:commandButton value="Place order" actionListener="#{checkoutController.order()}" action="myaccount" />
 						
 					</h:form>

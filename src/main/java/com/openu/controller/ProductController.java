@@ -25,6 +25,7 @@ import com.openu.model.OrderStatus;
 import com.openu.model.Product;
 import com.openu.model.ProductColor;
 import com.openu.model.ProductSize;
+import com.openu.model.StockItem;
 import com.openu.repository.CustomerRepository;
 import com.openu.repository.ProductRepository;
 import com.openu.repository.StockItemRepository;
@@ -78,7 +79,7 @@ public class ProductController implements Serializable {
     @CustomerTransaction
     @Transactional
     public String addToShoppingCart() {
-        if (selectedColor == null || selectedSize == null) {
+        if (!isStockItemAvailable()){
             return null;
         }
         Customer loggedInCustomer = sessionBean.getCustomer();
@@ -202,5 +203,17 @@ public class ProductController implements Serializable {
 
     public void setSelectedQuantity(Integer selectedQuantity) {
         this.selectedQuantity = selectedQuantity;
+    }
+    
+    private boolean isStockItemAvailable(){
+	StockItem selectedItem = stockItemRepository.findStockItemByFields(getProduct(), getSelectedColor(), getSelectedSize());
+	if (selectedItem == null ) {
+	    return false;
+	}
+	return selectedItem.getQuantity() >= selectedQuantity;
+    }
+    
+    public String  getAvailability(){
+	return isStockItemAvailable()?"Available":"Not Available";
     }
 }

@@ -24,6 +24,7 @@ import com.openu.model.Order;
 import com.openu.model.OrderStatus;
 import com.openu.repository.CityRepository;
 import com.openu.repository.CustomerRepository;
+import com.openu.repository.OrderRepository;
 import com.openu.util.CustomerTransaction;
 
 @Component
@@ -37,7 +38,7 @@ public class CheckoutController implements Serializable {
     private Long cityId;
     private Boolean acceptTerms;
     private Boolean useCustomerAddress = true;
-
+    private String phoneNumber;
 
     @Resource
     private SessionBean sessionBean;
@@ -45,6 +46,8 @@ public class CheckoutController implements Serializable {
     private CustomerRepository customerRepository;
     @Resource
     private CityRepository cityRepository;
+    @Resource
+    private OrderRepository orderRepository;
 
     @PostConstruct
     public void init() {
@@ -74,7 +77,7 @@ public class CheckoutController implements Serializable {
         order.setCcInfo(ccInfo);
         order.setModified(System.currentTimeMillis());
         order.setShippingAddress(getAddress(customer));
-        customerRepository.save(customer);
+        orderRepository.save(order);
     }
 
     private Address getAddress(Customer customer) {
@@ -142,6 +145,14 @@ public class CheckoutController implements Serializable {
     
     public boolean ShowAdressField (){
 	return !useCustomerAddress;
+    }
+
+    public String getPhoneNumber() {
+	return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+	this.phoneNumber = phoneNumber;
     }
     
 

@@ -19,4 +19,6 @@ public interface StockItemRepository extends PagingAndSortingRepository<StockIte
     @Query("select distinct size from StockItem where product = :product and color = :color")
     List<ProductSize> findDistinctSizeByProductAndColor(@Param("product") Product product, @Param("color") ProductColor color);
 
+    @Query("from StockItem where product = :product and color = :color and size = :size")
+    StockItem findStockItemByFields(@Param("product") Product product, @Param("color") ProductColor color,  @Param("size") ProductSize size );
 }

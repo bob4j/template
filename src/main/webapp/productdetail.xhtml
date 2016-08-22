@@ -31,7 +31,8 @@
 							</tr>
 							<tr>
 								<td>Availability:</td>
-								<td>In Stock</td>
+								<td><h:outputText value="${productController.getAvailability()}" id="availability"/>
+								 </td>
 							</tr>
 							<tr>
 								<td>Model:</td>
@@ -44,31 +45,38 @@
 							<tr>
 								<td>Color:</td>
 								<td>
-									<h:selectOneMenu value="#{productController.selectedColor}" >
+									<h:selectOneMenu value="#{productController.selectedColor}"  id="color" required="true" requiredMessage="please add product color">
 										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 						                <f:selectItems value="#{productController.colors}" />
-						                <f:ajax listener="#{productController.listener}" render="sizes" />
+						                <f:ajax listener="#{productController.listener}" render="sizes availability" />
 						            </h:selectOneMenu>
+						            <h:message for="color" style="color:red;"></h:message>
+						            
 								</td>
 							</tr>
 							<tr>
 								<td>Size:</td>
 								<td>
-									<h:selectOneMenu value="#{productController.selectedSize}" id="sizes">
+									<h:selectOneMenu value="#{productController.selectedSize}" id="sizes" required="true" requiredMessage="please add product size">
 										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
-						                <f:selectItems value="#{productController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}"/>
+						                <f:selectItems value="#{productController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}" />
+						                <f:ajax render="availability" ></f:ajax>
 						            </h:selectOneMenu>
+						            <h:message for="sizes" style="color:red;"></h:message>
 								</td>
 							</tr>
 							<tr>
 								<td>Quantity</td>
 								<td>
-									<h:inputText style="width: 20px; text-align: right" value="${productController.selectedQuantity}" />
-									<!-- <input type="text" value="1" style="width: 20px; text-align: right" /> -->
+									<h:inputText style="width: 20px; text-align: right" id="quantity"
+											 value="${productController.selectedQuantity}" >
+									<f:ajax render="availability" execute="availability"></f:ajax>
+									<f:validator validatorId="ProductAvailabilityValidator"></f:validator>
+									</h:inputText>
 								</td>
 							</tr>
 						</table>
-						<h:messages />
+						<h:message for="quantity" style="color:red;"></h:message>
 
 						<div class="cleaner h20" />
 						
