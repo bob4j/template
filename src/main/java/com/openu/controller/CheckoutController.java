@@ -77,7 +77,7 @@ public class CheckoutController implements Serializable {
         order.setCcInfo(ccInfo);
         order.setModified(System.currentTimeMillis());
         order.setShippingAddress(getAddress(customer));
-        orderRepository.save(order);
+        customerRepository.save(customer);
     }
 
     private Address getAddress(Customer customer) {

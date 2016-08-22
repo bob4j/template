@@ -14,7 +14,7 @@
 			<div id="content" class="float_l">
 				<h:form id="table_product_form" style="display:flex;">
 					<h:dataTable value="#{adminOrderController.all}" var="o"
-						style="width: 60%;" id="table_product"
+						 id="table_product"
 						headerClass="entityTableHeader"
 						rowClasses="entityTableOddRow,entityTableEvenRow" class="float_l">
 						<h:column>
@@ -112,19 +112,16 @@
 							</f:facet>
 							#{o.customer.firstName} #{o.customer.lastName}
 						</h:column>
-						<!-- 						<h:column> -->
-						<!-- 							<f:facet name="header">Action</f:facet> -->
-						<!-- 							<c:if test="${o.status eq 'PLACED'}"> -->
-						<!-- 								<h:commandLink -->
-						<!-- 									actionListener="#{adminOrderController.approve(o.id)}" -->
-						<!-- 									value="Approve" /> -->
-						<!-- 							</c:if> -->
-						<!-- 							<c:if test="${o.status eq 'APPROVED'}"> -->
-						<!-- 								<h:commandLink style="float:right;" -->
-						<!-- 									actionListener="#{adminOrderController.ship(o.id)}" -->
-						<!-- 									value="Ship" /> -->
-						<!-- 							</c:if> -->
-						<!-- 						</h:column> -->
+						<h:column>
+							<f:facet name="header">Action</f:facet>
+								<h:commandLink rendered="(#{o.status eq 'PLACED'}) || (#{adminOrderController.isAllOrderStockItemsAvailable(o.id)})"
+									actionListener="#{adminOrderController.approve(o.id )}"
+									value="Approve" />	
+							
+								<h:commandLink rendered="#{o.status eq 'APPROVED'}"
+									actionListener="#{adminOrderController.ship(o.id)}"
+									value="Ship" />
+						</h:column>
 						<h:column>
 							<f:facet name="header">Order Details</f:facet>
 
@@ -134,59 +131,59 @@
 							</h:link>
 						</h:column>
 					</h:dataTable>
-					<div id="sidebar" class="float_r" style="width: 40%">
-						<div class="sidebar_box">
-							<span class="bottom"></span>
-							<h3>Filter Yours Orders</h3>
-							<h4>Filter By Status</h4>
-							<ul class="sidebar_list float_l">
-								<h:outputText class="float_l" value="status"></h:outputText>
-								<h:selectOneMenu class="float_l" id="orderStatusFilter"
-									value="#{adminOrderController.selectedStatus}">
-									<f:ajax execute="orderStatusFilter" render="table_product" />
-									<f:selectItems value="${adminOrderController.statusesList}"
-										var="s" itemLabel="#{c}" itemValue="#{c}" />
-								</h:selectOneMenu>
-							</ul>
-							<div class="cleaner"></div>
-							<h4>Creation Date</h4>
-							<div>
-								<t:inputCalendar id="creationDateFilter" name="creationDateFilter" 
-								    value="#{adminOrderController.selectedCreationDate}"
-								    renderAsPopup="true"
-								    renderPopupButtonAsImage="true" 
-								    popupDateFormat="MM/dd/yyyy">
-								    <f:ajax execute="creationDateFilter" render="table_product" />
-								</t:inputCalendar>
-							</div>
-							<div class="cleaner"></div>
-							<h4>Last Modified Date</h4>
-							<div>
-								<t:inputCalendar id="modifiedDateFilter" name="modifiedDateFilter" 
-								    value="#{adminOrderController.selectedModifiedDate}"
-								    renderAsPopup="true"
-								    renderPopupButtonAsImage="true" 
-								    popupDateFormat="MM/dd/yyyy">
-								    <f:ajax execute="modifiedDateFilter" render="table_product" />
-								</t:inputCalendar>
-							</div>
-							<div class="cleaner"></div>
-							<h4>FilterCustomer Name</h4>
-							<ul class="sidebar_list float_l">
-								<h:outputText class="float_l" value="customer name"></h:outputText>
-								<h:inputText class="float_l" id="orderCustomerFilter"
-									value="#{adminOrderController.selectedCustomer}">
-									<f:ajax execute="orderCustomerFilter" event="valueChange"
-										render="table_product " />
-								</h:inputText>
-							</ul>
-							<h:commandButton action="#{adminOrderController.clearFilter()}" value="Clear Filter"> 
-								<f:ajax execute="table_product" event="click"
-									render="table_product orderCustomerFilter creationDateFilter modifiedDateFilter">
-								</f:ajax>
-							</h:commandButton>
-						</div>
-					</div>
+<!-- 					<div id="sidebar" class="float_r" style="width: 40%"> -->
+<!-- 						<div class="sidebar_box"> -->
+<!-- 							<span class="bottom"></span> -->
+<!-- 							<h3>Filter Yours Orders</h3> -->
+<!-- 							<h4>Filter By Status</h4> -->
+<!-- 							<ul class="sidebar_list float_l"> -->
+<!-- 								<h:outputText class="float_l" value="status"></h:outputText> -->
+<!-- 								<h:selectOneMenu class="float_l" id="orderStatusFilter" -->
+<!-- 									value="#{adminOrderController.selectedStatus}"> -->
+<!-- 									<f:ajax execute="orderStatusFilter" render="table_product" /> -->
+<!-- 									<f:selectItems value="${adminOrderController.statusesList}" -->
+<!-- 										var="s" itemLabel="#{c}" itemValue="#{c}" /> -->
+<!-- 								</h:selectOneMenu> -->
+<!-- 							</ul> -->
+<!-- 							<div class="cleaner"></div> -->
+<!-- 							<h4>Creation Date</h4> -->
+<!-- 							<div> -->
+<!-- 								<t:inputCalendar id="creationDateFilter" name="creationDateFilter"  -->
+<!-- 								    value="#{adminOrderController.selectedCreationDate}" -->
+<!-- 								    renderAsPopup="true" -->
+<!-- 								    renderPopupButtonAsImage="true"  -->
+<!-- 								    popupDateFormat="MM/dd/yyyy"> -->
+<!-- 								    <f:ajax execute="creationDateFilter" render="table_product" /> -->
+<!-- 								</t:inputCalendar> -->
+<!-- 							</div> -->
+<!-- 							<div class="cleaner"></div> -->
+<!-- 							<h4>Last Modified Date</h4> -->
+<!-- 							<div> -->
+<!-- 								<t:inputCalendar id="modifiedDateFilter" name="modifiedDateFilter"  -->
+<!-- 								    value="#{adminOrderController.selectedModifiedDate}" -->
+<!-- 								    renderAsPopup="true" -->
+<!-- 								    renderPopupButtonAsImage="true"  -->
+<!-- 								    popupDateFormat="MM/dd/yyyy"> -->
+<!-- 								    <f:ajax execute="modifiedDateFilter" render="table_product" /> -->
+<!-- 								</t:inputCalendar> -->
+<!-- 							</div> -->
+<!-- 							<div class="cleaner"></div> -->
+<!-- 							<h4>FilterCustomer Name</h4> -->
+<!-- 							<ul class="sidebar_list float_l"> -->
+<!-- 								<h:outputText class="float_l" value="customer name"></h:outputText> -->
+<!-- 								<h:inputText class="float_l" id="orderCustomerFilter" -->
+<!-- 									value="#{adminOrderController.selectedCustomer}"> -->
+<!-- 									<f:ajax execute="orderCustomerFilter" event="valueChange" -->
+<!-- 										render="table_product " /> -->
+<!-- 								</h:inputText> -->
+<!-- 							</ul> -->
+<!-- 							<h:commandButton action="#{adminOrderController.clearFilter()}" value="Clear Filter">  -->
+<!-- 								<f:ajax execute="table_product" event="click" -->
+<!-- 									render="table_product orderCustomerFilter creationDateFilter modifiedDateFilter"> -->
+<!-- 								</f:ajax> -->
+<!-- 							</h:commandButton> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
 				</h:form>
 
 			</div>

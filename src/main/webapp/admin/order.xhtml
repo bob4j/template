@@ -9,86 +9,106 @@
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
 		<ui:define name="content">
-			
-			<c:set var="o" value="${adminOrderController.order}"/>
-			
-			<div id="content" class="float_l">
-				<h2>Orders #${o.id}</h2>
-				<table>
-					<tr>
-						<td>ID</td>
-						<td>${o.id}</td>
-					</tr>
-					<tr>
-						<td>Status</td>
-						<td>${o.status}</td>
-					</tr>
-					<tr>
-						<td>Created</td>
-						<td>${o.createdPretty}</td>
-					</tr>
-					<tr>
-						<td>Modified</td>
-						<td>${o.modifiedPretty}</td>
-					</tr>
-					<tr>
-						<td>Shipping Address</td>
-						<td>${o.shippingAddress.city.name} ${o.shippingAddress.address}</td>
-					</tr>
-					<tr>
-						<td>Customer ID</td>
-						<td>${o.customer.id}</td>
-					</tr>
-					<tr>
-						<td>Customer name</td>
-						<td>${o.customer.firstName} ${o.customer.lastName}</td>
-					</tr>
-				</table>
-				<h3 style="margin-top:15px;">Credit card details</h3>
-				<table>	
-					<tr>
-						<td>Credit card type</td>
-						<td>${o.ccInfo.type}</td>
-					</tr>
-					<tr>
-						<td>Credit card number</td>
-						<td>${o.ccInfo.number}</td>
-					</tr>
-					<tr>
-						<td>Credit card owner name</td>
-						<td>${o.ccInfo.ownerName}</td>
-					</tr>
-					<tr>
-						<td>Credit card CVV</td>
-						<td>${o.ccInfo.cvv}</td>
-					</tr>
-				</table>
-				<h3 style="margin-top:15px;">Cart items</h3>
-				<table >
-					<thead class="entityTableHeader">
+			<h:form>
+				<c:set var="o" value="${adminOrderController.order}" />
+
+				<div id="content" class="float_l">
+					<h2>Orders #${o.id}</h2>
+					<table>
 						<tr>
-							<td>Brand</td>
-							<td>Model</td>
-							<td>Quantity</td>
-							<td>Color</td>
-							<td>Size</td>
-							<td>Price</td>
+							<td>ID</td>
+							<td>${o.id}</td>
 						</tr>
-					</thead>
-					<tbody >
-						<c:forEach var="i" items="${o.items}">
+						<tr>
+							<td>Status</td>
+							<td>${o.status}</td>
+						</tr>
+						<tr>
+							<td>Created</td>
+							<td>${o.createdPretty}</td>
+						</tr>
+						<tr>
+							<td>Modified</td>
+							<td>${o.modifiedPretty}</td>
+						</tr>
+						<tr>
+							<td>Shipping Address</td>
+							<td>${o.shippingAddress.city.name}
+								${o.shippingAddress.address}</td>
+						</tr>
+						<tr>
+							<td>Customer ID</td>
+							<td>${o.customer.id}</td>
+						</tr>
+						<tr>
+							<td>Customer name</td>
+							<td>${o.customer.firstName} ${o.customer.lastName}</td>
+						</tr>
+					</table>
+					<h3 style="margin-top: 15px;">Credit card details</h3>
+					<table>
+						<tr>
+							<td>Credit card type</td>
+							<td>${o.ccInfo.type}</td>
+						</tr>
+						<tr>
+							<td>Credit card number</td>
+							<td>${o.ccInfo.number}</td>
+						</tr>
+						<tr>
+							<td>Credit card owner name</td>
+							<td>${o.ccInfo.ownerName}</td>
+						</tr>
+						<tr>
+							<td>Credit card CVV</td>
+							<td>${o.ccInfo.cvv}</td>
+						</tr>
+					</table>
+					<h3 style="margin-top: 15px;">Cart items</h3>
+					<table>
+						<thead class="entityTableHeader">
 							<tr>
-								<td>${i.product.brand}</td>
-								<td>${i.product.name}</td>
-								<td>${i.quantity}</td>
-								<td>${i.color}</td>
-								<td>${i.size.label}</td>
-								<td>${i.price}</td>								
+								<td>Brand</td>
+								<td>Model</td>
+								<td>Quantity</td>
+								<td>Color</td>
+								<td>Size</td>
+								<td>Price</td>
+								<td>Availability</td>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>				
-			</div>
+						</thead>
+						<tbody>
+							<c:forEach var="i" items="${o.items}">
+								<tr>
+									<td>${i.product.brand}</td>
+									<td>${i.product.name}</td>
+									<td>${i.quantity}</td>
+									<td>${i.color}</td>
+									<td>${i.size.label}</td>
+									<td>${i.price}</td>
+									<td></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					<c:if test="#{o.status eq 'PLACED'}">
+						<h:commandLink
+							actionListener="#{adminOrderController.approve(o.id)}"
+							value="Approve" />
+					</c:if>
+					<c:if test="${o.status eq 'APPROVED'}">
+						<h:commandLink style="float:right;"
+							actionListener="#{adminOrderController.ship(o.id)}" value="Ship" />
+					</c:if>
+					<h:selectOneMenu class="float_l" id="orderStatusAction"
+						value="#{adminOrderController.selectedStatusAction}">
+						<f:selectItems value="${adminOrderController.statusesList}"
+							var="s" itemLabel="#{c}" itemValue="#{c}" />
+					</h:selectOneMenu>
+					<h:commandButton
+						action="#{adminOrderController.applyStatusAction()}" value="Apply" />
+				</div>
+			</h:form>
 			<div class="cleaner"></div>
 
 		</ui:define>

@@ -79,4 +79,10 @@ public class StockItem {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+	return "StockItem [id=" + id + ", product=" + product.getId() + ", size=" + size + ", color=" + color + ", quantity="
+		+ quantity + "]";
+    }
+
 }

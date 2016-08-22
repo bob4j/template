@@ -206,11 +206,12 @@ public class ProductController implements Serializable {
     }
     
     private boolean isStockItemAvailable(){
-	StockItem selectedItem = stockItemRepository.findStockItemByFields(getProduct(), getSelectedColor(), getSelectedSize());
-	if (selectedItem == null ) {
-	    return false;
+	List <StockItem> selectedItem = stockItemRepository.findStockItemByFields(getProduct(), getSelectedColor(), getSelectedSize());
+	if (selectedItem == null  || selectedItem.isEmpty()) {
+	    return false; 
 	}
-	return selectedItem.getQuantity() >= selectedQuantity;
+	//TODO change to StockItem
+	return selectedItem.get(0).getQuantity() >= selectedQuantity;
     }
     
     public String  getAvailability(){

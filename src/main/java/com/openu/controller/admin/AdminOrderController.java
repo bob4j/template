@@ -5,14 +5,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.openu.controller.AbstractCrudController;
 import com.openu.controller.Constants;
 import com.openu.model.Order;
+import com.openu.model.OrderItem;
 import com.openu.model.OrderStatus;
+import com.openu.model.StockItem;
 import com.openu.repository.OrderRepository;
+import com.openu.repository.StockItemRepository;
 import com.openu.util.FilterManager;
 import com.openu.util.Utils;
 
@@ -33,6 +40,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private static final String CUSTOMER_LAST_NAME = "lastName";
     private static final String CUSTOMER = "customer";
 
+    private OrderStatus selectedStatusAction = OrderStatus.NOT_SLECTED;
     private OrderStatus selectedStatus = OrderStatus.NOT_SLECTED;
     private ArrayList<String> statusesList;
     private String selectedCustomer = "";
@@ -41,26 +49,32 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     @Resource
     private OrderRepository orderRepository;
+    
+    @Resource
+    private StockItemRepository stockItemRepository;
+    
     @Resource
     private EntityManagerFactory entityManagerFactory;
 
-    public Order getOrder() {
-        String orderId = Utils.getRequest().getParameter("order_id");
-        if (orderId != null) {
-            return orderRepository.findOne(Long.valueOf(orderId));
-        }
-        return null;
-    }
-
     @Transactional
     public void approve(long orderId) {
-        Order order = orderRepository.findOne(orderId);
-        if (order.getStatus() != OrderStatus.PLACED) {
-            throw new IllegalArgumentException();
-        }
-        // TODO decrement stock inventory
-        order.setStatus(OrderStatus.APPROVED);
-        orderRepository.save(order);
+	Order order = orderRepository.findOne(orderId);
+	if (order.getStatus() != OrderStatus.PLACED) {
+	    throw new IllegalArgumentException();
+	}
+	if (isAllOrderStockItemsAvailable(orderId)) {
+	    order.setStatus(OrderStatus.APPROVED);
+	    orderRepository.save(order);
+	    List<OrderItem> orderItems = getOrderItems(orderId);
+	    for (OrderItem orderItem : orderItems) {
+		 List <StockItem> selectedItems = stockItemRepository.findStockItemByFields(orderItem.getProduct(),
+	   		    orderItem.getColor(), orderItem.getSize());
+		 StockItem selectedStockItem = selectedItems.get(0);
+		Integer oldQuantity = selectedStockItem.getQuantity();
+		selectedStockItem.setQuantity(oldQuantity - orderItem.getQuantity());
+		 stockItemRepository.save(selectedStockItem);
+	    }
+	}
     }
 
     @Transactional
@@ -195,6 +209,14 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         this.selectedStatus = OrderStatus.getValueByNameForUI(selectedStatus);
     }
 
+    public String getSelectedStatusAction() {
+	return selectedStatusAction.getNameForUI();
+    }
+
+    public void setSelectedStatusAction(String selectedStatusAction) {
+	this.selectedStatusAction = OrderStatus.getValueByNameForUI(selectedStatusAction);  
+	}
+
     public String getSelectedCustomer() {
         return selectedCustomer;
     }
@@ -224,6 +246,43 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     public void setSelectedModifiedDate(Date selectedModifiedDate) {
         this.selectedModifiedDate = selectedModifiedDate;
+    }
+    
+    private List<OrderItem> getOrderItems(Long orderId){
+	Order order = orderRepository.findOne(orderId);
+	return order.getItems();
+    }
+
+    public Order getOrder() {
+	String orderId = Utils.getRequest().getParameter("order_id");
+	if (orderId != null) {
+	     return orderRepository.findOne(Long.valueOf(orderId));
+	}
+	return null;
+    }
+    public boolean isAllOrderStockItemsAvailable(Long orderId) {
+	List<OrderItem> items = getOrderItems(orderId);
+   	for (OrderItem orderItem : items) {
+   	    List <StockItem> selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(),
+   		    orderItem.getColor(), orderItem.getSize());
+   	    //TODO Change to StockItem
+   	    if (selectedItem == null || selectedItem.get(0).getQuantity() < orderItem.getQuantity()) {
+   		return false;
+   	    }
+   	}
+   	return true;
+       }
+
+    @Transactional
+    public void cancelOrder(Long orderId){
+	Order order = orderRepository.findOne(orderId);
+	order.setStatus(OrderStatus.CANCELLED);
+	sendEmail();
+	orderRepository.save(order);
+    }
+    
+    private void sendEmail(){
+	
     }
 
 }
