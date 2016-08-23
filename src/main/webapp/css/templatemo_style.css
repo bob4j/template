@@ -361,4 +361,34 @@ a.nivo-prevNav {
 	hight: 10px;
 	float: right;
 }
+.filter_row{
+	display: flex;
+	flex-direction: row;
+	margin-top: 10px;
+	
+}
+.filter_box.ul{
+	
+}
+.filter_box_ul{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	
+
+	}
+.filter_box{
+	display: flex;
+	flex-direction: row;
+
+}
+.filter_container{
+	background-color: aliceblue;
+	display: flex;
+	flex-direction: column;
+}
+ul, menu, dir {
+	padding: 0;
+	margin: 0;
+}
 .
