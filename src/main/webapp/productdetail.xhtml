@@ -48,7 +48,7 @@
 									<h:selectOneMenu value="#{productController.selectedColor}"  id="color" required="true" requiredMessage="please add product color">
 										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 						                <f:selectItems value="#{productController.colors}" />
-						                <f:ajax listener="#{productController.listener}" render="sizes availability" />
+						                <f:ajax listener="#{productController.listener}" render="sizes availability notAvailableErrorMessage" />
 						            </h:selectOneMenu>
 						            <h:message for="color" style="color:red;"></h:message>
 						            
@@ -60,7 +60,7 @@
 									<h:selectOneMenu value="#{productController.selectedSize}" id="sizes" required="true" requiredMessage="please add product size">
 										<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 						                <f:selectItems value="#{productController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}" />
-						                <f:ajax render="availability" ></f:ajax>
+						                <f:ajax render="availability notAvailableErrorMessage" ></f:ajax>
 						            </h:selectOneMenu>
 						            <h:message for="sizes" style="color:red;"></h:message>
 								</td>
@@ -70,18 +70,17 @@
 								<td>
 									<h:inputText style="width: 20px; text-align: right" id="quantity"
 											 value="${productController.selectedQuantity}" >
-									<f:ajax render="availability" execute="availability"></f:ajax>
-									<f:validator validatorId="ProductAvailabilityValidator"></f:validator>
+									<f:ajax render="availability notAvailableErrorMessage" execute="availability notAvailableErrorMessage"></f:ajax>
 									</h:inputText>
 								</td>
 							</tr>
 						</table>
-						<h:message for="quantity" style="color:red;"></h:message>
 
 						<div class="cleaner h20" />
 						
 						<h:commandLink action="${productController.addToShoppingCart()}" class="addtocart"/>
-						
+						<h:outputText  id="notAvailableErrorMessage" value="${productController.notAvailableErrorMessage}"
+							style="color: red" />
 					</h:form>
 				</div>
 				<div class="cleaner h30"></div>

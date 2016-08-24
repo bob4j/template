@@ -62,6 +62,8 @@ public class ProductController implements Serializable {
     private Product currentProduct;
 
     private Integer selectedQuantity = 1;
+    
+    private String notAvailableErrorMessage = "";
 
     @Transactional
     public String removeFromShoppingCart(long orderId) {
@@ -80,7 +82,7 @@ public class ProductController implements Serializable {
     @Transactional
     public String addToShoppingCart() {
         if (!isStockItemAvailable()){
-            return null;
+            setNotAvailableErrorMessage("The product is not available in stock");
         }
         Customer loggedInCustomer = sessionBean.getCustomer();
         if (loggedInCustomer == null) {
@@ -187,6 +189,7 @@ public class ProductController implements Serializable {
 
     public void setSelectedColor(ProductColor selectedColor) {
         this.selectedColor = selectedColor;
+        setNotAvailableErrorMessage("");
     }
 
     public ProductSize getSelectedSize() {
@@ -195,6 +198,8 @@ public class ProductController implements Serializable {
 
     public void setSelectedSize(ProductSize selectedSize) {
         this.selectedSize = selectedSize;
+        setNotAvailableErrorMessage("");
+
     }
 
     public Integer getSelectedQuantity() {
@@ -203,6 +208,8 @@ public class ProductController implements Serializable {
 
     public void setSelectedQuantity(Integer selectedQuantity) {
         this.selectedQuantity = selectedQuantity;
+        setNotAvailableErrorMessage("");
+
     }
     
     private boolean isStockItemAvailable(){
@@ -217,4 +224,14 @@ public class ProductController implements Serializable {
     public String  getAvailability(){
 	return isStockItemAvailable()?"Available":"Not Available";
     }
+
+    public String getNotAvailableErrorMessage() {
+	return notAvailableErrorMessage;
+    }
+
+    public void setNotAvailableErrorMessage(String notAvailableErrorMessage) {
+	this.notAvailableErrorMessage = notAvailableErrorMessage;
+    }
+    
+    
 }
