@@ -20,9 +20,9 @@
 								<h4 >Customer Name</h4>
 								<ul>
 									<h:inputText id="orderCustomerFilter"
-										value="#{adminOrderController.selectedCustomer}">
-										<f:ajax execute="orderCustomerFilter" event="valueChange"
-											render="table_product " />
+										value="#{adminOrderController.selectedCustomer}" 
+										onkeypress="if (event.keyCode == 13) {onchange(); return false; }">
+										<f:ajax execute="orderCustomerFilter" render="table_product " />
 									</h:inputText>
 								</ul>
 							</div>
@@ -61,9 +61,9 @@
 							</div>
 						<h:commandButton action="#{adminOrderController.clearFilter()}" style="margin-left:10px"
 							value="Clear Filter">
-							<f:ajax execute="table_product" event="click"
+							<!-- <f:ajax execute="table_product" event="click"
 								render="table_product orderCustomerFilter creationDateFilter modifiedDateFilter">
-							</f:ajax>
+							</f:ajax> -->
 						</h:commandButton>
 						</div>
 
