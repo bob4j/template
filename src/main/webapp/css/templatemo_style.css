@@ -367,9 +367,7 @@ a.nivo-prevNav {
 	margin-top: 10px;
 	
 }
-.filter_box.ul{
-	
-}
+
 .filter_box_ul{
 	margin-top: 0px;
 	margin-bottom: 0px;
@@ -382,8 +380,7 @@ a.nivo-prevNav {
 	flex-direction: row;
 
 }
-.filter_container{
-	background-color: aliceblue;
+.column_container{
 	display: flex;
 	flex-direction: column;
 }

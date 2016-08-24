@@ -86,27 +86,25 @@
 									<td>${i.color}</td>
 									<td>${i.size.label}</td>
 									<td>${i.price}</td>
+									<td>${adminOrderController.getItemOrderAvailability(i)}</td>
 									<td></td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
-					<c:if test="#{o.status eq 'PLACED'}">
-						<h:commandLink
-							actionListener="#{adminOrderController.approve(o.id)}"
-							value="Approve" />
-					</c:if>
-					<c:if test="${o.status eq 'APPROVED'}">
-						<h:commandLink style="float:right;"
-							actionListener="#{adminOrderController.ship(o.id)}" value="Ship" />
-					</c:if>
-					<h:selectOneMenu class="float_l" id="orderStatusAction"
-						value="#{adminOrderController.selectedStatusAction}">
-						<f:selectItems value="${adminOrderController.statusesList}"
-							var="s" itemLabel="#{c}" itemValue="#{c}" />
-					</h:selectOneMenu>
-					<h:commandButton
-						action="#{adminOrderController.applyStatusAction()}" value="Apply" />
+					<div class="column_container">
+						<h4>Change Order Status</h4>
+						<h:selectOneMenu class="float_l" id="orderStatusAction" style="width:150px;"
+							value="#{adminOrderController.selectedStatusAction}">
+							<f:selectItems value="${adminOrderController.statusesList}"
+								var="s" itemLabel="#{c}" itemValue="#{c}" />
+						</h:selectOneMenu>
+					</div>
+					
+						<h:commandButton action="#{adminOrderController.applyStatusAction()}" value="Apply" >
+						<f:param  name="apply_status_order_id" value="${o.id}" />
+						 
+						</h:commandButton>
 				</div>
 			</h:form>
 			<div class="cleaner"></div>

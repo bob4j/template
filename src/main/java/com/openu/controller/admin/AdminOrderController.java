@@ -5,18 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +22,9 @@ import com.openu.controller.Constants;
 import com.openu.model.Order;
 import com.openu.model.OrderItem;
 import com.openu.model.OrderStatus;
+import com.openu.model.Product;
+import com.openu.model.ProductColor;
+import com.openu.model.ProductSize;
 import com.openu.model.StockItem;
 import com.openu.repository.OrderRepository;
 import com.openu.repository.StockItemRepository;
@@ -49,10 +48,10 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 
     @Resource
     private OrderRepository orderRepository;
-    
+
     @Resource
     private StockItemRepository stockItemRepository;
-    
+
     @Resource
     private EntityManagerFactory entityManagerFactory;
 
@@ -65,148 +64,158 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	if (isAllOrderStockItemsAvailable(orderId)) {
 	    order.setStatus(OrderStatus.APPROVED);
 	    orderRepository.save(order);
-	    List<OrderItem> orderItems = getOrderItems(orderId);
-	    for (OrderItem orderItem : orderItems) {
-		 List <StockItem> selectedItems = stockItemRepository.findStockItemByFields(orderItem.getProduct(),
-	   		    orderItem.getColor(), orderItem.getSize());
-		 StockItem selectedStockItem = selectedItems.get(0);
-		Integer oldQuantity = selectedStockItem.getQuantity();
-		selectedStockItem.setQuantity(oldQuantity - orderItem.getQuantity());
-		 stockItemRepository.save(selectedStockItem);
-	    }
+	    updateStockItemRepositoryAfterAction(orderId, true);
 	}
     }
 
-    @Transactional
-    public void ship(long orderId) {
-        Order order = orderRepository.findOne(orderId);
-        if (order.getStatus() != OrderStatus.APPROVED) {
-            throw new IllegalArgumentException();
-        }
-        order.setStatus(OrderStatus.SHIPPED);
-        orderRepository.save(order);
+    /**
+     * 
+     * @param orderId
+     * @param decreaseStockItemQuantity
+     *            -true if after the action we need to decrease the quantity of
+     *            the stock items in the order - false if after the action we
+     *            need to increase the quantity of the stock items in the order
+     */
+    private void updateStockItemRepositoryAfterAction(long orderId, boolean decreaseStockItemQuantity) {
+	List<OrderItem> orderItems = getOrderItems(orderId);
+	for (OrderItem orderItem : orderItems) {
+	    List<StockItem> selectedItems = stockItemRepository.findStockItemByFields(orderItem.getProduct(),
+		    orderItem.getColor(), orderItem.getSize());
+	    StockItem selectedStockItem = selectedItems.get(0);
+	    Integer oldQuantity = selectedStockItem.getQuantity();
+	    if (decreaseStockItemQuantity) {
+		selectedStockItem.setQuantity(oldQuantity - orderItem.getQuantity());
+	    } else {
+
+	    }
+	    stockItemRepository.save(selectedStockItem);
+	}
     }
 
+
     public List<Order> getPlacedOrders() {
-        return orderRepository.findAll((root, query, cb) -> cb.and(cb.notEqual(root.get(Constants.STATUS), OrderStatus.PLACED)));
+	return orderRepository
+		.findAll((root, query, cb) -> cb.and(cb.notEqual(root.get(Constants.STATUS), OrderStatus.PLACED)));
     }
 
     @Override
     protected PagingAndSortingRepository<Order, Long> getRepository() {
-        return orderRepository;
+	return orderRepository;
     }
 
     @Override
     protected Order createEntity() throws Exception {
-        throw new UnsupportedOperationException();
+	throw new UnsupportedOperationException();
     }
 
     public void statusUp() {
-        setSortBy(Constants.STATUS);
-        setDirection(Direction.ASC);
+	setSortBy(Constants.STATUS);
+	setDirection(Direction.ASC);
     }
 
     public void statusDown() {
-        setSortBy(Constants.STATUS);
-        setDirection(Direction.DESC);
+	setSortBy(Constants.STATUS);
+	setDirection(Direction.DESC);
     }
 
     public void modifiedUp() {
-        setSortBy(Constants.MODIFIED);
-        setDirection(Direction.ASC);
+	setSortBy(Constants.MODIFIED);
+	setDirection(Direction.ASC);
     }
 
     public void modifiedDown() {
-        setSortBy(Constants.MODIFIED);
-        setDirection(Direction.DESC);
+	setSortBy(Constants.MODIFIED);
+	setDirection(Direction.DESC);
     }
 
     public void creationUp() {
-        setSortBy(Constants.CREATED);
-        setDirection(Direction.ASC);
+	setSortBy(Constants.CREATED);
+	setDirection(Direction.ASC);
     }
 
     public void creationDown() {
-        setSortBy(Constants.CREATED);
-        setDirection(Direction.DESC);
+	setSortBy(Constants.CREATED);
+	setDirection(Direction.DESC);
     }
 
     public void customerUp() {
-        setSortBy(Constants.CUSTOMER);
-        setDirection(Direction.ASC);
+	setSortBy(Constants.CUSTOMER);
+	setDirection(Direction.ASC);
     }
 
     public void customerDown() {
-        setSortBy(Constants.CUSTOMER);
-        setDirection(Direction.DESC);
+	setSortBy(Constants.CUSTOMER);
+	setDirection(Direction.DESC);
     }
 
     @Override
     protected FilterManager<Order> getFilterManager() {
-        return new FilterManager<>(Order.class, entityManagerFactory);
+	return new FilterManager<>(Order.class, entityManagerFactory);
     }
 
     @Override
     protected void createPredicatesList(FilterManager<Order> filterManager) {
-        super.createPredicatesList(filterManager);
-        CriteriaBuilder criteriaBuilder = filterManager.getCriteriaBuilder();
-        Root<Order> root = filterManager.getRoot();
-        Predicate statusPredicate = getStatusPredicate(criteriaBuilder, root);
-        Predicate customerPredicate = getCustomerPredicate(filterManager);
-        Predicate creationDatePredicate = getCreationDatePredicate(criteriaBuilder, root);
-        Predicate modifiedDatePredicate = getModifiedDatePredicate(criteriaBuilder, root);
-        filterManager.addPredicates(statusPredicate, creationDatePredicate, customerPredicate, modifiedDatePredicate);
+	super.createPredicatesList(filterManager);
+	CriteriaBuilder criteriaBuilder = filterManager.getCriteriaBuilder();
+	Root<Order> root = filterManager.getRoot();
+	Predicate statusPredicate = getStatusPredicate(criteriaBuilder, root);
+	Predicate customerPredicate = getCustomerPredicate(filterManager);
+	Predicate creationDatePredicate = getCreationDatePredicate(criteriaBuilder, root);
+	Predicate modifiedDatePredicate = getModifiedDatePredicate(criteriaBuilder, root);
+	filterManager.addPredicates(statusPredicate, creationDatePredicate, customerPredicate, modifiedDatePredicate);
     }
 
     private Predicate getStatusPredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        if (selectedStatus != OrderStatus.NOT_SLECTED) {
-            return criteriaBuilder.equal(root.<OrderStatus> get(Constants.STATUS), selectedStatus);
-        } else {
-            return null;
-        }
+	if (selectedStatus != OrderStatus.NOT_SLECTED) {
+	    return criteriaBuilder.equal(root.<OrderStatus>get(Constants.STATUS), selectedStatus);
+	} else {
+	    return null;
+	}
     }
 
     private Predicate getCustomerPredicate(FilterManager<Order> filterManager) {
-        String[] customerArray = { selectedCustomer };
-        Predicate firstNamePredicate = filterManager.getJoinStringFieldPredicate(customerArray, CUSTOMER, CUSTOMER_FIRST_NAME, "%value%");
-        Predicate lastNamePredicate = filterManager.getJoinStringFieldPredicate(customerArray, CUSTOMER, CUSTOMER_LAST_NAME, "%value%");
-        return filterManager.getCriteriaBuilder().or(firstNamePredicate, lastNamePredicate);
+	String[] customerArray = { selectedCustomer };
+	Predicate firstNamePredicate = filterManager.getJoinStringFieldPredicate(customerArray, CUSTOMER,
+		CUSTOMER_FIRST_NAME, "%value%");
+	Predicate lastNamePredicate = filterManager.getJoinStringFieldPredicate(customerArray, CUSTOMER,
+		CUSTOMER_LAST_NAME, "%value%");
+	return filterManager.getCriteriaBuilder().or(firstNamePredicate, lastNamePredicate);
     }
 
     private Predicate getCreationDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        return getDatePredicate(criteriaBuilder, root, selectedCreationDate, "created");
+	return getDatePredicate(criteriaBuilder, root, selectedCreationDate, "created");
     }
 
     private Predicate getModifiedDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        return getDatePredicate(criteriaBuilder, root, selectedModifiedDate, "modified");
+	return getDatePredicate(criteriaBuilder, root, selectedModifiedDate, "modified");
     }
 
     private Predicate getDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root, Date date, String field) {
-        if (date == null) {
-            return null;
-        }
-        Calendar until = Calendar.getInstance();
-        until.setTime(date);
-        until.set(Calendar.HOUR, 23);
-        until.set(Calendar.MINUTE, 59);
-        return criteriaBuilder.between(root.get(field), date.getTime(), until.getTimeInMillis());
+	if (date == null) {
+	    return null;
+	}
+	Calendar until = Calendar.getInstance();
+	until.setTime(date);
+	until.set(Calendar.HOUR, 23);
+	until.set(Calendar.MINUTE, 59);
+	return criteriaBuilder.between(root.get(field), date.getTime(), until.getTimeInMillis());
     }
 
     public List<String> getStatusesList() {
-        statusesList = new ArrayList<>();
-        for (OrderStatus status : OrderStatus.values()) {
-            statusesList.add(status.getNameForUI());
-        }
-        return statusesList;
+	statusesList = new ArrayList<>();
+	for (OrderStatus status : OrderStatus.values()) {
+	    statusesList.add(status.getNameForUI());
+	}
+	return statusesList;
 
     }
 
     public String getSelectedStatus() {
-        return selectedStatus.getNameForUI();
+	return selectedStatus.getNameForUI();
     }
 
     public void setSelectedStatus(String selectedStatus) {
-        this.selectedStatus = OrderStatus.getValueByNameForUI(selectedStatus);
+	this.selectedStatus = OrderStatus.getValueByNameForUI(selectedStatus);
     }
 
     public String getSelectedStatusAction() {
@@ -214,41 +223,41 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public void setSelectedStatusAction(String selectedStatusAction) {
-	this.selectedStatusAction = OrderStatus.getValueByNameForUI(selectedStatusAction);  
-	}
+	this.selectedStatusAction = OrderStatus.getValueByNameForUI(selectedStatusAction);
+    }
 
     public String getSelectedCustomer() {
-        return selectedCustomer;
+	return selectedCustomer;
     }
 
     public void setSelectedCustomer(String selectedCustomer) {
-        this.selectedCustomer = selectedCustomer;
+	this.selectedCustomer = selectedCustomer;
     }
 
     public void clearFilter() {
-        selectedCustomer = "";
-        selectedStatus = OrderStatus.NOT_SLECTED;
-        selectedCreationDate = null;
-        selectedModifiedDate = null;
+	selectedCustomer = "";
+	selectedStatus = OrderStatus.NOT_SLECTED;
+	selectedCreationDate = null;
+	selectedModifiedDate = null;
     }
 
     public Date getSelectedCreationDate() {
-        return selectedCreationDate;
+	return selectedCreationDate;
     }
 
     public void setSelectedCreationDate(Date selectedCreationDate) {
-        this.selectedCreationDate = selectedCreationDate;
+	this.selectedCreationDate = selectedCreationDate;
     }
 
     public Date getSelectedModifiedDate() {
-        return selectedModifiedDate;
+	return selectedModifiedDate;
     }
 
     public void setSelectedModifiedDate(Date selectedModifiedDate) {
-        this.selectedModifiedDate = selectedModifiedDate;
+	this.selectedModifiedDate = selectedModifiedDate;
     }
-    
-    private List<OrderItem> getOrderItems(Long orderId){
+
+    private List<OrderItem> getOrderItems(Long orderId) {
 	Order order = orderRepository.findOne(orderId);
 	return order.getItems();
     }
@@ -256,33 +265,105 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     public Order getOrder() {
 	String orderId = Utils.getRequest().getParameter("order_id");
 	if (orderId != null) {
-	     return orderRepository.findOne(Long.valueOf(orderId));
+	    return orderRepository.findOne(Long.valueOf(orderId));
 	}
 	return null;
     }
+
     public boolean isAllOrderStockItemsAvailable(Long orderId) {
 	List<OrderItem> items = getOrderItems(orderId);
-   	for (OrderItem orderItem : items) {
-   	    List <StockItem> selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(),
-   		    orderItem.getColor(), orderItem.getSize());
-   	    //TODO Change to StockItem
-   	    if (selectedItem == null || selectedItem.get(0).getQuantity() < orderItem.getQuantity()) {
-   		return false;
-   	    }
-   	}
-   	return true;
-       }
-
-    @Transactional
-    public void cancelOrder(Long orderId){
-	Order order = orderRepository.findOne(orderId);
-	order.setStatus(OrderStatus.CANCELLED);
-	sendEmail();
-	orderRepository.save(order);
+	for (OrderItem orderItem : items) {
+	    List<StockItem> selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(),
+		    orderItem.getColor(), orderItem.getSize());
+	    // TODO Change to StockItem
+	    if (selectedItem == null || selectedItem.get(0).getQuantity() < orderItem.getQuantity()) {
+		return false;
+	    }
+	}
+	return true;
     }
     
-    private void sendEmail(){
+    @Transactional
+    public void ship(long orderId) {
+	Order order = orderRepository.findOne(orderId);
+	order.setStatus(OrderStatus.SHIPPED);
+	orderRepository.save(order);
+	sendEmail(order);
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId) {
+	Order order = orderRepository.findOne(orderId);
+	order.setStatus(OrderStatus.CANCELLED);
+	boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED)
+		|| order.getStatus().equals(OrderStatus.SHIPPED);
+	if (shouldUpdateStockItems) {
+	    updateStockItemRepositoryAfterAction(orderId, false);
+	}
+	orderRepository.save(order);
+	sendEmail(order);
+    }
+    
+    @Transactional
+    public void PlaceOrder(Long orderId) {
+	Order order = orderRepository.findOne(orderId);
+	order.setStatus(OrderStatus.PLACED);
+	boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED)
+		|| order.getStatus().equals(OrderStatus.SHIPPED);
+	if (shouldUpdateStockItems) {
+	    updateStockItemRepositoryAfterAction(orderId, false);
+	}
+	orderRepository.save(order);
+	sendEmail(order);
+    }
+
+    private void sendEmail(Order order) {
+
+    }
+
+    public String getItemOrderAvailability(OrderItem item) {
+	ProductColor color = item.getColor();
+	ProductSize size = item.getSize();
+	Product product = item.getProduct();
+	List<StockItem> findStockItemByFields = stockItemRepository.findStockItemByFields(product, color, size);
+	boolean isItemAvailable = findStockItemByFields.get(0).getQuantity() < item.getQuantity();
+	return isItemAvailable ? "Available" : "Not Available";
+
+    }
+
+    public void applyStatusAction(){
 	
+	Long  orderId = getOrderIdForApplyStatusAction();
+	if (orderId == null){
+	    return;
+	}
+	
+	switch (selectedStatusAction) {
+	case NOT_SLECTED:
+	    return ;
+	case APPROVED:
+	    return ;
+	case CANCELLED:
+		cancelOrder(orderId);
+	    return ;
+	case OPEN:
+	    return ;
+	case PLACED:
+	    PlaceOrder(orderId);
+	    return ;
+	case REJECTED:
+	    return ;
+	case SHIPPED:
+	    ship(orderId);
+	    return ;
+	default:
+	    break;
+	}
+    }
+
+    private Long getOrderIdForApplyStatusAction() {
+	String id = Utils.getRequest().getParameter("apply_status_order_id");
+	return Long.valueOf(id);
     }
 
 }
