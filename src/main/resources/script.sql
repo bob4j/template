@@ -28,7 +28,7 @@ insert into product(id,brand,name,description,price,image_id) values (8,'Nimrod'
 
 INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (1, 'BLACK', 99, '_9', 1);
 INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (2, 'BLACK', 99, '_10', 1);
-INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (3, 'BLACK', 99, '_10', 1);
+INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (3, 'BROWN', 99, '_10', 1);
 INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (4, 'RED', 99, '_10', 1);
 INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (5, 'BLACK', 99, '_9', 2);
 INSERT INTO stockitem(id, color, quantity, size, product_id) VALUES (6, 'BLACK', 99, '_9', 3);
