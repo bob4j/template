@@ -77,24 +77,38 @@ public class ProductController implements Serializable {
         customerRepository.save(customer);
         return null;
     }
+    
+    private Customer getCustomerForCart(){
+	Customer loggedInCustomer = sessionBean.getCustomer();
+        if (loggedInCustomer == null) {
+            return null;
+        }
+        return customerRepository.findByUsername(loggedInCustomer.getUsername());
+    }
 
     @CustomerTransaction
     @Transactional
     public String addToShoppingCart() {
         if (!isStockItemAvailable()){
-            setNotAvailableErrorMessage("The product is not available in stock");
+            if (getSelectedColor()!= null && getSelectedSize()!=null ){
+        	setNotAvailableErrorMessage("The selected product quantity exceeds the number of products in stock");
+            }
+            return null;
         }
-        Customer loggedInCustomer = sessionBean.getCustomer();
-        if (loggedInCustomer == null) {
+        Customer customer = getCustomerForCart();
+        if (customer == null){
             return "login";
         }
-        Customer customer = customerRepository.findByUsername(loggedInCustomer.getUsername());
         Order shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
             shoppingCart = new Order();
             shoppingCart.setStatus(OrderStatus.OPEN);
             shoppingCart.setCustomer(customer);
             customer.getOrders().add(shoppingCart);
+        }
+        if (checkForDuplication(shoppingCart)){
+            //customerRepository.save(customer);
+            return null;
         }
         OrderItem item = new OrderItem();
         item.setProduct(currentProduct);
@@ -105,6 +119,20 @@ public class ProductController implements Serializable {
         shoppingCart.getItems().add(item);
         customerRepository.save(customer);
         return null;
+    }
+
+    private boolean checkForDuplication(Order shoppingCart) {
+	List<OrderItem> ShoppingCartitems = shoppingCart.getItems();
+        for (OrderItem  orderItem : ShoppingCartitems) {
+            boolean isDuplicateItem = orderItem.getColor().equals(selectedColor) && 
+        	    orderItem.getSize().equals(selectedSize)&&
+        	    orderItem.getProduct().getId().equals(currentProduct.getId());
+	    if(isDuplicateItem ){
+		orderItem.setQuantity(orderItem.getQuantity()+selectedQuantity);
+	        return true;
+	    }
+	}
+        return false;
     }
 
     /**
@@ -212,13 +240,22 @@ public class ProductController implements Serializable {
 
     }
     
+    @CustomerTransaction
     private boolean isStockItemAvailable(){
-	List <StockItem> selectedItem = stockItemRepository.findStockItemByFields(getProduct(), getSelectedColor(), getSelectedSize());
-	if (selectedItem == null  || selectedItem.isEmpty()) {
+	StockItem selectedStockItem = stockItemRepository.findStockItemByFields(getProduct(), getSelectedColor(), getSelectedSize());
+	if (selectedStockItem == null ) {
 	    return false; 
 	}
-	//TODO change to StockItem
-	return selectedItem.get(0).getQuantity() >= selectedQuantity;
+	
+        Customer customer = getCustomerForCart();
+        
+        List<OrderItem> ShoppingCartitems = customer.getShoppingCart().getItems();
+	for (OrderItem orderItem : ShoppingCartitems) {
+	    if (selectedStockItem.isEqualToOrderItem(orderItem)){
+		return selectedStockItem.getQuantity() >= (selectedQuantity + orderItem.getQuantity());
+	    }
+	}
+	return selectedStockItem.getQuantity() >= selectedQuantity;
     }
     
     public String  getAvailability(){

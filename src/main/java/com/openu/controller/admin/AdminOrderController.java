@@ -78,11 +78,11 @@ public class AdminOrderController extends AbstractCrudController<Order> {
      *            after the action we need to increase the quantity of the stock items in the order
      */
     private void updateStockItemRepositoryAfterAction(long orderId, boolean decreaseStockItemQuantity) {
-        List<OrderItem> orderItems = getOrderItems(orderId);
+	StockItem selectedStockItem;
+	List<OrderItem> orderItems = getOrderItems(orderId);
         for (OrderItem orderItem : orderItems) {
-            List<StockItem> selectedItems = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
+            selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
                     orderItem.getSize());
-            StockItem selectedStockItem = selectedItems.get(0);
             Integer oldQuantity = selectedStockItem.getQuantity();
             if (decreaseStockItemQuantity) {
                 selectedStockItem.setQuantity(oldQuantity - orderItem.getQuantity());
@@ -273,12 +273,12 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public boolean isAllOrderStockItemsAvailable(Long orderId) {
-        List<OrderItem> items = getOrderItems(orderId);
+	StockItem selectedItem;
+	List<OrderItem> items = getOrderItems(orderId);
         for (OrderItem orderItem : items) {
-            List<StockItem> selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
+            selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
                     orderItem.getSize());
-            // TODO Change to StockItem
-            if (selectedItem == null || selectedItem.get(0).getQuantity() < orderItem.getQuantity()) {
+            if (selectedItem == null || selectedItem.getQuantity() < orderItem.getQuantity()) {
                 return false;
             }
         }
@@ -325,8 +325,8 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         ProductColor color = item.getColor();
         ProductSize size = item.getSize();
         Product product = item.getProduct();
-        List<StockItem> findStockItemByFields = stockItemRepository.findStockItemByFields(product, color, size);
-        boolean isItemAvailable = findStockItemByFields.get(0).getQuantity() < item.getQuantity();
+        StockItem findStockItemByFields = stockItemRepository.findStockItemByFields(product, color, size);
+        boolean isItemAvailable = findStockItemByFields.getQuantity() < item.getQuantity();
         return isItemAvailable ? "Available" : "Not Available";
 
     }

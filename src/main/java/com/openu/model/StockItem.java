@@ -84,5 +84,11 @@ public class StockItem {
 	return "StockItem [id=" + id + ", product=" + product.getId() + ", size=" + size + ", color=" + color + ", quantity="
 		+ quantity + "]";
     }
+    
+    public boolean isEqualToOrderItem(OrderItem orderItem){
+	return this.getColor().equals(orderItem.getColor()) &&
+		this.getSize().equals(orderItem.getSize()) &&
+		this.getProduct().getId().equals(orderItem.getProduct().getId());
+    }
 
 }
