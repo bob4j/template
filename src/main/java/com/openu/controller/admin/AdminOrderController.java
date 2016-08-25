@@ -58,16 +58,19 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private EntityManagerFactory entityManagerFactory;
 
     @Transactional
-    public void approve(long orderId) {
-        Order order = orderRepository.findOne(orderId);
-        if (order.getStatus() != OrderStatus.PLACED) {
-            throw new IllegalArgumentException();
-        }
-        if (isAllOrderStockItemsAvailable(orderId)) {
+    public synchronized void  approve(long orderId) {
+        Order order = orderRepository.findOne(orderId);   
+        if (order.getStatus().equals(OrderStatus.SHIPPED)){
+            order.setStatus(OrderStatus.APPROVED);
+            orderRepository.save(order);
+            sendEmail(order);
+        } else if (isAllOrderStockItemsAvailable(orderId)) {
             order.setStatus(OrderStatus.APPROVED);
             orderRepository.save(order);
             updateStockItemRepositoryAfterAction(orderId, true);
+            sendEmail(order);
         }
+        
     }
 
     /**
@@ -86,8 +89,8 @@ public class AdminOrderController extends AbstractCrudController<Order> {
             Integer oldQuantity = selectedStockItem.getQuantity();
             if (decreaseStockItemQuantity) {
                 selectedStockItem.setQuantity(oldQuantity - orderItem.getQuantity());
-            } else {
-
+            } else  {
+        	 selectedStockItem.setQuantity(oldQuantity + orderItem.getQuantity());
             }
             stockItemRepository.save(selectedStockItem);
         }
@@ -292,9 +295,20 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         orderRepository.save(order);
         sendEmail(order);
     }
-
     @Transactional
-    public void cancelOrder(Long orderId) {
+    public synchronized void rejectOrder(Long orderId) {
+        Order order = orderRepository.findOne(orderId);
+        if (order.getStatus() != OrderStatus.SHIPPED){
+            throw new IllegalArgumentException("cannot reject order with status " + order.getStatus());
+        }
+        order.setStatus(OrderStatus.REJECTED);
+        updateStockItemRepositoryAfterAction(orderId, false);
+        orderRepository.save(order);
+        sendEmail(order);
+    }
+ 
+    @Transactional
+    public synchronized void cancelOrder(Long orderId) {
         Order order = orderRepository.findOne(orderId);
         order.setStatus(OrderStatus.CANCELLED);
         boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED) || order.getStatus().equals(OrderStatus.SHIPPED);
@@ -306,13 +320,13 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     @Transactional
-    public void PlaceOrder(Long orderId) {
+    public synchronized  void PlaceOrder(Long orderId) {
         Order order = orderRepository.findOne(orderId);
-        order.setStatus(OrderStatus.PLACED);
         boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED) || order.getStatus().equals(OrderStatus.SHIPPED);
         if (shouldUpdateStockItems) {
             updateStockItemRepositoryAfterAction(orderId, false);
         }
+        order.setStatus(OrderStatus.PLACED);
         orderRepository.save(order);
         sendEmail(order);
     }
@@ -326,7 +340,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         ProductSize size = item.getSize();
         Product product = item.getProduct();
         StockItem findStockItemByFields = stockItemRepository.findStockItemByFields(product, color, size);
-        boolean isItemAvailable = findStockItemByFields.getQuantity() < item.getQuantity();
+        boolean isItemAvailable = findStockItemByFields.getQuantity() >= item.getQuantity();
         return isItemAvailable ? "Available" : "Not Available";
 
     }
@@ -342,7 +356,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         case NOT_SLECTED:
             return;
         case APPROVED:
-            return;
+            approve(orderId);
         case CANCELLED:
             cancelOrder(orderId);
             return;
@@ -364,6 +378,47 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     private Long getOrderIdForApplyStatusAction() {
         String id = Utils.getRequest().getParameter("apply_status_order_id");
         return Long.valueOf(id);
+    }
+    
+    public List <OrderStatus> getStatusesActionList() {
+	
+        Order order = getOrder();
+        if (order == null){
+          return null;  
+        }
+        ArrayList<OrderStatus> statussesActionList = new ArrayList<OrderStatus>();
+        OrderStatus status = order.getStatus();
+	switch (status) {
+	case OPEN:
+	     statussesActionList.add(OrderStatus.OPEN);
+	     break;
+	case CANCELLED:
+	     statussesActionList.add(OrderStatus.PLACED);
+	     statussesActionList.add(OrderStatus.APPROVED);
+	     statussesActionList.add(OrderStatus.CANCELLED);
+
+	     break;
+	case APPROVED:
+	    statussesActionList.add(OrderStatus.PLACED);
+	    statussesActionList.add(OrderStatus.SHIPPED);
+	    statussesActionList.add(OrderStatus.CANCELLED);
+	     statussesActionList.add(OrderStatus.APPROVED);
+
+	    break;
+	case SHIPPED:
+	    statussesActionList.add(OrderStatus.PLACED);
+	    statussesActionList.add(OrderStatus.APPROVED);
+	     statussesActionList.add(OrderStatus.SHIPPED);
+	     statussesActionList.add(OrderStatus.REJECTED);
+
+
+	    break;
+
+	default:
+	    return null;
+	}
+	return statussesActionList;
+
     }
 
 }

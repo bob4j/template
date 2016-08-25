@@ -240,7 +240,7 @@ public class ProductController implements Serializable {
 
     }
     
-    @CustomerTransaction
+    @Transactional
     private boolean isStockItemAvailable(){
 	StockItem selectedStockItem = stockItemRepository.findStockItemByFields(getProduct(), getSelectedColor(), getSelectedSize());
 	if (selectedStockItem == null ) {
@@ -249,12 +249,15 @@ public class ProductController implements Serializable {
 	
         Customer customer = getCustomerForCart();
         
-        List<OrderItem> ShoppingCartitems = customer.getShoppingCart().getItems();
-	for (OrderItem orderItem : ShoppingCartitems) {
-	    if (selectedStockItem.isEqualToOrderItem(orderItem)){
-		return selectedStockItem.getQuantity() >= (selectedQuantity + orderItem.getQuantity());
-	    }
-	}
+        Order shoppingCart = customer.getShoppingCart();
+        if (shoppingCart != null){
+            List<OrderItem> ShoppingCartitems = shoppingCart.getItems();
+        	for (OrderItem orderItem : ShoppingCartitems) {
+        	    if (selectedStockItem.isEqualToOrderItem(orderItem)){
+        		return selectedStockItem.getQuantity() >= (selectedQuantity + orderItem.getQuantity());
+        	    }
+        	}
+        }
 	return selectedStockItem.getQuantity() >= selectedQuantity;
     }
     
