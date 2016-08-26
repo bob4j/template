@@ -2,6 +2,7 @@ package com.openu.service;
 
 import java.util.List;
 
+import com.openu.controller.Constants;
 import com.openu.model.Order;
 import com.openu.model.OrderItem;
 
@@ -47,7 +48,7 @@ public abstract class AbstractOrderEmailSender extends EmailSender {
 		    order.getShippingAddress().getCity().getName());
 	}
 	return String.format(BILLING_AND_SHIPPING, order.getCustomer().getFirstName(),
-		    order.getCustomer().getLastName(), "Not Found","Not Found");
+		    order.getCustomer().getLastName(), Constants.NOT_FOUND,Constants.NOT_FOUND);
     }
 
     private String getOrderItemsBodyTable(Order order){

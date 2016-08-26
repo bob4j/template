@@ -36,6 +36,10 @@ import com.openu.util.Utils;
 @Scope("view")
 public class ProductController implements Serializable {
 
+    private static final String PRODUCT_ID = "product_id";
+
+    private static final String LOGIN = "login";
+
     private static final long serialVersionUID = 1L;
 
     private static final int MAX_RELATED = 6;
@@ -61,7 +65,7 @@ public class ProductController implements Serializable {
 
     private Product currentProduct;
 
-    private Integer selectedQuantity = 1;
+    private Integer selectedQuantity = Constants.DEFAULT_ITEM_QUANTITY;
     
     private String notAvailableErrorMessage = "";
 
@@ -69,7 +73,7 @@ public class ProductController implements Serializable {
     public String removeFromShoppingCart(long orderId) {
         Customer loggedInCustomer = sessionBean.getCustomer();
         if (loggedInCustomer == null) {
-            return "login";
+            return LOGIN;
         }
         Customer customer = customerRepository.findByUsername(loggedInCustomer.getUsername());
         Order shoppingCart = customer.getShoppingCart();
@@ -97,7 +101,7 @@ public class ProductController implements Serializable {
         }
         Customer customer = getCustomerForCart();
         if (customer == null){
-            return "login";
+            return LOGIN;
         }
         Order shoppingCart = customer.getShoppingCart();
         if (shoppingCart == null) {
@@ -141,7 +145,7 @@ public class ProductController implements Serializable {
      * @return 6 newest products
      */
     public Iterable<Product> getNewProducts() {
-        return productRepository.findAll(new PageRequest(0, 6, new Sort(new Sort.Order(Direction.DESC, "id")))).getContent();
+        return productRepository.findAll(new PageRequest(0, 6, new Sort(new Sort.Order(Direction.DESC, Constants.ID)))).getContent();
     }
 
     /**
@@ -164,7 +168,7 @@ public class ProductController implements Serializable {
      * Loads the product by the request parameters - productdetail.jsf?category_id=<ID>
      */
     public Product getProduct() {
-        String productId = Utils.getRequest().getParameter("product_id");
+        String productId = Utils.getRequest().getParameter(PRODUCT_ID);
         if (productId != null) {
             currentProduct = loadProduct(productId);
         }
@@ -267,7 +271,7 @@ public class ProductController implements Serializable {
     }
     
     public String  getAvailability(){
-	return isStockItemAvailable()?"Available":"Not Available";
+	return isStockItemAvailable()?Constants.ITEM_AVAILABLE:Constants.ITEM_NOT_AVAILABLE;
     }
 
     public String getNotAvailableErrorMessage() {

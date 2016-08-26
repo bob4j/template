@@ -12,10 +12,14 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.openu.controller.Constants;
+
 @Service
 public class EmailSender {
 
     	  
+    private static final String EMAIL_FROM = Constants.EMAIL_FROM;
+
     @Value("${email.username}")
     private String username;
 
@@ -44,7 +48,7 @@ public class EmailSender {
 	});
 	try {
 	    Message message = new MimeMessage(session);
-	    message.setFrom(new InternetAddress(username, "Shoe Store"));
+	    message.setFrom(new InternetAddress(username, EMAIL_FROM));
 	    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 	    message.setSubject(subject);
 	    message.setContent(text, "text/html");

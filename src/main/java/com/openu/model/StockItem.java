@@ -12,9 +12,11 @@ import javax.persistence.SequenceGenerator;
 @Entity
 public class StockItem {
 
+    private static final String STOCKITEM_SEQ = "stockitem_seq";
+
     @Id
-    @SequenceGenerator(name = "stockitem_seq", sequenceName = "stockitem_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stockitem_seq")
+    @SequenceGenerator(name = STOCKITEM_SEQ, sequenceName = STOCKITEM_SEQ, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = STOCKITEM_SEQ)
     private Long id;
 
     @ManyToOne

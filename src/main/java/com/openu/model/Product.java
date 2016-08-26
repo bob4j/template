@@ -24,9 +24,17 @@ public class Product {
 
     // TODO add columns: size; width; color; promotion
 
+    private static final String CATEGORY_ID = "category_id";
+
+    private static final String ID = "id";
+
+    private static final String PRODUCT_ID = "product_id";
+
+    private static final String PRODUCT_SEQ = "product_seq";
+
     @Id
-    @SequenceGenerator(name = "product_seq", sequenceName = "product_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(name = PRODUCT_SEQ, sequenceName = PRODUCT_SEQ, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = PRODUCT_SEQ)
     private Long id;
 
     private String brand;
@@ -47,7 +55,7 @@ public class Product {
 
     private Double price;
 
-    @JoinTable(name = "category_product", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") })
+    @JoinTable(name = "category_product", joinColumns = { @JoinColumn(name = PRODUCT_ID, referencedColumnName = ID) }, inverseJoinColumns = { @JoinColumn(name = CATEGORY_ID, referencedColumnName = ID) })
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> categories;
 

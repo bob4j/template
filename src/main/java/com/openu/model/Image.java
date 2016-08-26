@@ -9,9 +9,11 @@ import javax.persistence.SequenceGenerator;
 @Entity
 public class Image {
 
+    private static final String IMAGE_SEQUENCE_NAME = "image_seq";
+
     @Id
-    @SequenceGenerator(name = "image_seq", sequenceName = "image_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "image_seq")
+    @SequenceGenerator(name = IMAGE_SEQUENCE_NAME, sequenceName = IMAGE_SEQUENCE_NAME, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = IMAGE_SEQUENCE_NAME)
     private Long id;
 
     private String name;

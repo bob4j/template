@@ -10,12 +10,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
+import com.openu.controller.Constants;
+
 @Entity
 public class OrderItem {
 
+    private static final String ORDERITEM_SEQ = "orderitem_seq";
+
     @Id
-    @SequenceGenerator(name = "orderitem_seq", sequenceName = "orderitem_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderitem_seq")
+    @SequenceGenerator(name = ORDERITEM_SEQ, sequenceName = ORDERITEM_SEQ, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ORDERITEM_SEQ)
     private Long id;
 
     @NotNull
@@ -23,7 +27,7 @@ public class OrderItem {
     private Product product;
 
     @NotNull
-    private Integer quantity = 1;
+    private Integer quantity = Constants.DEFAULT_ITEM_QUANTITY;
 
     @NotNull
     @Enumerated(EnumType.STRING)

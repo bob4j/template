@@ -11,9 +11,13 @@ import javax.persistence.SequenceGenerator;
 @Entity
 public class CreditCardInfo {
 
+    private static final int INITIAL_VALUE = 100;
+    private static final int ALLOCATED_SIZE = 1;
+    private static final String CREDIT_CARD_INFO_SEQUENCE_NAME = "cc_info_seq";
+
     @Id
-    @SequenceGenerator(name = "cc_info_seq", sequenceName = "cc_info_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cc_info_seq")
+    @SequenceGenerator(name = CREDIT_CARD_INFO_SEQUENCE_NAME, sequenceName = CREDIT_CARD_INFO_SEQUENCE_NAME, allocationSize = ALLOCATED_SIZE, initialValue = INITIAL_VALUE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = CREDIT_CARD_INFO_SEQUENCE_NAME)
     private Long id;
 
     @Enumerated(EnumType.STRING)

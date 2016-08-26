@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.openu.model.Administrator;
 import com.openu.repository.AdministratorRepository;
-import com.openu.service.UserService;
 
 @ManagedBean
 @RequestScoped
@@ -45,7 +44,7 @@ public class AdminController extends AbstractCrudController<Administrator> {
 
     @Override
     public void delete(Administrator entity) {
-        if (entity.getUsername().equals(UserService.ADMIN)) {
+        if (entity.getUsername().equals(Constants.ADMIN)) {
             throw new RuntimeException("cannot delete admin");
         }
         super.delete(entity);

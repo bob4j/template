@@ -15,12 +15,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.UniqueConstraint;
 
+import com.openu.controller.Constants;
+
 @Entity
 public class Category {
 
+    private static final String CATEGORY_SEQUENCE_NAME = "category_seq";
+
     @Id
-    @SequenceGenerator(name = "category_seq", sequenceName = "category_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq")
+    @SequenceGenerator(name = CATEGORY_SEQUENCE_NAME, sequenceName = CATEGORY_SEQUENCE_NAME, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = CATEGORY_SEQUENCE_NAME)
     private Long id;
 
     private String name;
@@ -31,8 +35,8 @@ public class Category {
     private Image image;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    @JoinTable(name = "category_product", inverseJoinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, joinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") }, uniqueConstraints = { @UniqueConstraint(columnNames = {
-            "product_id", "category_id" }) })
+    @JoinTable(name = Constants.CATEGORY_PRODUCT, inverseJoinColumns = { @JoinColumn(name = Constants.PRODUCT_ID, referencedColumnName = Constants.ID) }, joinColumns = { @JoinColumn(name = Constants.CATEGORY_ID, referencedColumnName = Constants.ID) }, uniqueConstraints = { @UniqueConstraint(columnNames = {
+	    Constants.PRODUCT_ID, Constants.CATEGORY_ID }) })
     private List<Product> products;
 
     public Long getId() {

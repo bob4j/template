@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.openu.controller.Constants;
 import com.openu.model.Administrator;
 import com.openu.model.Customer;
 import com.openu.repository.AdministratorRepository;
@@ -26,9 +27,6 @@ public class UserService {
     @Resource
     private AdministratorRepository administratorRepository;
 
-    public static final String ADMIN = "admin";
-    public static final String DEFAULT_CUSTOMER = "customer";
-
     @PostConstruct
     public void init() {
         initDefaultAdmin();
@@ -36,13 +34,13 @@ public class UserService {
     }
 
     private void initDefaultCustomer() {
-        if (customerRepository.findByUsername(DEFAULT_CUSTOMER) != null) {
+        if (customerRepository.findByUsername(Constants.DEFAULT_CUSTOMER) != null) {
             return;
         }
-        logger.info("going to create default customer '{}'", DEFAULT_CUSTOMER);
+        logger.info("going to create default customer '{}'", Constants.DEFAULT_CUSTOMER);
         Customer c = new Customer();
-        c.setUsername(DEFAULT_CUSTOMER);
-        c.setPassword(DEFAULT_CUSTOMER);
+        c.setUsername(Constants.DEFAULT_CUSTOMER);
+        c.setPassword(Constants.DEFAULT_CUSTOMER);
         c.setFirstName("John");
         c.setLastName("Smith");
         c.setEmail("customer@company.com");
@@ -51,14 +49,14 @@ public class UserService {
     }
 
     private void initDefaultAdmin() {
-        if (administratorRepository.findByUsername(ADMIN) != null) {
+        if (administratorRepository.findByUsername(Constants.ADMIN) != null) {
             return;
         }
-        logger.info("going to create default administrator '{}'", ADMIN);
+        logger.info("going to create default administrator '{}'", Constants.ADMIN);
         Administrator admin = new Administrator();
-        admin.setUsername(ADMIN);
-        admin.setPassword(ADMIN);
-        admin.setName(ADMIN);
+        admin.setUsername(Constants.ADMIN);
+        admin.setPassword(Constants.ADMIN);
+        admin.setName(Constants.ADMIN);
         admin.setEmail("admin@company.com");
         administratorRepository.save(admin);
     }

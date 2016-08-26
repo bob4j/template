@@ -9,9 +9,13 @@ import javax.persistence.SequenceGenerator;
 @Entity
 public class City {
 
+
+
+    private static final String CITY_SEQUENCE_NAME = "city_seq";
+
     @Id
-    @SequenceGenerator(name = "city_seq", sequenceName = "city_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_seq")
+    @SequenceGenerator(name = CITY_SEQUENCE_NAME, sequenceName = CITY_SEQUENCE_NAME, allocationSize = 1, initialValue =100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = CITY_SEQUENCE_NAME)
     private Long id;
 
     private String name;

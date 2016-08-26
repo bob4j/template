@@ -1,23 +1,12 @@
 package com.openu.controller;
 
-import java.io.IOException;
-import java.util.Map;
-
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.openu.model.User;
-import com.openu.validators.EmailValidator;
 
 public abstract  class  AbstractInformationCollector<R extends User> {
    

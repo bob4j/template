@@ -16,9 +16,11 @@ import javax.persistence.SequenceGenerator;
 @MappedSuperclass
 public abstract class User {
 
+    private static final String USER_SEQ = "user_seq";
+
     @Id
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = USER_SEQ, sequenceName = USER_SEQ, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = USER_SEQ)
     protected Long id;
 
     @Column(unique = true)

@@ -25,11 +25,13 @@ import org.hibernate.annotations.FetchMode;
 @Entity(name = "order_")
 public class Order {
 
+    private static final String ORDER_SEQ = "order_seq";
+
     public static final String ORDER_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Id
-    @SequenceGenerator(name = "order_seq", sequenceName = "order_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
+    @SequenceGenerator(name = ORDER_SEQ, sequenceName = ORDER_SEQ, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ORDER_SEQ)
     private Long id;
 
     private Long created;
@@ -41,6 +43,10 @@ public class Order {
 
     @Embedded
     private Address shippingAddress;
+    
+    private String phoneNumber;
+    
+    private String email;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
@@ -139,6 +145,22 @@ public class Order {
 
     public Double getTotalPrice() {
         return getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
+    }
+
+    public String getPhoneNumber() {
+	return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+	this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+	return email;
+    }
+
+    public void setEmail(String email) {
+	this.email = email;
     }
     
    

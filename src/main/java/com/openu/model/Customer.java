@@ -12,11 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.google.common.collect.Lists;
+import com.openu.controller.Constants;
 
 @Entity
 public class Customer extends User implements Serializable {
 
    
+
+    private static final String CUSTOMER = Constants.CUSTOMER;
 
     /**
      * 
@@ -37,7 +40,7 @@ public class Customer extends User implements Serializable {
     @ManyToOne
     private CreditCardInfo creditCardInfo;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @OneToMany(mappedBy = CUSTOMER,fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     private List<Order> orders = new ArrayList<>();
 
     public Customer() {
