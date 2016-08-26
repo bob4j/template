@@ -248,8 +248,13 @@ public class ProductController implements Serializable {
 	}
 	
         Customer customer = getCustomerForCart();
-        
-        Order shoppingCart = customer.getShoppingCart();
+        Order shoppingCart = null;
+        try{
+        shoppingCart = customer.getShoppingCart();
+        }catch (javax.persistence.NonUniqueResultException e) {
+	    System.err.println(e.getMessage());
+	    return false;
+	}
         if (shoppingCart != null){
             List<OrderItem> ShoppingCartitems = shoppingCart.getItems();
         	for (OrderItem orderItem : ShoppingCartitems) {

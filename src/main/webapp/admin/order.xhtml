@@ -92,19 +92,6 @@
 							</c:forEach>
 						</tbody>
 					</table>
-					<div class="column_container">
-						<h4>Change Order Status</h4>
-						<h:selectOneMenu class="float_l" id="orderStatusAction" style="width:150px;"
-							value="#{adminOrderController.selectedStatusAction}">
-							<f:selectItems value="${adminOrderController.getStatusesActionList()}"
-								var="s" itemLabel="#{c}" itemValue="#{c}" />
-						</h:selectOneMenu>
-					</div>
-					
-						<h:button action="#{adminOrderController.applyStatusAction()}" value="Apply" outcome="admin/orders" >
-						<f:param  name="apply_status_order_id" value="${o.id}"  />
-						 
-						</h:button>
 				</div>
 			</h:form>
 			<div class="cleaner"></div>

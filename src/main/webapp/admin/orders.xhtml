@@ -169,12 +169,9 @@
 						<h:column>
 							<f:facet name="header">Action</f:facet>
 							<h:commandLink
-								rendered="(#{o.status eq 'PLACED'}) || (#{adminOrderController.isAllOrderStockItemsAvailable(o.id)})"
-								actionListener="#{adminOrderController.approve(o.id )}"
-								value="Approve" />
+								actionListener="#{adminOrderController.ApplyAction(o.id )}"
+								value="#{adminOrderController.getOrderActionName(o.id )}"/>
 
-							<h:commandLink rendered="#{o.status eq 'APPROVED'}"
-								actionListener="#{adminOrderController.ship(o.id)}" value="Ship" />
 						</h:column>
 						<h:column>
 							<f:facet name="header">Order Details</f:facet>

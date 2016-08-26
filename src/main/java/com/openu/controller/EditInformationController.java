@@ -17,8 +17,10 @@ public class EditInformationController extends AbstractCustomerInformationCollec
     @PostConstruct
     public void prepareEditing() {
        this.customer = sessionBean.loadCustomer();
-       setAddressLine(customer.getAddress().getAddress());
-       setCityId(customer.getAddress().getCity().getId());
+       if (customer.getAddress() != null){
+	   setAddressLine(customer.getAddress().getAddress());
+	   setCityId(customer.getAddress().getCity().getId());
+       }
        setEmail(customer.getEmail());
        setFirstName(customer.getFirstName());
        setLastName(customer.getLastName());
