@@ -182,7 +182,9 @@ public class FilterManager<T> {
 
     private void getLikeTemplateWithValue(String[] params, StringBuilder paramAsString, int index) {
         int indexOfValue = paramAsString.indexOf(VALUE);
-        paramAsString.replace(indexOfValue, indexOfValue + VALUE.length(), params[index]);
+        if (indexOfValue != -1){
+            paramAsString.replace(indexOfValue, indexOfValue + VALUE.length(), params[index]);
+        }
     }
 
     public <R> Predicate getPrimitiveFieldPredicate(String[] params, Function<String, R> getParamByNameFunction,
