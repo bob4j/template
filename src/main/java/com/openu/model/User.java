@@ -27,6 +27,8 @@ public abstract class User {
     protected String username;
 
     protected String password;
+    
+    protected String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -62,6 +64,15 @@ public abstract class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+    
+ // TODO add methods for get/add shopping card, which is Order (with status=OPEN)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }

@@ -27,7 +27,6 @@ public class AdminEditInformationController extends AbstractInformationCollector
        setName(admin.getName());
        setPassword(admin.getPassword());
        setUsername(admin.getUsername());
-       
     }
 
     @Override
@@ -35,6 +34,7 @@ public class AdminEditInformationController extends AbstractInformationCollector
 	admin.setEmail(getEmail());
 	admin.setName(getName());
 	admin.setPassword(getPassword());
+	admin.setEmail(getEmail());
     }
 
     public String getName() {

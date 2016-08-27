@@ -30,7 +30,6 @@ public class Customer extends User implements Serializable {
 
     private String lastName;
 
-    private String email;
 
     @Embedded
     private Address address;
@@ -53,15 +52,6 @@ public class Customer extends User implements Serializable {
      */
     public Order getShoppingCart() {
         return orders.stream().filter(o -> o.getStatus() == OrderStatus.OPEN).findAny().orElse(null);
-    }
-
-    // TODO add methods for get/add shopping card, which is Order (with status=OPEN)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Address getAddress() {
