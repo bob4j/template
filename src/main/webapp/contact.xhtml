@@ -14,31 +14,46 @@
 			<div id="content" class="float_r">
 				<h1>Contact Us</h1>
 				<div class="content_half float_l">
-					<p>Etiam eget leo nisl. Morbi magna enim, lobortis vitae
-						condimentum eu, ultrices a lacus.</p>
 					<div id="contact_form">
-						<form method="post" name="contact" action="#">
-
-							<label for="author">Name:</label> <input type="text" id="author"
-								name="author" class="required input_field" />
-							<div class="cleaner h10"></div>
-							<label for="email">Email:</label> <input type="text" id="email"
-								name="email" class="validate-email required input_field" />
-							<div class="cleaner h10"></div>
-
-							<label for="phone">Phone:</label> <input type="text" name="phone"
-								id="phone" class="input_field" />
+						<h:form id="contactForm" prependId="false">
+							<p>name:</p>
+							<h:inputText id="name" required="true"
+								requiredMessage="Please enter name" style="width: 300px;"
+								value="#{contactController.name}" />
+							<h:messages style="color:red;" for="name" />
 							<div class="cleaner h10"></div>
 
-							<label for="text">Message:</label>
-							<textarea id="text" name="text" rows="0" cols="0"
-								class="required"></textarea>
+							<p>Email:</p>
+							<h:inputText id="email" required="true"
+								requiredMessage="Please enter email" style="width: 300px;"
+								value="#{contactController.email}">
+								<f:validator validatorId="EmailValidator"></f:validator>
+							</h:inputText>
+							<h:messages style="color:red;" for="email" />
 							<div class="cleaner h10"></div>
 
-							<input type="submit" class="submit_btn" name="submit" id="submit"
-								value="Send" />
+							<p>Phone number:</p>
+							<h:inputText id="phoneNumber" required="true"
+								requiredMessage="Please enter phone number"
+								style="width: 300px;" value="#{contactController.phoneNumber}">
+								<f:validator validatorId="PhoneValidator"></f:validator>
+							</h:inputText>
+							<h:messages style="color:red;" for="phoneNumber" />
+							<div class="cleaner h10"></div>
 
-						</form>
+							<p>Message</p>
+							<h:inputTextarea id="message" required="true"
+								requiredMessage="Please enter Message" style="width: 300px;"
+								value="#{contactController.message}">
+							</h:inputTextarea>
+							<h:messages style="color:red;" for="message" />
+							<div class="cleaner h10"></div>
+
+							<h:commandButton id="submit" class="submit_btn" value="apply"
+								type="submit" actionListener="#{contactController.apply()}"
+								style="margin-top:20px;" />
+						</h:form>
+						<div class="cleaner h10"></div>
 					</div>
 				</div>
 				<div class="content_half float_r">
@@ -47,7 +62,7 @@
 					<p>Azrieli Square Tower</p>
 					<p>floor 25</p>
 					<p>Israel</p>
-					
+
 					<br /> Phone: 010-010-6600<br /> Email: <a
 						href="mailto:info@yourcompany.com">info@yourcompany.com</a><br />
 

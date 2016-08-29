@@ -1,11 +1,11 @@
 package com.openu.controller;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import javax.annotation.Resource;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +15,14 @@ import com.openu.model.OrderStatus;
 import com.openu.repository.CustomerRepository;
 import com.openu.repository.ProductRepository;
 
-@ManagedBean
-@RequestScoped
 @Component
-public class CustomerController {
+@Scope("view")
+public class CustomerController implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6260261132471474357L;
 
     @Resource
     private SessionBean sessionBean;
