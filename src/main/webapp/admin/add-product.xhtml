@@ -45,22 +45,6 @@
 						<h5>
 							<strong>Stock information</strong>
 						</h5>
-						<!-- <div style="float:left;width:400px">
-							Color:
-							<h:selectOneMenu value="" id="color" style="width:84px;margin-right:10px">
-								<f:selectItem itemValue="#{null}" itemLabel="select one" />
-								<f:selectItem itemValue="" itemLabel="black" />
-								<f:selectItem itemValue="" itemLabel="red" />
-							</h:selectOneMenu>
-							Size: 
-							<h:selectOneMenu value="" id="size" style="width:84px;margin-right:10px">
-								<f:selectItem itemValue="#{null}" itemLabel="select one" />
-								<f:selectItem itemValue="" itemLabel="9" />
-								<f:selectItem itemValue="" itemLabel="10" />
-							</h:selectOneMenu>
-							Quantity:
-							<input type="text" style="width: 20px;" />
-						</div> -->
 						<div style="float:left;width:400px">
 						    <h:dataTable id="tblFields" value="#{adminProductController.stockItems}" var="si">
 						        <h:column>
@@ -81,23 +65,6 @@
 							<h:commandButton value="Add stock item">
 						        <f:ajax listener="#{adminProductController.addStockItem}" execute="tblFields" render="tblFields" /> 
 						    </h:commandButton>
-						    <!-- <h:graphicImage value="images/plus.png" style="padding-left:10px;height:20px;"/> -->
-						    
-							<!-- Color:
-							<h:selectOneMenu value="" id="color" style="width:84px;margin-right:10px">
-								<f:selectItem itemValue="#{null}" itemLabel="select one" />
-								<f:selectItem itemValue="" itemLabel="black" />
-								<f:selectItem itemValue="" itemLabel="red" />
-							</h:selectOneMenu>
-							Size: 
-							<h:selectOneMenu value="" id="size" style="width:84px;margin-right:10px">
-								<f:selectItem itemValue="#{null}" itemLabel="select one" />
-								<f:selectItem itemValue="" itemLabel="9" />
-								<f:selectItem itemValue="" itemLabel="10" />
-							</h:selectOneMenu>
-							Quantity:
-							<input type="text" style="width: 20px;" />
-							<h:graphicImage value="images/plus.png" style="padding-left:10px;height:20px;"/> -->
 						</div>
 					</div>
 					<div class="cleaner h50" />

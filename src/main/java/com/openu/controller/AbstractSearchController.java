@@ -18,31 +18,11 @@ import com.openu.util.Utils;
 
 public abstract class AbstractSearchController extends AbstractCrudController<Product> {
 
-    private static final String PRICE_IS_BIGGER = "price>";
-
-    private static final String PRICE_IS_SMALLER = "price<";
-
-    private static final String PRICE = "price";
-
-    private static final String NAME = "name";
-
-    private static final String LIKE_TEMPLATE = "%value%";
-
-    private static final String DESCRIPTOR = "description";
-
-    private static final String SIZE = "size";
-
-    private static final String COLOR = "color";
-
-    private static final String STOCK_ITEMS = "stockItems";
-
     @Resource
     protected ProductRepository productRepository;
 
     @Resource
     private EntityManagerFactory entityManagerFactory;
-
-    // FilterManager<Product> filterManager;
 
     Map<String, String[]> parameterMap;
 
@@ -81,52 +61,52 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
     }
 
     private boolean isPriceSmallerParameter(String param) {
-        return param.startsWith(PRICE_IS_SMALLER);
+        return param.startsWith(Constants.PRICE_IS_SMALLER);
     }
 
     private boolean isPriceBiggerParameter(String param) {
-        return param.startsWith(PRICE_IS_BIGGER);
+        return param.startsWith(Constants.PRICE_IS_BIGGER);
     }
 
     private boolean isUnknownParam(Set<String> unKnownParamSet) {
         for (String param : unKnownParamSet) {
-            if (param.startsWith(PRICE_IS_BIGGER) || param.startsWith(PRICE_IS_SMALLER)) {
+            if (param.startsWith(Constants.PRICE_IS_BIGGER) || param.startsWith(Constants.PRICE_IS_SMALLER)) {
                 return false;
             }
         }
-        return !unKnownParamSet.contains(SIZE) && !unKnownParamSet.contains(PRICE) && !unKnownParamSet.contains(NAME)
-                && !unKnownParamSet.contains(DESCRIPTOR) && !unKnownParamSet.contains(COLOR);
+        return !unKnownParamSet.contains(Constants.SIZE) && !unKnownParamSet.contains(Constants.PRICE) && !unKnownParamSet.contains(Constants.NAME)
+                && !unKnownParamSet.contains(Constants.DESCRIPTOR) && !unKnownParamSet.contains(Constants.COLOR);
     }
 
     private Predicate getColorPredicate(FilterManager<Product> filterManager) {
-        String[] colorParams = parameterMap.get(COLOR);
+        String[] colorParams = parameterMap.get(Constants.COLOR);
         if (colorParams == null) {
             return null;
         }
-        Predicate colorPredicate = filterManager.getJoinFieldPredicate(colorParams, STOCK_ITEMS, ProductColor::getColorByName,
-                filterManager.getCriteriaBuilder()::equal, COLOR);
+        Predicate colorPredicate = filterManager.getJoinFieldPredicate(colorParams, Constants.STOCK_ITEMS, ProductColor::getColorByName,
+                filterManager.getCriteriaBuilder()::equal, Constants.COLOR);
         filterManager.addPredicate(colorPredicate);
         return colorPredicate;
     }
 
     private Predicate getPriceSmallerPricePredicate(FilterManager<Product> filterManager) {
-        String[] priceSmallerArray = getPriceArray(PRICE_IS_SMALLER, this::isPriceSmallerParameter);
+        String[] priceSmallerArray = getPriceArray(Constants.PRICE_IS_SMALLER, this::isPriceSmallerParameter);
         if (priceSmallerArray.length == 0) {
             return null;
         }
         Predicate priceSmallerPricePredicate = filterManager.getPrimitiveFieldPredicate(priceSmallerArray, Double::parseDouble,
-                filterManager.getCriteriaBuilder()::le, PRICE);
+                filterManager.getCriteriaBuilder()::le, Constants.PRICE);
         filterManager.addPredicate(priceSmallerPricePredicate);
         return priceSmallerPricePredicate;
     }
 
     private Predicate getPriceBiggerPricePredicate(FilterManager<Product> filterManager) {
-        String[] priceBiggerArray = getPriceArray(PRICE_IS_BIGGER, this::isPriceBiggerParameter);
+        String[] priceBiggerArray = getPriceArray(Constants.PRICE_IS_BIGGER, this::isPriceBiggerParameter);
         if (priceBiggerArray.length == 0) {
             return null;
         }
         Predicate priceBiggerPricePredicate = filterManager.getPrimitiveFieldPredicate(priceBiggerArray, Double::parseDouble,
-                filterManager.getCriteriaBuilder()::ge, PRICE);
+                filterManager.getCriteriaBuilder()::ge, Constants.PRICE);
         filterManager.addPredicate(priceBiggerPricePredicate);
         return priceBiggerPricePredicate;
     }
@@ -144,20 +124,20 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
     }
 
     private Predicate getSizePredicate(FilterManager<Product> filterManager) {
-        String[] sizeParams = parameterMap.get(SIZE);
+        String[] sizeParams = parameterMap.get(Constants.SIZE);
 
         if (sizeParams == null) {
             return null;
         }
-        Predicate sizePredicate = filterManager.getJoinFieldPredicate(sizeParams, STOCK_ITEMS, ProductSize::getSizeByLable,
-                filterManager.getCriteriaBuilder()::equal, SIZE);
+        Predicate sizePredicate = filterManager.getJoinFieldPredicate(sizeParams, Constants.STOCK_ITEMS, ProductSize::getSizeByLable,
+                filterManager.getCriteriaBuilder()::equal, Constants.SIZE);
         filterManager.addPredicate(sizePredicate);
         return sizePredicate;
     }
 
     private Predicate getDescriptorPredicate(FilterManager<Product> filterManager) {
-        String[] descriptorParams = parameterMap.get(DESCRIPTOR);
-        Predicate descriptorPredicate = filterManager.getStringFieldPredicate(descriptorParams, LIKE_TEMPLATE, DESCRIPTOR);
+        String[] descriptorParams = parameterMap.get(Constants.DESCRIPTOR);
+        Predicate descriptorPredicate = filterManager.getStringFieldPredicate(descriptorParams, Constants.LIKE_TEMPLATE, Constants.DESCRIPTOR);
         filterManager.addPredicate(descriptorPredicate);
         return descriptorPredicate;
     }
@@ -169,14 +149,14 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
      * @return descriptorPredicate - this function not add the predicate to filterManager
      */
     private Predicate getNotExplicitlyDescriptorPredicate(String[] parameterArray, FilterManager<Product> filterManager) {
-        Predicate descriptorPredicate = filterManager.getStringFieldPredicate(parameterArray, LIKE_TEMPLATE, DESCRIPTOR);
+        Predicate descriptorPredicate = filterManager.getStringFieldPredicate(parameterArray, Constants.LIKE_TEMPLATE, Constants.DESCRIPTOR);
         return descriptorPredicate;
 
     }
 
     private Predicate getNamePredicate(FilterManager<Product> filterManager) {
-        String[] nameParmameters = parameterMap.get(NAME);
-        Predicate namePredicate = filterManager.getStringFieldPredicate(nameParmameters, LIKE_TEMPLATE, NAME);
+        String[] nameParmameters = parameterMap.get(Constants.NAME);
+        Predicate namePredicate = filterManager.getStringFieldPredicate(nameParmameters, Constants.LIKE_TEMPLATE, Constants.NAME);
         filterManager.addPredicate(namePredicate);
         return namePredicate;
 
@@ -189,15 +169,15 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
      * @return descriptorPredicate - this function not add the predicate to filterManager
      */
     private Predicate getNotExplicitlyNamePredicate(String[] parameterArray, FilterManager<Product> filterManager) {
-        Predicate namePredicate = filterManager.getStringFieldPredicate(parameterArray, LIKE_TEMPLATE, NAME);
+        Predicate namePredicate = filterManager.getStringFieldPredicate(parameterArray, Constants.LIKE_TEMPLATE, Constants.NAME);
         return namePredicate;
 
     }
 
     private Predicate getPriceEqualPredicate(FilterManager<Product> filterManager) {
-        String[] priceParmameters = parameterMap.get(PRICE);
+        String[] priceParmameters = parameterMap.get(Constants.PRICE);
         Predicate priceEqualPredicate = filterManager.getPrimitiveFieldPredicate(priceParmameters, Double::parseDouble,
-                filterManager.getCriteriaBuilder()::equal, PRICE);
+                filterManager.getCriteriaBuilder()::equal, Constants.PRICE);
         filterManager.addPredicate(priceEqualPredicate);
         return priceEqualPredicate;
     }

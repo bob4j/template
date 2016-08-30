@@ -20,8 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort.Direction;
 
+import com.openu.controller.Constants;
+
 public class FilterManager<T> {
-    private static final String VALUE = "value";
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private Root<T> root;
@@ -35,6 +36,7 @@ public class FilterManager<T> {
         setCriteriaBuilder(getEm().getCriteriaBuilder());
         setCriteriaQuery(getCriteriaBuilder().createQuery(objectClass));
         setRoot(getCriteriaQuery().from(objectClass));
+        getCriteriaQuery().distinct(true);
     }
 
     public Metamodel getMetamodel() {
@@ -181,9 +183,9 @@ public class FilterManager<T> {
     }
 
     private void getLikeTemplateWithValue(String[] params, StringBuilder paramAsString, int index) {
-        int indexOfValue = paramAsString.indexOf(VALUE);
+        int indexOfValue = paramAsString.indexOf(Constants.LIKE_TEMPLATE_VALUE);
         if (indexOfValue != -1){
-            paramAsString.replace(indexOfValue, indexOfValue + VALUE.length(), params[index]);
+            paramAsString.replace(indexOfValue, indexOfValue + Constants.LIKE_TEMPLATE_VALUE.length(), params[index]);
         }
     }
 

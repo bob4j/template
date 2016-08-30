@@ -42,24 +42,11 @@ import com.openu.util.Utils;
 public class AdminOrderController extends AbstractCrudController<Order> {
 
     
-    private static final String CANNOT_PLACE_ORDER_WITH_STATUS = "cannot place order with status ";
-    private static final String CANNOT_REJECT_ORDER_WITH_STATUS = "cannot reject order with status ";
-    private static final String CANNOT_SHIP_ORDER_WITH_STATUS = "cannot ship order with status ";
-    private static final String NO_CUSTOMER_SELECTED = "";
-    private static final int MAX_MIN_IN_HOUR = 59;
-    private static final int MAX_HOUR_IN_DAY = 23;
-    private static final String MODIFIED = "modified";
-    private static final String CREATED = "created";
-    private static final String LIKE_TEMPLATE = "%value%";
-    private static final String ORDER_ID = "order_id";
-    private static final String CUSTOMER_FIRST_NAME = "firstName";
-    private static final String CUSTOMER_LAST_NAME = "lastName";
-    private static final String CUSTOMER = "customer";
+    
 
-    private OrderStatus selectedStatusAction = OrderStatus.NOT_SLECTED;
     private OrderStatus selectedStatus = OrderStatus.NOT_SLECTED;
     private ArrayList<String> statusesList;
-    private String selectedCustomer = NO_CUSTOMER_SELECTED;
+    private String selectedCustomer = Constants.NO_CUSTOMER_SELECTED;
     private Date selectedCreationDate;
     private Date selectedModifiedDate;
 
@@ -172,8 +159,8 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         List<String> terms = Splitter.on(" ").trimResults().omitEmptyStrings().splitToList(selectedCustomer);
         List<Predicate> predicates = new ArrayList<>();
         for (String term : terms) {
-            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, CUSTOMER, CUSTOMER_FIRST_NAME, LIKE_TEMPLATE));
-            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, CUSTOMER, CUSTOMER_LAST_NAME, LIKE_TEMPLATE));
+            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, Constants.CUSTOMER, Constants.CUSTOMER_FIRST_NAME, Constants.LIKE_TEMPLATE));
+            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, Constants.CUSTOMER, Constants.CUSTOMER_LAST_NAME, Constants.LIKE_TEMPLATE));
         }
         if (!predicates.isEmpty()) {
             filterManager.addPredicate(filterManager.getCriteriaBuilder().or(predicates.toArray(new Predicate[0])));
@@ -181,11 +168,11 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     private Predicate getCreationDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        return getDatePredicate(criteriaBuilder, root, selectedCreationDate, CREATED);
+        return getDatePredicate(criteriaBuilder, root, selectedCreationDate, Constants.CREATED);
     }
 
     private Predicate getModifiedDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root) {
-        return getDatePredicate(criteriaBuilder, root, selectedModifiedDate, MODIFIED);
+        return getDatePredicate(criteriaBuilder, root, selectedModifiedDate, Constants.MODIFIED);
     }
 
     private Predicate getDatePredicate(CriteriaBuilder criteriaBuilder, Root<Order> root, Date date, String field) {
@@ -194,13 +181,13 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         }
         Calendar until = Calendar.getInstance();
         until.setTime(date);
-        until.set(Calendar.HOUR, MAX_HOUR_IN_DAY);
-        until.set(Calendar.MINUTE, MAX_MIN_IN_HOUR);
+        until.set(Calendar.HOUR, Constants.MAX_HOUR_IN_DAY);
+        until.set(Calendar.MINUTE, Constants.MAX_MIN_IN_HOUR);
         return criteriaBuilder.between(root.get(field), date.getTime(), until.getTimeInMillis());
     }
     
     public void clearFilter() {
-        selectedCustomer = NO_CUSTOMER_SELECTED;
+        selectedCustomer = Constants.NO_CUSTOMER_SELECTED;
         selectedStatus = OrderStatus.NOT_SLECTED;
         selectedCreationDate = null;
         selectedModifiedDate = null;
@@ -224,20 +211,12 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         this.selectedStatus = OrderStatus.getValueByNameForUI(selectedStatus);
     }
 
-    public String getSelectedStatusAction() {
-        return selectedStatusAction.getNameForUI();
-    }
-
-    public void setSelectedStatusAction(String selectedStatusAction) {
-        this.selectedStatusAction = OrderStatus.getValueByNameForUI(selectedStatusAction);
-    }
-
     public String getSelectedCustomer() {
         return selectedCustomer;
     }
 
     public void setSelectedCustomer(String selectedCustomer) {
-        this.selectedCustomer = Optional.ofNullable(selectedCustomer).map(c -> c.toLowerCase()).orElse(NO_CUSTOMER_SELECTED);
+        this.selectedCustomer = Optional.ofNullable(selectedCustomer).map(c -> c.toLowerCase()).orElse(Constants.NO_CUSTOMER_SELECTED);
     }
 
    
@@ -263,7 +242,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     @Transactional
     public void shipOrder(Order order) {
         if (order.getStatus() != OrderStatus.APPROVED){
-            throw new IllegalArgumentException(CANNOT_SHIP_ORDER_WITH_STATUS + order.getStatus());
+            throw new IllegalArgumentException(Constants.CANNOT_SHIP_ORDER_WITH_STATUS + order.getStatus());
         }
         order.setStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
@@ -273,7 +252,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     @Transactional
     public  void rejectOrder(Order order) {
         if (order.getStatus() != OrderStatus.SHIPPED){
-            throw new IllegalArgumentException(CANNOT_REJECT_ORDER_WITH_STATUS + order.getStatus());
+            throw new IllegalArgumentException(Constants.CANNOT_REJECT_ORDER_WITH_STATUS + order.getStatus());
         }
         updateStockItemRepositoryAfterAction(order, false);
         order.setStatus(OrderStatus.REJECTED);
@@ -284,7 +263,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     @Transactional
     public  void  approveOrder(Order order) {
         if (order.getStatus() != OrderStatus.PLACED){
-            throw new IllegalArgumentException(CANNOT_REJECT_ORDER_WITH_STATUS + order.getStatus());
+            throw new IllegalArgumentException(Constants.CANNOT_REJECT_ORDER_WITH_STATUS + order.getStatus());
         }
         if (isAllOrderStockItemsAvailable(order)) {
             order.setStatus(OrderStatus.APPROVED);
@@ -312,7 +291,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	    orderRepository.save(order);
 
 	} else {
-	    throw new IllegalArgumentException(CANNOT_PLACE_ORDER_WITH_STATUS + order.getStatus());
+	    throw new IllegalArgumentException(Constants.CANNOT_PLACE_ORDER_WITH_STATUS + order.getStatus());
 	}
     }
     
@@ -408,7 +387,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public Order getOrder() {
-        String orderId = Utils.getRequest().getParameter(ORDER_ID);
+        String orderId = Utils.getRequest().getParameter(Constants.ORDER_ID);
         if (orderId != null) {
             return orderRepository.findOne(Long.valueOf(orderId));
         }

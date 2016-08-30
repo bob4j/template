@@ -128,12 +128,6 @@ public class CheckoutController implements Serializable {
         this.acceptTerms = acceptTerms;
     }
 
-    public void validateTerms(FacesContext fc, UIComponent uiComponent, Object o) {
-        if (o == null || !(Boolean) o) {
-            fc.addMessage(null, new FacesMessage("You must accept terms of use"));
-            fc.renderResponse();
-        }
-    }
 
     public Boolean getUseCustomerAddress() {
 	return useCustomerAddress;

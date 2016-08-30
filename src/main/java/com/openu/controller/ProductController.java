@@ -36,7 +36,7 @@ import com.openu.util.Utils;
 @Scope("view")
 public class ProductController implements Serializable {
 
-    private static final String PRODUCT_ID = "product_id";
+    private static final String PRODUCT_ID = Constants.PRODUCT_ID;
 
     private static final String LOGIN = "login";
 
