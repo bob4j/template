@@ -8,6 +8,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
+		<ui:param name="ordersClass" value="selected"/>
 		<ui:define name="content">
 			<h:form>
 				<c:set var="o" value="${adminOrderController.order}" />

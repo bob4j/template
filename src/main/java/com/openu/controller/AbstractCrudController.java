@@ -61,7 +61,9 @@ public abstract class AbstractCrudController<T> {
      */
     public void save() throws Exception {
         T e = createEntity();
-        getRepository().save(e);
+        if (e != null) {
+            getRepository().save(e);
+        }
     }
 
     /**

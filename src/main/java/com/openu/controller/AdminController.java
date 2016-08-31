@@ -1,7 +1,9 @@
 package com.openu.controller;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -34,6 +36,10 @@ public class AdminController extends AbstractCrudController<Administrator> {
 
     @Override
     protected Administrator createEntity() throws Exception {
+        if (administratorRepository.findByUsername(username) != null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "username already exists", null));
+            return null;
+        }
         Administrator admin = new Administrator();
         admin.setName(name);
         admin.setUsername(username);
@@ -45,7 +51,8 @@ public class AdminController extends AbstractCrudController<Administrator> {
     @Override
     public void delete(Administrator entity) {
         if (entity.getUsername().equals(Constants.ADMIN)) {
-            throw new RuntimeException("cannot delete admin");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "cannot delete protected user", null));
+            return;
         }
         super.delete(entity);
     }

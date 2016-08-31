@@ -11,13 +11,12 @@
 		<div id="templatemo_menubar">
 				<div id="top_nav" class="ddsmoothmenu">
 				<ul>
-					<li><h:link outcome="products" value="Products"
-							class="selected" /></li>
-					<li><h:link outcome="categories" value="Categories" /></li>
-					<li><h:link outcome="cities" value="Cities" /></li>
-					<li><h:link outcome="admin-users" value="Admin users" /></li>
-					<li><h:link outcome="orders" value="Orders" /></li>
-					<li><a href="#" class="myaccountClass">My Account</a>
+					<li><h:link outcome="products" value="Products" class="${productsClass}" /></li>
+					<li><h:link outcome="categories" value="Categories" class="${categoriesClass}" /></li>
+					<li><h:link outcome="cities" value="Cities" class="${citiesClass}" /></li>
+					<li><h:link outcome="admin-users" value="Admin users" class="${adminUsersClass}" /></li>
+					<li><h:link outcome="orders" value="Orders" class="${ordersClass}" /></li>
+					<li><a href="#" class="${myAccountClass}">My Account</a>
 						<ul>
 							<li><h:link outcome="editAdminPersonalInformation"
 									value="Edit Details" /></li>
