@@ -263,16 +263,35 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     @Transactional
     public  void  approveOrder(Order order) {
         if (order.getStatus() != OrderStatus.PLACED){
-            throw new IllegalArgumentException(Constants.CANNOT_REJECT_ORDER_WITH_STATUS + order.getStatus());
+            throw new IllegalArgumentException(Constants.CANNOT_APROVE_ORDER_WITH_STATUS + order.getStatus());
         }
-        if (isAllOrderStockItemsAvailable(order)) {
-            order.setStatus(OrderStatus.APPROVED);
-            orderRepository.save(order);
-            updateStockItemRepositoryAfterAction(order, true);
-            approvedOrderEmailSender.sendOrderEmail(order);
-        }
+	boolean aproveSuccess = updateStockItemRepositoryAfterApprove(order);
+	if (!aproveSuccess){
+	    return;
+	}
+	order.setStatus(OrderStatus.APPROVED);
+	orderRepository.save(order);
+	approvedOrderEmailSender.sendOrderEmail(order);
     }
     
+    private synchronized boolean   updateStockItemRepositoryAfterApprove(Order order) {
+	if (isAllOrderStockItemsAvailable(order)){
+	    StockItem selectedStockItem;
+		List<OrderItem> orderItems = order.getItems();
+		if (orderItems == null){
+		    return false;
+		}
+	        for (OrderItem orderItem : orderItems) {
+	            selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
+	                    orderItem.getSize());
+	                decreaseStockItemQuantity(selectedStockItem, orderItem);
+	        }
+	        return true;
+	}
+	return false;
+	
+    }
+
     @Transactional
     public  void cancelOrder(Order order) {
         boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED);
@@ -364,22 +383,21 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         for (OrderItem orderItem : orderItems) {
             selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
                     orderItem.getSize());
-            Integer oldQuantity = selectedStockItem.getQuantity();
             if (decreaseStockItemQuantity) {
-                decreaseStockItemQuantity(selectedStockItem, orderItem, oldQuantity);
+                decreaseStockItemQuantity(selectedStockItem, orderItem);
             } else  {
-        	 increaseStockItemQuantity(selectedStockItem, orderItem, oldQuantity);
+        	 increaseStockItemQuantity(selectedStockItem, orderItem);
             }
             stockItemRepository.save(selectedStockItem);
         }
     }
 
-    private synchronized void increaseStockItemQuantity(StockItem selectedStockItem, OrderItem orderItem, Integer oldQuantity) {
-	selectedStockItem.setQuantity(oldQuantity + orderItem.getQuantity());
+    private synchronized void increaseStockItemQuantity(StockItem selectedStockItem, OrderItem orderItem) {
+	selectedStockItem.setQuantity(selectedStockItem.getQuantity() + orderItem.getQuantity());
     }
 
-    private synchronized void decreaseStockItemQuantity(StockItem selectedStockItem, OrderItem orderItem, Integer oldQuantity) {
-	selectedStockItem.setQuantity(oldQuantity - orderItem.getQuantity());
+    private synchronized void decreaseStockItemQuantity(StockItem selectedStockItem, OrderItem orderItem) {
+	selectedStockItem.setQuantity(selectedStockItem.getQuantity() - orderItem.getQuantity());
     }
 
     public List<Order> getPlacedOrders() {
@@ -394,7 +412,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         return null;
     }
 
-    public boolean isAllOrderStockItemsAvailable(Order order) {
+    public synchronized boolean isAllOrderStockItemsAvailable(Order order) {
 	StockItem selectedItem;
 	List<OrderItem> items = order.getItems();
 	if (items == null){

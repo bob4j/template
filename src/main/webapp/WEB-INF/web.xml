@@ -92,11 +92,6 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-<!-- 	<servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>/faces/*</url-pattern>
-	</servlet-mapping>
- -->	
  	<servlet-mapping>
 		<servlet-name>Image Servlet</servlet-name>
 		<url-pattern>/image/*</url-pattern>
@@ -105,14 +100,6 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
-	<!-- <servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>*.faces</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>*.xhtml</url-pattern>
-	</servlet-mapping> -->
 	<error-page>
 	    <error-code>500</error-code>
 	    <location>/error.xhtml</location>

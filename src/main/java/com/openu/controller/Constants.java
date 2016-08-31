@@ -1,5 +1,7 @@
 package com.openu.controller;
 
+import com.openu.model.OrderStatus;
+
 public final class Constants {
     public static final int NO_YEAR_SELECTED = -1;
     public static final int NO_DAY_SELECTED = 0;
@@ -40,6 +42,8 @@ public final class Constants {
     public static final String CANNOT_PLACE_ORDER_WITH_STATUS = "cannot place order with status ";
     public static final String CANNOT_REJECT_ORDER_WITH_STATUS = "cannot reject order with status ";
     public static final String CANNOT_SHIP_ORDER_WITH_STATUS = "cannot ship order with status ";
+    public static final String CANNOT_APROVE_ORDER_WITH_STATUS = "cannot approve order with status ";
+
     // ==============END status action message======================
     public static final String ALL = "All";
     
