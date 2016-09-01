@@ -12,7 +12,8 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.openu.controller.Constants;
+import com.openu.util.Constants;
+
 
 @Service
 public class EmailSender {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.openu.model.Administrator;
 import com.openu.repository.AdministratorRepository;
+import com.openu.util.Constants;
 
 @ManagedBean
 @RequestScoped

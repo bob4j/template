@@ -15,7 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.UniqueConstraint;
 
-import com.openu.controller.Constants;
+import com.openu.util.Constants;
+
 
 @Entity
 public class Category {

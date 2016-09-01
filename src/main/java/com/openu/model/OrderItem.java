@@ -10,7 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
-import com.openu.controller.Constants;
+import com.openu.util.Constants;
+
 
 @Entity
 public class OrderItem {

@@ -29,6 +29,7 @@ import com.openu.model.StockItem;
 import com.openu.repository.CustomerRepository;
 import com.openu.repository.ProductRepository;
 import com.openu.repository.StockItemRepository;
+import com.openu.util.Constants;
 import com.openu.util.CustomerTransaction;
 import com.openu.util.Utils;
 
@@ -253,12 +254,12 @@ public class ProductController implements Serializable {
 	
         Customer customer = getCustomerForCart();
         Order shoppingCart = null;
-        try{
+        //try{
         shoppingCart = customer.getShoppingCart();
-        }catch (javax.persistence.NonUniqueResultException e) {
-	    System.err.println(e.getMessage());
-	    return false;
-	}
+  //      }catch (javax.persistence.NonUniqueResultException e) {
+//	    System.err.println(e.getMessage());
+//	    return false;
+//	}
         if (shoppingCart != null){
             List<OrderItem> ShoppingCartitems = shoppingCart.getItems();
         	for (OrderItem orderItem : ShoppingCartitems) {

@@ -2,9 +2,9 @@ package com.openu.service;
 
 import java.util.List;
 
-import com.openu.controller.Constants;
 import com.openu.model.Order;
 import com.openu.model.OrderItem;
+import com.openu.util.Constants;
 
 public abstract class AbstractOrderEmailSender extends EmailSender {
     private static final String ITEM_TABLE_BODY = "<tr>" + "<td>%1$s</td>" + "<td>%2$s</td>"+ "<td>%3$s</td>" + "<td>%4$.2f</td>" + "<td>%5$d</td>" + "</tr>";

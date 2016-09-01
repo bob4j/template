@@ -16,6 +16,10 @@ import com.openu.repository.CustomerRepository;
 @ManagedBean
 @Component
 @SessionScoped
+/**
+ * 
+ * This class is for get and load the current logged in User.
+ */
 public class SessionBean {
 
     @Resource
@@ -23,6 +27,11 @@ public class SessionBean {
     @Resource
     private AdministratorRepository adminRepository;
 
+    /**
+     * 
+     * @return the {@link User} that logged in to the system.
+     * null if no logged user was found
+     */
     public User getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
@@ -31,6 +40,10 @@ public class SessionBean {
         return null;
     }
 
+    /**
+     * 
+     * @return Reference to Customer in {@link CustomerRepository} that is logged in the system 
+     */
     public Customer loadCustomer() {
         Customer customer = getCustomer();
         if (customer == null) {
@@ -39,6 +52,10 @@ public class SessionBean {
         return customerRepository.findOne(customer.getId());
     }
     
+    /**
+     * 
+     * @return Reference to Admin in {@link AdministratorRepository} that is logged in the system 
+     */
     public Administrator loadAdmin() {
         Administrator admin = getAdmin();
         if (admin == null) {
@@ -47,6 +64,11 @@ public class SessionBean {
         return adminRepository.findOne(admin.getId());
     }
 
+    /**
+     * 
+     * @return the {@link Customer} that logged in to the system.
+     * null if no logged in  Customer was found
+     */
     public Customer getCustomer() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Customer) {
@@ -55,6 +77,11 @@ public class SessionBean {
         return null;
     }
 
+    /**
+     * 
+     * @return the {@link Administrator} that logged in to the system.
+     * null if no logged in  Administrator was found
+     */
     public Administrator getAdmin() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Administrator) {

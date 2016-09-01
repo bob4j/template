@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
 import com.openu.controller.AbstractCrudController;
-import com.openu.controller.Constants;
 import com.openu.model.Order;
 import com.openu.model.OrderItem;
 import com.openu.model.OrderStatus;
@@ -34,6 +33,7 @@ import com.openu.service.ApprovedOrderEmailSender;
 import com.openu.service.CancelOrderEmailSender;
 import com.openu.service.RejectedOrderEmailSender;
 import com.openu.service.ShippedOrderEmailSender;
+import com.openu.util.Constants;
 import com.openu.util.FilterManager;
 import com.openu.util.Utils;
 

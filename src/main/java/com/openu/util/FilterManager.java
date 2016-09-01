@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort.Direction;
 
-import com.openu.controller.Constants;
 
 public class FilterManager<T> {
     private Logger logger = LoggerFactory.getLogger(getClass());

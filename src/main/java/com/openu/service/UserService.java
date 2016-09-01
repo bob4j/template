@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.openu.controller.Constants;
 import com.openu.model.Administrator;
 import com.openu.model.Customer;
 import com.openu.repository.AdministratorRepository;
 import com.openu.repository.CustomerRepository;
+import com.openu.util.Constants;
 
 /**
  * TODO - no need for services, move the logic to controller

@@ -7,9 +7,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

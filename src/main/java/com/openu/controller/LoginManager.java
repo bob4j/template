@@ -10,7 +10,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-
+/**
+ * 
+ * This class handle the Login / Logout from the system
+ */
 @ManagedBean
 @RequestScoped
 public class LoginManager {

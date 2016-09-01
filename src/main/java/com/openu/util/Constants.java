@@ -1,6 +1,4 @@
-package com.openu.controller;
-
-import com.openu.model.OrderStatus;
+package com.openu.util;
 
 public final class Constants {
     public static final int NO_YEAR_SELECTED = -1;

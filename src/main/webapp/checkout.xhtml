@@ -27,12 +27,12 @@
 							</h:selectOneMenu>
 							<h:messages style="color:red;" for="cctype" />
 							<p style="margin-top:15px">Number:</p>
-							<h:inputText value="#{checkoutController.ccInfo.number}" required="true" style="width: 300px;" id="ccnumber" requiredMessage="Please enter credit card number">
+							<h:inputText value="#{checkoutController.ccInfo.number}" required="true" style="width: 300px;" id="ccnumber" requiredMessage="Please enter credit card number" validatorMessage="Credit Card number nust be nubber with 16 digits ">
 							<f:validateLongRange  for="ccnumber" minimum="1000000000000000" maximum="9999999999999999" />
 							</h:inputText>
 							<h:messages style="color:red;" for="ccnumber" />
 							<p style="margin-top:15px">Owner name:</p>
-							<h:inputText value="#{checkoutController.ccInfo.ownerName}" required="true" id="ccowner" style="width: 300px;" requiredMessage="Please enter credit card owner name"/>
+							<h:inputText value="#{checkoutController.ccInfo.ownerName}" required="true" id="ccowner" style="width: 300px;" requiredMessage="Please enter credit card owner name" />
 							<h:messages style="color:red;" for="ccowner" />
 							<p style="margin-top:15px">CVV:</p>
 							<h:inputText value="#{checkoutController.ccInfo.cvv}" required="true" id="cvv" style="width: 300px;" requiredMessage="Please enter credit card CVV" validatorMessage="cvv must be number with 3 digits">

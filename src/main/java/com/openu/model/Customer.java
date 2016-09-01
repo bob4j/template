@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.google.common.collect.Lists;
-import com.openu.controller.Constants;
+import com.openu.util.Constants;
 
 @Entity
 public class Customer extends User implements Serializable {
