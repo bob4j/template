@@ -34,6 +34,7 @@ import com.openu.service.CancelOrderEmailSender;
 import com.openu.service.RejectedOrderEmailSender;
 import com.openu.service.ShippedOrderEmailSender;
 import com.openu.util.Constants;
+import com.openu.util.CustomerTransaction;
 import com.openu.util.FilterManager;
 import com.openu.util.Utils;
 
@@ -292,6 +293,19 @@ public class AdminOrderController extends AbstractCrudController<Order> {
 	
     }
 
+    public boolean canCancelOrder(Long orderId){
+	Order order = orderRepository.findOne(orderId);
+	if(order == null){
+	    return false;
+	}
+	return order.getStatus().equals(OrderStatus.PLACED) || order.getStatus().equals(OrderStatus.APPROVED) ;
+    }
+    
+    public void cancelOrder(Long orderId){
+	Order order = orderRepository.findOne(orderId);	
+	cancelOrder(order);
+    }
+    
     @Transactional
     public  void cancelOrder(Order order) {
         boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED);
@@ -436,4 +450,6 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         boolean isItemAvailable = findStockItemByFields.getQuantity() >= item.getQuantity();
         return isItemAvailable ? Constants.ITEM_AVAILABLE:Constants.ITEM_NOT_AVAILABLE;
     }
+    
+   
 }
