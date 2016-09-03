@@ -294,6 +294,9 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public boolean canCancelOrder(Long orderId){
+	if (orderId == null){
+	    return false;
+	}
 	Order order = orderRepository.findOne(orderId);
 	if(order == null){
 	    return false;

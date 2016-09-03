@@ -8,69 +8,102 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
-		<ui:param name="productsClass" value="selected"/>
+		<ui:param name="productsClass" value="selected" />
 		<ui:define name="content">
 
 			<div id="content" class="float_l">
-				<h:form id="checkout-form" name="checkout-form" enctype="multipart/form-data">
-				
-					<h:messages style="color:red;"></h:messages>
+				<h:form id="checkout-form" name="checkout-form"
+					enctype="multipart/form-data">
+
 					<h2>Add new product</h2>
 					<h5>
 						<strong>Details</strong>
 					</h5>
 					<div class="content_half float_l checkout">
-						<p style="margin-top:15px">Brand:</p>
-						<h:inputText value="#{adminProductController.brand}" required="true" style="width: 300px;" id="brand"/>
-						
-						<p style="margin-top:15px">Model:</p>
-						<h:inputText value="#{adminProductController.model}" required="true" style="width: 300px;" id="model"/>
-						
-						<p style="margin-top:15px">Description:</p>
-						<h:inputTextarea value="#{adminProductController.description}" required="true" style="width: 300px;" id="description"/>
-						
-						<p style="margin-top:15px">Image:</p>
-						<h:inputFile value="#{adminProductController.imagePart}" required="true"/>
-						
-						<p style="margin-top:15px">Price:</p>
-						$ <h:inputText value="#{adminProductController.price}" required="true" style="width: 100px;" id="price"/>
-						
-						<p style="margin-top:15px">Categories:</p>
-						<h:selectManyListbox value="#{adminProductController.categoryIds}">
-							<f:selectItems value="#{adminProductController.allCategories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
+						<p style="margin-top: 15px">Brand:</p>
+						<h:inputText value="#{adminProductController.brand}"
+							required="true" style="width: 300px;" id="brand"
+							requiredMessage="Please enter brand" />
+						<h:messages style="color:red;" for="brand"></h:messages>
+						<p style="margin-top: 15px">Model:</p>
+						<h:inputText value="#{adminProductController.model}"
+							required="true" style="width: 300px;" id="model"
+							requiredMessage="Please enter model" />
+						<h:messages style="color:red;" for="model"></h:messages>
+
+						<p style="margin-top: 15px">Description:</p>
+						<h:inputTextarea value="#{adminProductController.description}"
+							required="true" style="width: 300px;" id="description"
+							requiredMessage="Please enter description" />
+						<h:messages style="color:red;" for="description"></h:messages>
+
+						<p style="margin-top: 15px">Image:</p>
+						<h:inputFile value="#{adminProductController.imagePart}"
+							required="true" requiredMessage="Please enter image" />
+
+						<p style="margin-top: 15px">Price:</p>
+						$
+						<h:inputText value="#{adminProductController.price}"
+							required="true" style="width: 100px;" id="price"
+							requiredMessage="Please enter price" />
+						<h:messages style="color:red;" for="price"></h:messages>
+
+						<p style="margin-top: 15px">Categories:</p>
+						<h:selectManyListbox value="#{adminProductController.categoryIds}"
+							required="true" requiredMessage="Please enter category"
+							id="category">
+							<f:selectItems value="#{adminProductController.allCategories}"
+								var="c" itemLabel="#{c.name}" itemValue="#{c.id}" />
 						</h:selectManyListbox>
-						
+						<h:messages style="color:red;" for="category"></h:messages>
+
 					</div>
 					<div class="cleaner h50" />
 					<div class="content_half float_l checkout">
 						<h5>
 							<strong>Stock information</strong>
 						</h5>
-						<div style="float:left;width:400px">
-						    <h:dataTable id="tblFields" value="#{adminProductController.stockItems}" var="si">
-						        <h:column>
-						            <h:selectOneMenu value="#{si.color}" required="true">
-						                <f:selectItems value="#{adminProductController.colors}" />
-						            </h:selectOneMenu>
-						        </h:column>
+						<div style="float: left; width: 400px">
+							<h:dataTable id="tblFields"
+								value="#{adminProductController.stockItems}" var="si">
 								<h:column>
-						            <h:selectOneMenu value="#{si.size}" required="true">
-						                <f:selectItems value="#{adminProductController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}"/>
-						            </h:selectOneMenu>
-						        </h:column>
-						        <h:column>
-						            <h:inputText value="#{si.quantity}" />
-						        </h:column>
-						    </h:dataTable>
-							
-							<h:commandButton value="Add stock item">
-						        <f:ajax listener="#{adminProductController.addStockItem}" execute="tblFields" render="tblFields" /> 
-						    </h:commandButton>
+									<f:facet name="header">Color</f:facet>
+									<h:selectOneMenu value="#{si.color}" required="true" id="color">
+										<f:selectItems value="#{adminProductController.colors}" />
+									</h:selectOneMenu>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Size</f:facet>
+									<h:selectOneMenu value="#{si.size}">
+										<f:selectItems value="#{adminProductController.sizes}" var="s"
+											itemValue="#{s}" itemLabel="#{s.label}" />
+									</h:selectOneMenu>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Quantity</f:facet>
+									<h:inputText id="siQuantity" value="#{si.quantity}"
+										converterMessage="Please enter digits only." >
+									</h:inputText>
+									<h:messages style="color:red;" for="siQuantity"></h:messages>
+								</h:column>
+							</h:dataTable>
+							<div>
+								<h:commandButton value="Add stock item" class="float_l">
+									<f:ajax listener="#{adminProductController.addStockItem}"
+										execute="tblFields" render="tblFields" />
+								</h:commandButton>
+								<h:commandButton value="Remove last stock item" class="float_l">
+									<f:ajax listener="#{adminProductController.removeLastStockItem}"
+										execute="tblFields" render="tblFields" />
+								</h:commandButton>
+							</div>
 						</div>
 					</div>
 					<div class="cleaner h50" />
-					
-					<h:commandButton value="Add" actionListener="#{adminProductController.save}" action="/admin/products?faces-redirect=true" />
+
+					<h:commandButton value="Add"
+						actionListener="#{adminProductController.save}"
+						action="/admin/products?faces-redirect=true" />
 				</h:form>
 			</div>
 			<div class="cleaner"></div>

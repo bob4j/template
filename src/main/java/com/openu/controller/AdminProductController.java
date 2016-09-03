@@ -83,6 +83,12 @@ public class AdminProductController extends AbstractSearchController implements 
     public void addStockItem(AjaxBehaviorEvent event) {
 	stockItems.add(new StockItem());
     }
+    
+    public void removeLastStockItem(AjaxBehaviorEvent event) {
+	if (stockItems.size() > 1){
+	    stockItems.remove(stockItems.size()-1);
+	}
+    }
 
     public List<ProductColor> getColors() {
 	return Stream.of(ProductColor.values()).collect(Collectors.toList());

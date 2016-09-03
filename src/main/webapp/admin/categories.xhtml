@@ -8,7 +8,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
-		<ui:param name="categoriesClass" value="selected"/>
+		<ui:param name="categoriesClass" value="selected" />
 		<ui:define name="content">
 			<div id="content" class="float_l">
 				<h2>Categories</h2>
@@ -28,12 +28,13 @@
 						</h:column>
 						<h:column>
 							<f:facet name="header">Image</f:facet>
-							<h:graphicImage url="/#{c.image.name}" />
+							<h:graphicImage url="/#{c.image.name}" style="width: 100px;" />
 						</h:column>
 						<h:column>
 							<f:facet name="header">Delete</f:facet>
-							<h:commandButton action="#{adminCategoryController.delete(c)}"
-								value="Delete" />
+							<h:commandLink action="#{adminCategoryController.delete(c)}">
+								<ui:include src="/images/delete.svg" />
+							</h:commandLink>
 						</h:column>
 					</h:dataTable>
 					<h:commandButton action="/admin/add-category" value="Add Category" />

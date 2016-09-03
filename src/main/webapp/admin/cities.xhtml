@@ -25,7 +25,9 @@
 						</h:column>
 						<h:column>
 							<f:facet name="header">Delete</f:facet>
-							<h:commandButton action="#{cityController.delete(c)}" value="Delete" />
+							<h:commandLink  action="#{cityController.delete(c)}"  >
+								<ui:include src="/images/delete.svg" />
+							</h:commandLink>
 						</h:column>
 					</h:dataTable>
 					<h:commandButton action="/admin/add-city" value="Add city" />
