@@ -13,9 +13,6 @@ import com.openu.repository.AdministratorRepository;
 import com.openu.repository.CustomerRepository;
 import com.openu.util.Constants;
 
-/**
- * TODO - no need for services, move the logic to controller
- */
 @Service
 public class UserService {
 
@@ -23,7 +20,6 @@ public class UserService {
 
     @Resource
     private CustomerRepository customerRepository;
-
     @Resource
     private AdministratorRepository administratorRepository;
 
@@ -57,7 +53,7 @@ public class UserService {
         admin.setUsername(Constants.ADMIN);
         admin.setPassword(Constants.ADMIN);
         admin.setName(Constants.ADMIN);
-        admin.setEmail("admin@company.com");
+        admin.setEmail("shoestoreopenu@gmail.com");
         administratorRepository.save(admin);
     }
 

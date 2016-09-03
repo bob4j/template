@@ -1,4 +1,4 @@
-package com.openu.controller.admin;
+package com.openu.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
-import com.openu.controller.AbstractCrudController;
 import com.openu.model.Order;
 import com.openu.model.OrderItem;
 import com.openu.model.OrderStatus;
@@ -34,7 +33,6 @@ import com.openu.service.CancelOrderEmailSender;
 import com.openu.service.RejectedOrderEmailSender;
 import com.openu.service.ShippedOrderEmailSender;
 import com.openu.util.Constants;
-import com.openu.util.CustomerTransaction;
 import com.openu.util.FilterManager;
 import com.openu.util.Utils;
 
@@ -42,42 +40,38 @@ import com.openu.util.Utils;
 @Scope("view")
 public class AdminOrderController extends AbstractCrudController<Order> {
 
-    
-    
-
     private OrderStatus selectedStatus = OrderStatus.NOT_SLECTED;
     private ArrayList<String> statusesList;
     private String selectedCustomer = Constants.NO_CUSTOMER_SELECTED;
     private Date selectedCreationDate;
     private Date selectedModifiedDate;
 
-    //================== Email Senders=============
+    // ================== Email Senders=============
     @Resource
-    private  CancelOrderEmailSender  cancelOrderEmailSender;
-    
+    private CancelOrderEmailSender cancelOrderEmailSender;
+
     @Resource
-    private  RejectedOrderEmailSender rejectedOrderEmailSender;
-    
+    private RejectedOrderEmailSender rejectedOrderEmailSender;
+
     @Resource
-    private  ApprovedOrderEmailSender approvedOrderEmailSender;
-    
+    private ApprovedOrderEmailSender approvedOrderEmailSender;
+
     @Resource
-    private  ShippedOrderEmailSender shippedOrderEmailSender;    
-    
-    //========Repository================
+    private ShippedOrderEmailSender shippedOrderEmailSender;
+
+    // ========Repository================
     @Resource
     private OrderRepository orderRepository;
 
     @Resource
     private StockItemRepository stockItemRepository;
 
-    //=========EntityManager===============
+    // =========EntityManager===============
     @Resource
     private EntityManagerFactory entityManagerFactory;
-    
-//==================================================================================================
 
-  
+    // ==================================================================================================
+
     // ==============Sort==============================================
     @Override
     protected PagingAndSortingRepository<Order, Long> getRepository() {
@@ -128,8 +122,8 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         setSortBy(Constants.CUSTOMER);
         setDirection(Direction.DESC);
     }
-    
-    //==========FILTER=====================================
+
+    // ==========FILTER=====================================
 
     @Override
     protected FilterManager<Order> getFilterManager() {
@@ -160,8 +154,10 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         List<String> terms = Splitter.on(" ").trimResults().omitEmptyStrings().splitToList(selectedCustomer);
         List<Predicate> predicates = new ArrayList<>();
         for (String term : terms) {
-            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, Constants.CUSTOMER, Constants.CUSTOMER_FIRST_NAME, Constants.LIKE_TEMPLATE));
-            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, Constants.CUSTOMER, Constants.CUSTOMER_LAST_NAME, Constants.LIKE_TEMPLATE));
+            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, Constants.CUSTOMER, Constants.CUSTOMER_FIRST_NAME,
+                    Constants.LIKE_TEMPLATE));
+            predicates.add(filterManager.getJoinStringFieldPredicate(new String[] { term }, Constants.CUSTOMER, Constants.CUSTOMER_LAST_NAME,
+                    Constants.LIKE_TEMPLATE));
         }
         if (!predicates.isEmpty()) {
             filterManager.addPredicate(filterManager.getCriteriaBuilder().or(predicates.toArray(new Predicate[0])));
@@ -186,15 +182,15 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         until.set(Calendar.MINUTE, Constants.MAX_MIN_IN_HOUR);
         return criteriaBuilder.between(root.get(field), date.getTime(), until.getTimeInMillis());
     }
-    
+
     public void clearFilter() {
         selectedCustomer = Constants.NO_CUSTOMER_SELECTED;
         selectedStatus = OrderStatus.NOT_SLECTED;
         selectedCreationDate = null;
         selectedModifiedDate = null;
     }
-    
-    //===========Filter getters and Setters
+
+    // ===========Filter getters and Setters
     public List<String> getStatusesList() {
         statusesList = new ArrayList<>();
         for (OrderStatus status : OrderStatus.values()) {
@@ -220,8 +216,6 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         this.selectedCustomer = Optional.ofNullable(selectedCustomer).map(c -> c.toLowerCase()).orElse(Constants.NO_CUSTOMER_SELECTED);
     }
 
-   
-
     public Date getSelectedCreationDate() {
         return selectedCreationDate;
     }
@@ -237,22 +231,23 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     public void setSelectedModifiedDate(Date selectedModifiedDate) {
         this.selectedModifiedDate = selectedModifiedDate;
     }
-//===================end filter getter and setters========================================
-    
-    //===============================Order Status Action =====================
+
+    // ===================end filter getter and setters========================================
+
+    // ===============================Order Status Action =====================
     @Transactional
     public void shipOrder(Order order) {
-        if (order.getStatus() != OrderStatus.APPROVED){
+        if (order.getStatus() != OrderStatus.APPROVED) {
             throw new IllegalArgumentException(Constants.CANNOT_SHIP_ORDER_WITH_STATUS + order.getStatus());
         }
         order.setStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         shippedOrderEmailSender.sendOrderEmail(order);
     }
-    
+
     @Transactional
-    public  void rejectOrder(Order order) {
-        if (order.getStatus() != OrderStatus.SHIPPED){
+    public void rejectOrder(Order order) {
+        if (order.getStatus() != OrderStatus.SHIPPED) {
             throw new IllegalArgumentException(Constants.CANNOT_REJECT_ORDER_WITH_STATUS + order.getStatus());
         }
         updateStockItemRepositoryAfterAction(order, false);
@@ -260,54 +255,53 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         orderRepository.save(order);
         rejectedOrderEmailSender.sendOrderEmail(order);
     }
- 
+
     @Transactional
-    public  void  approveOrder(Order order) {
-        if (order.getStatus() != OrderStatus.PLACED){
+    public void approveOrder(Order order) {
+        if (order.getStatus() != OrderStatus.PLACED) {
             throw new IllegalArgumentException(Constants.CANNOT_APROVE_ORDER_WITH_STATUS + order.getStatus());
         }
-	boolean aproveSuccess = updateStockItemRepositoryAfterApprove(order);
-	if (!aproveSuccess){
-	    return;
-	}
-	order.setStatus(OrderStatus.APPROVED);
-	orderRepository.save(order);
-	approvedOrderEmailSender.sendOrderEmail(order);
-    }
-    
-    private synchronized boolean   updateStockItemRepositoryAfterApprove(Order order) {
-	if (isAllOrderStockItemsAvailable(order)){
-	    StockItem selectedStockItem;
-		List<OrderItem> orderItems = order.getItems();
-		if (orderItems == null){
-		    return false;
-		}
-	        for (OrderItem orderItem : orderItems) {
-	            selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
-	                    orderItem.getSize());
-	                decreaseStockItemQuantity(selectedStockItem, orderItem);
-	        }
-	        return true;
-	}
-	return false;
-	
+        boolean aproveSuccess = updateStockItemRepositoryAfterApprove(order);
+        if (!aproveSuccess) {
+            return;
+        }
+        order.setStatus(OrderStatus.APPROVED);
+        orderRepository.save(order);
+        approvedOrderEmailSender.sendOrderEmail(order);
     }
 
-    public boolean canCancelOrder(Long orderId){
-	Order order = orderRepository.findOne(orderId);
-	if(order == null){
-	    return false;
-	}
-	return order.getStatus().equals(OrderStatus.PLACED) || order.getStatus().equals(OrderStatus.APPROVED) ;
+    private synchronized boolean updateStockItemRepositoryAfterApprove(Order order) {
+        if (isAllOrderStockItemsAvailable(order)) {
+            StockItem selectedStockItem;
+            List<OrderItem> orderItems = order.getItems();
+            if (orderItems == null) {
+                return false;
+            }
+            for (OrderItem orderItem : orderItems) {
+                selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(), orderItem.getSize());
+                decreaseStockItemQuantity(selectedStockItem, orderItem);
+            }
+            return true;
+        }
+        return false;
+
     }
-    
-    public void cancelOrder(Long orderId){
-	Order order = orderRepository.findOne(orderId);	
-	cancelOrder(order);
+
+    public boolean canCancelOrder(Long orderId) {
+        Order order = orderRepository.findOne(orderId);
+        if (order == null) {
+            return false;
+        }
+        return order.getStatus().equals(OrderStatus.PLACED) || order.getStatus().equals(OrderStatus.APPROVED);
     }
-    
+
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findOne(orderId);
+        cancelOrder(order);
+    }
+
     @Transactional
-    public  void cancelOrder(Order order) {
+    public void cancelOrder(Order order) {
         boolean shouldUpdateStockItems = order.getStatus().equals(OrderStatus.APPROVED);
         if (shouldUpdateStockItems) {
             updateStockItemRepositoryAfterAction(order, false);
@@ -318,69 +312,69 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     @Transactional
-    public   void placeOrder(Order order) {
-	if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.REJECTED) {
-	    order.setStatus(OrderStatus.PLACED);
-	    orderRepository.save(order);
+    public void placeOrder(Order order) {
+        if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.REJECTED) {
+            order.setStatus(OrderStatus.PLACED);
+            orderRepository.save(order);
 
-	} else {
-	    throw new IllegalArgumentException(Constants.CANNOT_PLACE_ORDER_WITH_STATUS + order.getStatus());
-	}
+        } else {
+            throw new IllegalArgumentException(Constants.CANNOT_PLACE_ORDER_WITH_STATUS + order.getStatus());
+        }
     }
-    
+
     // ============================order status Action getters and setters====================
     public String getOrderActionName(Long orderId) {
-	Order order = orderRepository.findOne(orderId);
-	switch (order.getStatus()) {
-	case APPROVED:
-	    return OrderStatus.SHIPPED.getNameForUI();
-	case CANCELLED:
-	    return OrderStatus.PLACED.getNameForUI();
-	case PLACED:
-	    if (isAllOrderStockItemsAvailable(order)) {
-		return OrderStatus.APPROVED.getNameForUI();
-	    } else {
-		return OrderStatus.CANCELLED.getNameForUI();
-	    }
-	case REJECTED:
-	    return OrderStatus.PLACED.getNameForUI();
-	case SHIPPED:
-	    return OrderStatus.REJECTED.getNameForUI();
-	default:
-	    return null;
-	}
+        Order order = orderRepository.findOne(orderId);
+        switch (order.getStatus()) {
+        case APPROVED:
+            return OrderStatus.SHIPPED.getNameForUI();
+        case CANCELLED:
+            return OrderStatus.PLACED.getNameForUI();
+        case PLACED:
+            if (isAllOrderStockItemsAvailable(order)) {
+                return OrderStatus.APPROVED.getNameForUI();
+            } else {
+                return OrderStatus.CANCELLED.getNameForUI();
+            }
+        case REJECTED:
+            return OrderStatus.PLACED.getNameForUI();
+        case SHIPPED:
+            return OrderStatus.REJECTED.getNameForUI();
+        default:
+            return null;
+        }
     }
-    
-    public void ApplyAction(Long orderId){
-	Order order = orderRepository.findOne(orderId);
-	switch (order.getStatus()) {
-	case APPROVED:
-	    shipOrder(order);
-	    break;
-	case CANCELLED:
-	    placeOrder(order);
-	    break;
-	case PLACED:
-	    if (isAllOrderStockItemsAvailable(order)) {
-		approveOrder(order);
-	    } else {
-		cancelOrder(order);
-	    }
-	    break;
-	case REJECTED:
-	    placeOrder(order);
-	    break;
-	case SHIPPED:
-	    rejectOrder(order);
-	    break;
 
-	default:
-	    break;
-	}
+    public void ApplyAction(Long orderId) {
+        Order order = orderRepository.findOne(orderId);
+        switch (order.getStatus()) {
+        case APPROVED:
+            shipOrder(order);
+            break;
+        case CANCELLED:
+            placeOrder(order);
+            break;
+        case PLACED:
+            if (isAllOrderStockItemsAvailable(order)) {
+                approveOrder(order);
+            } else {
+                cancelOrder(order);
+            }
+            break;
+        case REJECTED:
+            placeOrder(order);
+            break;
+        case SHIPPED:
+            rejectOrder(order);
+            break;
+
+        default:
+            break;
+        }
     }
-    
-    //=======================order status Action Utility===================
-    
+
+    // =======================order status Action Utility===================
+
     /**
      *
      * @param orderId
@@ -389,29 +383,28 @@ public class AdminOrderController extends AbstractCrudController<Order> {
      *            after the action we need to increase the quantity of the stock items in the order
      */
     private void updateStockItemRepositoryAfterAction(Order order, boolean decreaseStockItemQuantity) {
-	StockItem selectedStockItem;
-	List<OrderItem> orderItems = order.getItems();
-	if (orderItems == null){
-	    return;
-	}
+        StockItem selectedStockItem;
+        List<OrderItem> orderItems = order.getItems();
+        if (orderItems == null) {
+            return;
+        }
         for (OrderItem orderItem : orderItems) {
-            selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
-                    orderItem.getSize());
+            selectedStockItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(), orderItem.getSize());
             if (decreaseStockItemQuantity) {
                 decreaseStockItemQuantity(selectedStockItem, orderItem);
-            } else  {
-        	 increaseStockItemQuantity(selectedStockItem, orderItem);
+            } else {
+                increaseStockItemQuantity(selectedStockItem, orderItem);
             }
             stockItemRepository.save(selectedStockItem);
         }
     }
 
     private synchronized void increaseStockItemQuantity(StockItem selectedStockItem, OrderItem orderItem) {
-	selectedStockItem.setQuantity(selectedStockItem.getQuantity() + orderItem.getQuantity());
+        selectedStockItem.setQuantity(selectedStockItem.getQuantity() + orderItem.getQuantity());
     }
 
     private synchronized void decreaseStockItemQuantity(StockItem selectedStockItem, OrderItem orderItem) {
-	selectedStockItem.setQuantity(selectedStockItem.getQuantity() - orderItem.getQuantity());
+        selectedStockItem.setQuantity(selectedStockItem.getQuantity() - orderItem.getQuantity());
     }
 
     public List<Order> getPlacedOrders() {
@@ -427,14 +420,13 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     }
 
     public synchronized boolean isAllOrderStockItemsAvailable(Order order) {
-	StockItem selectedItem;
-	List<OrderItem> items = order.getItems();
-	if (items == null){
-	    return false;
-	}
+        StockItem selectedItem;
+        List<OrderItem> items = order.getItems();
+        if (items == null) {
+            return false;
+        }
         for (OrderItem orderItem : items) {
-            selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(),
-                    orderItem.getSize());
+            selectedItem = stockItemRepository.findStockItemByFields(orderItem.getProduct(), orderItem.getColor(), orderItem.getSize());
             if (selectedItem == null || selectedItem.getQuantity() < orderItem.getQuantity()) {
                 return false;
             }
@@ -448,8 +440,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         Product product = item.getProduct();
         StockItem findStockItemByFields = stockItemRepository.findStockItemByFields(product, color, size);
         boolean isItemAvailable = findStockItemByFields.getQuantity() >= item.getQuantity();
-        return isItemAvailable ? Constants.ITEM_AVAILABLE:Constants.ITEM_NOT_AVAILABLE;
+        return isItemAvailable ? Constants.ITEM_AVAILABLE : Constants.ITEM_NOT_AVAILABLE;
     }
-    
-   
+
 }

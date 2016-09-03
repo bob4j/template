@@ -1,4 +1,4 @@
-package com.openu.controller;
+package com.openu.security;
 
 import java.io.IOException;
 
@@ -10,9 +10,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
 /**
- * 
- * This class handle the Login / Logout from the system
+ * This class handles the Login / Logout from the system
  */
 @ManagedBean
 @RequestScoped

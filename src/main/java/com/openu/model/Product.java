@@ -22,8 +22,6 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 public class Product {
 
-    // TODO add columns: size; width; color; promotion
-
     private static final String CATEGORY_ID = "category_id";
 
     private static final String ID = "id";
@@ -39,7 +37,6 @@ public class Product {
 
     private String brand;
 
-    // TODO rename model
     private String name;
 
     private String description;

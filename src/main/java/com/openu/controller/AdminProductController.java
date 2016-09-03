@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,11 +28,10 @@ import com.openu.model.ProductColor;
 import com.openu.model.ProductSize;
 import com.openu.model.StockItem;
 import com.openu.repository.CategoryRepository;
-import com.openu.repository.ProductRepository;
 import com.openu.util.Utils;
 
 /**
- * 
+ *
  * This Class is Abstract class for controlling the search product functionality
  */
 @Component
@@ -49,9 +49,6 @@ public class AdminProductController extends AbstractSearchController implements 
     private Part imagePart;
 
     @Resource
-    private ProductRepository productRepository;
-
-    @Resource
     private CategoryRepository categoryRepository;
 
     @Value("${static.content.dir}")
@@ -64,148 +61,161 @@ public class AdminProductController extends AbstractSearchController implements 
     public List<StockItem> stockItems = new ArrayList<>();
 
     /**
-    * this function will be called before page loading.
-    *  
-    */
+     * this function will be called before page loading.
+     *
+     */
     @PostConstruct
     public void init() {
-	staticContentDir = staticContentDir.replace("~", System.getProperty("user.home"));
-	String productId = Utils.getRequest().getParameter("product_id");
-	if (productId != null) {
-	    entity = productRepository.findOne(Long.valueOf(productId));
-	    categoryIds = entity.getCategories().stream().map(c -> c.getId()).collect(Collectors.toList());
-	    stockItems = new ArrayList<>(entity.getStockItems());
-	} else {
-	    stockItems.add(new StockItem());
-	}
+        staticContentDir = staticContentDir.replace("~", System.getProperty("user.home"));
+        String productId = Utils.getRequest().getParameter("product_id");
+        if (productId != null) {
+            entity = productRepository.findOne(Long.valueOf(productId));
+            categoryIds = entity.getCategories().stream().map(c -> c.getId()).collect(Collectors.toList());
+            stockItems = new ArrayList<>(entity.getStockItems());
+        } else {
+            stockItems.add(new StockItem());
+        }
     }
 
     public void addStockItem(AjaxBehaviorEvent event) {
-	stockItems.add(new StockItem());
+        stockItems.add(new StockItem());
     }
 
     public List<ProductColor> getColors() {
-	return Stream.of(ProductColor.values()).collect(Collectors.toList());
+        return Stream.of(ProductColor.values()).collect(Collectors.toList());
     }
 
     public List<ProductSize> getSizes() {
-	return Stream.of(ProductSize.values()).collect(Collectors.toList());
+        return Stream.of(ProductSize.values()).collect(Collectors.toList());
     }
 
     @Override
     protected PagingAndSortingRepository<Product, Long> getRepository() {
-	return productRepository;
+        return productRepository;
     }
 
     /**
-     * Override {@link AbstractCrudController#createEntity()}
-     * create Product entity for admin Product 
+     * Override {@link AbstractCrudController#createEntity()} create Product entity for admin Product
      */
     @Override
     protected Product createEntity() throws Exception {
-	Product p = new Product();
-	p.setBrand(brand);
-	p.setName(model);
-	p.setDescription(description);
-	p.setPrice(price);
-	String filename = System.currentTimeMillis() + getImageSuffix();
-	Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
-	p.setImage(new Image(staticContentDirWeb + "/" + filename));
-	p.setCategories(categoryIds.stream().map(id -> categoryRepository.findOne(id)).collect(Collectors.toList()));
-	stockItems.forEach(si -> si.setProduct(p));
-	p.setStockItems(stockItems);
-	return p;
+        Product p = new Product();
+        p.setBrand(brand);
+        p.setName(model);
+        p.setDescription(description);
+        p.setPrice(price);
+        String filename = System.currentTimeMillis() + getImageSuffix();
+        Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
+        p.setImage(new Image(staticContentDirWeb + "/" + filename));
+        p.setCategories(categoryIds.stream().map(id -> categoryRepository.findOne(id)).collect(Collectors.toList()));
+        stockItems.forEach(si -> si.setProduct(p));
+        p.setStockItems(getStockItemsWithoutDuplicates(stockItems));
+        return p;
+    }
+
+    private List<StockItem> getStockItemsWithoutDuplicates(List<StockItem> sis) {
+        List<StockItem> items = new ArrayList<>();
+        for (StockItem si : sis) {
+            StockItem existing = items.stream().filter(item -> item.getColor() == si.getColor() && item.getSize() == si.getSize()).findFirst()
+                    .orElse(null);
+            if (existing != null) {
+                existing.setId(Optional.ofNullable(si.getId()).orElse(existing.getId()));
+                existing.setQuantity(existing.getQuantity() + si.getQuantity());
+            } else {
+                items.add(si);
+            }
+        }
+        return items;
     }
 
     public String update() throws Exception {
-	if (!StringUtils.isEmpty(imagePart.getSubmittedFileName())) {
-	    String filename = System.currentTimeMillis() + getImageSuffix();
-	    Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
-	    entity.setImage(new Image(staticContentDirWeb + "/" + filename));
-	}
-	entity.getCategories().clear();
-	entity.setCategories(
-		categoryIds.stream().map(id -> categoryRepository.findOne(id)).collect(Collectors.toList()));
-	entity.getStockItems().clear();
-	stockItems.forEach(si -> si.setProduct(entity));
-	entity.setStockItems(stockItems);
-	productRepository.save(entity);
-	return "/admin/products?faces-redirect=true";
+        if (!StringUtils.isEmpty(imagePart.getSubmittedFileName())) {
+            String filename = System.currentTimeMillis() + getImageSuffix();
+            Files.copy(imagePart.getInputStream(), Paths.get(staticContentDir, filename));
+            entity.setImage(new Image(staticContentDirWeb + "/" + filename));
+        }
+        entity.getCategories().clear();
+        entity.setCategories(categoryIds.stream().map(id -> categoryRepository.findOne(id)).collect(Collectors.toList()));
+        entity.getStockItems().clear();
+        stockItems.forEach(si -> si.setProduct(entity));
+        entity.setStockItems(getStockItemsWithoutDuplicates(stockItems));
+        productRepository.save(entity);
+        return "/admin/products?faces-redirect=true";
     }
 
     public Iterable<Category> getAllCategories() {
-	return categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     private String getImageSuffix() {
-	return imagePart.getSubmittedFileName().substring(imagePart.getSubmittedFileName().lastIndexOf("."),
-		imagePart.getSubmittedFileName().length());
+        return imagePart.getSubmittedFileName().substring(imagePart.getSubmittedFileName().lastIndexOf("."),
+                imagePart.getSubmittedFileName().length());
     }
 
     public void setImagePart(Part image) {
-	imagePart = image;
+        imagePart = image;
     }
 
     public Part getImagePart() {
-	return imagePart;
+        return imagePart;
     }
 
     public String getBrand() {
-	return brand;
+        return brand;
     }
 
     public void setBrand(String brand) {
-	this.brand = brand;
+        this.brand = brand;
     }
 
     public String getModel() {
-	return model;
+        return model;
     }
 
     public void setModel(String model) {
-	this.model = model;
+        this.model = model;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public Double getPrice() {
-	return price;
+        return price;
     }
 
     public void setPrice(Double price) {
-	this.price = price;
+        this.price = price;
     }
 
     public List<Long> getCategoryIds() {
-	return categoryIds;
+        return categoryIds;
     }
 
     public void setCategoryIds(List<Long> categoryIds) {
-	this.categoryIds = categoryIds;
+        this.categoryIds = categoryIds;
     }
 
     public List<StockItem> getStockItems() {
-	return stockItems;
+        return stockItems;
     }
 
     public void setStockItems(List<StockItem> stockItems) {
-	this.stockItems = stockItems;
+        this.stockItems = stockItems;
     }
 
     public void brandUp() {
-	setSortBy(BRAND);
-	setDirection(Direction.ASC);
+        setSortBy(BRAND);
+        setDirection(Direction.ASC);
     }
 
     public void brandDown() {
-	setSortBy(BRAND);
-	setDirection(Direction.DESC);
+        setSortBy(BRAND);
+        setDirection(Direction.DESC);
     }
 
 }
