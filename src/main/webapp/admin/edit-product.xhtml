@@ -65,14 +65,14 @@
 						        </h:column>
 						    </h:dataTable>
 							
-							<h:commandButton value="Add stock item">
+							<h:commandButton value="Add stock item" class="submit_btn">
 						        <f:ajax listener="#{adminProductController.addStockItem}" execute="tblFields" render="tblFields" /> 
 						    </h:commandButton>
 						</div>
 					</div>
 					<div class="cleaner h50" />
 					
-					<h:commandButton value="Save" action="#{adminProductController.update}" />
+					<h:commandButton value="Save" action="#{adminProductController.update}" class="submit_btn"/>
 				</h:form>
 			</div>
 			<div class="cleaner"></div>

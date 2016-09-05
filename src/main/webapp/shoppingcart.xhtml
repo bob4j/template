@@ -43,13 +43,9 @@
 				</table>
 				<div style="float: right; width: 215px; margin-top: 20px;">
 					<c:if test="${customerController.numberOfShoppingItems gt 0}">
-					<p>
-						<h:link outcome="checkout" value="Proceed to checkout"/>
-					</p>
+					<h:commandButton action="checkout" value="Proceed to checkout" class="submit_btn" style="margin-bottom: 10px;"/>
 					</c:if>
-					<p>
-						<h:link outcome="home" value="Continue shopping"/>
-					</p>
+					<h:commandButton action="home" value="Continue shopping" class="submit_btn"/>
 				</div>
 			</div>
 			</h:form>

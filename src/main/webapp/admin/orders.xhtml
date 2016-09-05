@@ -10,9 +10,9 @@
 
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
-		<ui:param name="ordersClass" value="selected"/>
+		<ui:param name="ordersClass" value="selected" />
 		<ui:define name="content">
-			<div id="content" class="float_l" style="width:100%">
+			<div id="content" class="float_l" style="width: 100%">
 				<h:form id="table_product_form">
 					<div class="column_container" style="background-color: aliceblue;">
 						<h3 style="margin-top: 10px;">Filter Yours Orders</h3>
@@ -61,7 +61,7 @@
 									<f:ajax execute="modifiedDateFilter" render="table_product" />
 								</t:inputCalendar>
 							</div>
-							<h:commandButton action="#{adminOrderController.clearFilter()}"
+							<h:commandButton action="#{adminOrderController.clearFilter()}" class="submit_btn"
 								style="margin-left:10px" value="Clear Filter">
 							</h:commandButton>
 						</div>
@@ -170,9 +170,9 @@
 							<f:facet name="header">Action</f:facet>
 							<h:commandLink
 								actionListener="#{adminOrderController.ApplyAction(o.id )}"
-								value="#{adminOrderController.getOrderActionName(o.id )}" >
-								<f:ajax render="table_product" execute="table_product" ></f:ajax>
-								 </h:commandLink>
+								value="#{adminOrderController.getOrderActionName(o.id )}">
+								<f:ajax render="table_product" execute="table_product"></f:ajax>
+							</h:commandLink>
 						</h:column>
 						<h:column>
 							<f:facet name="header">Order Details</f:facet>
@@ -183,13 +183,16 @@
 							</h:link>
 						</h:column>
 						<h:column>
-							<h:commandLink  rendered="#{adminOrderController.canCancelOrder(o.id)}" id="cancel_btn"
-								action="#{adminOrderController.cancelOrder(o.id)}"  value="">
-								<f:ajax render="table_product" execute="table_product" ></f:ajax>
+							<f:facet name="header">Cancel Order</f:facet>
+							<h:commandLink
+								rendered="#{adminOrderController.canCancelOrder(o.id)}"
+								id="cancel_btn"
+								action="#{adminOrderController.cancelOrder(o.id)}" value="">
+								<f:ajax render="table_product" execute="table_product"></f:ajax>
 								<ui:include src="/images/delete.svg" />
-								
+
 							</h:commandLink>
-							</h:column>
+						</h:column>
 					</h:dataTable>
 				</h:form>
 

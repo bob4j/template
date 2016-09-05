@@ -88,11 +88,11 @@
 								</h:column>
 							</h:dataTable>
 							<div>
-								<h:commandButton value="Add stock item" class="float_l">
+								<h:commandButton value="Add stock item" class="float_l submit_btn">
 									<f:ajax listener="#{adminProductController.addStockItem}"
 										execute="tblFields" render="tblFields" />
 								</h:commandButton>
-								<h:commandButton value="Remove last stock item" class="float_l">
+								<h:commandButton value="Remove last stock item" class="float_l submit_btn">
 									<f:ajax listener="#{adminProductController.removeLastStockItem}"
 										execute="tblFields" render="tblFields" />
 								</h:commandButton>
@@ -101,7 +101,7 @@
 					</div>
 					<div class="cleaner h50" />
 
-					<h:commandButton value="Add"
+					<h:commandButton value="Add" class="submit_btn"
 						actionListener="#{adminProductController.save}"
 						action="/admin/products?faces-redirect=true" />
 				</h:form>
