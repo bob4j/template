@@ -12,11 +12,6 @@
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	<servlet>
-		<servlet-name>Image Servlet</servlet-name>
-		<servlet-class>com.openu.controller.ImageServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
@@ -54,26 +49,6 @@
 		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
 		<param-value>false</param-value>
 	</context-param>
-	
-	
-	<filter>
-		<filter-name>MyFacesExtensionsFilter</filter-name>
-		<filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
-	</filter>
-	<filter-mapping>
-	    <filter-name>MyFacesExtensionsFilter</filter-name>
-	    <servlet-name>Faces Servlet</servlet-name>
-	</filter-mapping>
-	<filter-mapping>
-	    <filter-name>MyFacesExtensionsFilter</filter-name>
-	    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
-	</filter-mapping>	
-	<filter-mapping>
-	    <filter-name>MyFacesExtensionsFilter</filter-name>
-	    <url-pattern>*.jsf</url-pattern>
-	</filter-mapping>
-  	
-  	
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -92,10 +67,6 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
- 	<servlet-mapping>
-		<servlet-name>Image Servlet</servlet-name>
-		<url-pattern>/image/*</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>

@@ -36,7 +36,6 @@
 						<p style="margin-top:15px">Price:</p>
 						$ <h:inputText value="#{adminProductController.entity.price}" required="true" style="width: 100px;" id="price"/>
 						
-						<!-- TODO marks the existing categories -->
 						<p style="margin-top:15px">Categories:</p>
 						<h:selectManyListbox value="#{adminProductController.categoryIds}" required="true">
 							<f:selectItems value="#{adminProductController.allCategories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
