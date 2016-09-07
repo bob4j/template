@@ -241,6 +241,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
             throw new IllegalArgumentException(Constants.CANNOT_SHIP_ORDER_WITH_STATUS + order.getStatus());
         }
         order.setStatus(OrderStatus.SHIPPED);
+        order.setModified(System.currentTimeMillis());
         orderRepository.save(order);
         shippedOrderEmailSender.sendOrderEmail(order);
     }
@@ -252,6 +253,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         }
         updateStockItemRepositoryAfterAction(order, false);
         order.setStatus(OrderStatus.REJECTED);
+        order.setModified(System.currentTimeMillis());
         orderRepository.save(order);
         rejectedOrderEmailSender.sendOrderEmail(order);
     }
@@ -265,6 +267,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
         if (!aproveSuccess) {
             return;
         }
+        order.setModified(System.currentTimeMillis());
         order.setStatus(OrderStatus.APPROVED);
         orderRepository.save(order);
         approvedOrderEmailSender.sendOrderEmail(order);
@@ -307,6 +310,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
             updateStockItemRepositoryAfterAction(order, false);
         }
         order.setStatus(OrderStatus.CANCELLED);
+        order.setModified(System.currentTimeMillis());
         orderRepository.save(order);
         cancelOrderEmailSender.sendOrderEmail(order);
     }
@@ -315,6 +319,7 @@ public class AdminOrderController extends AbstractCrudController<Order> {
     public void placeOrder(Order order) {
         if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.REJECTED) {
             order.setStatus(OrderStatus.PLACED);
+            order.setModified(System.currentTimeMillis());
             orderRepository.save(order);
 
         } else {
