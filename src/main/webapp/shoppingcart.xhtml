@@ -8,46 +8,46 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="/template/layout.xhtml">
-		<ui:param name="myaccountClass" value="selected"/>
+		<ui:param name="myaccountClass" value="selected" />
 		<ui:define name="content">
 			<h:form>
-			<div id="content" class="float_r">
-				<h1>Shopping Cart</h1>
-				<c:set var="sc" value="${customerController.shoppingCart}" />
-				<table width="680px" cellspacing="0" cellpadding="5">
-					<tr bgcolor="#ddd">
-						<th width="220" align="left">Image</th>
-						<th width="180" align="left">Description</th>
-						<th width="100" align="center">Quantity</th>
-						<th width="60" align="right">Price</th>
-						<th width="60" align="right">Total</th>
-						<th width="90"></th>
+				<div id="content" class="float_r">
+					<h1>Shopping Cart</h1>
+					<c:set var="sc" value="${customerController.shoppingCart}" />
+					<table width="680px" cellspacing="0" cellpadding="5">
+						<tr bgcolor="#ddd">
+							<th width="220" align="left">Image</th>
+							<th width="180" align="left">Description</th>
+							<th width="100" align="center">Quantity</th>
+							<th width="60" align="right">Price</th>
+							<th width="60" align="right">Total</th>
+							<th width="90"></th>
 
-					</tr>
-					<c:forEach items="${sc.items}" var="item">
-						<tr>
-							<td><h:graphicImage value="/${item.product.image.name}" /></td>					
-							<td>${item.product.name}</td>
-							<td align="center">
-								<input type="text" value="${item.quantity}" style="width: 20px; text-align: right" />
-							</td>
-							<td align="right">$ ${item.price}</td>
-							<td align="right">$ ${item.totalPrice}</td>
-							<td align="center">
-							<h:commandLink action="${productController.removeFromShoppingCart(item.id)}" >
-									<h:graphicImage value="images/remove_x.gif"/>
-								</h:commandLink>
-							</td>
 						</tr>
-					</c:forEach>
-				</table>
-				<div style="float: right; width: 215px; margin-top: 20px;">
+						<c:forEach items="${sc.items}" var="item">
+							<tr>
+								<td><h:graphicImage value="/${item.product.image.name}" /></td>
+								<td>${item.product.name}</td>
+								<td align="center">
+								<h:outputText
+									value="${item.quantity}" style="width: 20px; text-align: right" />
+								</td>
+								<td align="right">$ ${item.price}</td>
+								<td align="right">$ ${item.totalPrice}</td>
+								<td align="center"><h:commandLink
+										action="${productController.removeFromShoppingCart(item.id)}">
+										<ui:include src="/images/delete.svg" />
+									</h:commandLink></td>
+							</tr>
+						</c:forEach>
+					</table>
 					<c:if test="${customerController.numberOfShoppingItems gt 0}">
-					<h:commandButton action="checkout" value="Proceed to checkout" class="submit_btn" style="margin-bottom: 10px;"/>
+						<h:commandButton action="checkout" value="Proceed to checkout"
+							class="submit_btn" style="margin-bottom: 10px;" />
 					</c:if>
-					<h:commandButton action="home" value="Continue shopping" class="submit_btn"/>
+					<h:commandButton action="home" value="Continue shopping"
+						class="submit_btn" />
 				</div>
-			</div>
 			</h:form>
 			<div class="cleaner"></div>
 
