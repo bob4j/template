@@ -1,5 +1,6 @@
 package com.openu.controller;
 
+import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.openu.model.Administrator;
 import com.openu.repository.AdministratorRepository;
+import com.openu.service.CreateAdminUserEmailSender;
 import com.openu.util.Constants;
 
 @ManagedBean
@@ -20,6 +22,12 @@ public class AdminController extends AbstractCrudController<Administrator> {
 
     @Autowired
     private AdministratorRepository administratorRepository;
+    
+    @Resource
+    private CreateAdminUserEmailSender createAdminUserEmailSender;
+    
+    @Resource
+    private SessionBean sessionBean;
 
     private String name;
     private String username;
@@ -88,5 +96,13 @@ public class AdminController extends AbstractCrudController<Administrator> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public void save() throws Exception {
+	super.save();
+	Administrator admin = sessionBean.getAdmin();
+	if (admin != null) {
+	    createAdminUserEmailSender.sendCreateAdminUserMessage(email, name, admin.getName(), password, username);
+	}
     }
 }
