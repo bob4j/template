@@ -29,7 +29,9 @@
 							<td>$ ${o.totalPrice}</td>
 							<c:if test="${o.status=='PLACED'}">
 								<td>
-									<h:commandLink action="#{orderController.cancelOrder(o.id)}" value="Cancel"/>
+									<h:commandLink action="#{orderController.cancelOrder(o.id)}" value="">
+										<ui:include src="/images/delete.svg" />
+									</h:commandLink>
 								</td>
 							</c:if>
 						</tr>

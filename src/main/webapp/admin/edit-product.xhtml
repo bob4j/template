@@ -8,70 +8,87 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="/template/admin/layout.xhtml">
-		<ui:param name="productsClass" value="selected"/>
+		<ui:param name="productsClass" value="selected" />
 		<ui:define name="content">
 
 			<div id="content" class="float_l">
-				<h:form id="checkout-form" name="checkout-form" enctype="multipart/form-data">
-				
+				<h:form id="checkout-form" name="checkout-form"
+					enctype="multipart/form-data">
+
 					<h:messages style="color:red;"></h:messages>
 					<h2>Edit product</h2>
 					<h5>
 						<strong>Details</strong>
 					</h5>
 					<div class="content_half float_l checkout">
-						<p style="margin-top:15px">Brand:</p>
-						<h:inputText value="#{adminProductController.entity.brand}" required="true" style="width: 300px;" id="brand"/>
-						
-						<p style="margin-top:15px">Model:</p>
-						<h:inputText value="#{adminProductController.entity.name}" required="true" style="width: 300px;" id="model"/>
-						
-						<p style="margin-top:15px">Description:</p>
-						<h:inputTextarea value="#{adminProductController.entity.description}" required="true" style="width: 300px;" id="description"/>
-						
+						<p style="margin-top: 15px">Brand:</p>
+						<h:inputText value="#{adminProductController.entity.brand}"
+							required="true" style="width: 300px;" id="brand" />
+
+						<p style="margin-top: 15px">Model:</p>
+						<h:inputText value="#{adminProductController.entity.name}"
+							required="true" style="width: 300px;" id="model" />
+
+						<p style="margin-top: 15px">Description:</p>
+						<h:inputTextarea
+							value="#{adminProductController.entity.description}"
+							required="true" style="width: 300px;" id="description" />
+
 						<h:graphicImage url="/#{adminProductController.entity.image.name}" />
-						<p style="margin-top:15px">Image:</p>
-						<h:inputFile value="#{adminProductController.imagePart}" required="true"/>
-						
-						<p style="margin-top:15px">Price:</p>
-						$ <h:inputText value="#{adminProductController.entity.price}" required="true" style="width: 100px;" id="price"/>
-						
-						<p style="margin-top:15px">Categories:</p>
-						<h:selectManyListbox value="#{adminProductController.categoryIds}" required="true">
-							<f:selectItems value="#{adminProductController.allCategories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}"/>
+						<p style="margin-top: 15px">Image:</p>
+						<h:inputFile value="#{adminProductController.imagePart}"
+							required="true" />
+
+						<p style="margin-top: 15px">Price:</p>
+						$
+						<h:inputText value="#{adminProductController.entity.price}"
+							required="true" style="width: 100px;" id="price" />
+
+						<p style="margin-top: 15px">Categories:</p>
+						<h:selectManyListbox value="#{adminProductController.categoryIds}"
+							required="true">
+							<f:selectItems value="#{adminProductController.allCategories}"
+								var="c" itemLabel="#{c.name}" itemValue="#{c.id}" />
 						</h:selectManyListbox>
-						
+
 					</div>
 					<div class="cleaner h50" />
 					<div class="content_half float_l checkout">
 						<h5>
 							<strong>Stock information</strong>
 						</h5>
-						<div style="float:left;width:400px">
-						    <h:dataTable id="tblFields" value="#{adminProductController.stockItems}" var="si">
-						        <h:column>
-						            <h:selectOneMenu value="#{si.color}" required="true">
-						                <f:selectItems value="#{adminProductController.colors}" />
-						            </h:selectOneMenu>
-						        </h:column>
+						<div style="float: left; width: 400px">
+							<h:dataTable id="tblFields"
+								value="#{adminProductController.stockItems}" var="si">
 								<h:column>
-						            <h:selectOneMenu value="#{si.size}" required="true">
-						                <f:selectItems value="#{adminProductController.sizes}" var="s" itemValue="#{s}" itemLabel="#{s.label}"/>
-						            </h:selectOneMenu>
-						        </h:column>
-						        <h:column>
-						            <h:inputText value="#{si.quantity}" />
-						        </h:column>
-						    </h:dataTable>
-							
+									<f:facet name="header">Color</f:facet>
+									<h:selectOneMenu value="#{si.color}" required="true">
+										<f:selectItems value="#{adminProductController.colors}" />
+									</h:selectOneMenu>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Size</f:facet>
+									<h:selectOneMenu value="#{si.size}" required="true">
+										<f:selectItems value="#{adminProductController.sizes}" var="s"
+											itemValue="#{s}" itemLabel="#{s.label}" />
+									</h:selectOneMenu>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Quantity</f:facet>
+									<h:inputText value="#{si.quantity}" />
+								</h:column>
+							</h:dataTable>
+
 							<h:commandButton value="Add stock item" class="submit_btn">
-						        <f:ajax listener="#{adminProductController.addStockItem}" execute="tblFields" render="tblFields" /> 
-						    </h:commandButton>
+								<f:ajax listener="#{adminProductController.addStockItem}"
+									execute="tblFields" render="tblFields" />
+							</h:commandButton>
 						</div>
 					</div>
 					<div class="cleaner h50" />
-					
-					<h:commandButton value="Save" action="#{adminProductController.update}" class="submit_btn"/>
+
+					<h:commandButton value="Save"
+						action="#{adminProductController.update}" class="submit_btn" />
 				</h:form>
 			</div>
 			<div class="cleaner"></div>

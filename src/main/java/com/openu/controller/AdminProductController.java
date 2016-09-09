@@ -28,6 +28,7 @@ import com.openu.model.ProductColor;
 import com.openu.model.ProductSize;
 import com.openu.model.StockItem;
 import com.openu.repository.CategoryRepository;
+import com.openu.util.Constants;
 import com.openu.util.Utils;
 
 /**
@@ -38,7 +39,6 @@ import com.openu.util.Utils;
 @Scope("view")
 public class AdminProductController extends AbstractSearchController implements Serializable {
 
-    private static final String BRAND = "brand";
 
     private static final long serialVersionUID = 1L;
 
@@ -215,12 +215,22 @@ public class AdminProductController extends AbstractSearchController implements 
     }
 
     public void brandUp() {
-        setSortBy(BRAND);
+        setSortBy(Constants.BRAND);
         setDirection(Direction.ASC);
     }
 
     public void brandDown() {
-        setSortBy(BRAND);
+        setSortBy(Constants.BRAND);
+        setDirection(Direction.DESC);
+    }
+    
+    public void productIdUp() {
+        setSortBy(Constants.PRODUCT_ID);
+        setDirection(Direction.ASC);
+    }
+
+    public void productIdDown() {
+        setSortBy(Constants.PRODUCT_ID);
         setDirection(Direction.DESC);
     }
 

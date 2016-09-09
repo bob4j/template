@@ -12,7 +12,7 @@
 		<ui:define name="content">
 
 			<div id="content" class="float_l">
-				<h2>Users</h2>
+				<h2>Administrators</h2>
 				<h:messages style="color:red"/>
 				<h:form>
 					<h:dataTable value="#{adminController.all}" var="c" styleClass="entityTable" headerClass="entityTableHeader" rowClasses="entityTableOddRow,entityTableEvenRow">
@@ -22,7 +22,7 @@
 				      	</h:column>
 						<h:column>
 							<f:facet name="header">Name</f:facet>
-							<h:commandLink action="/admin/admin-user" actionListener="#{adminController.load(c)}" value="#{c.name}" />
+							<h:outputText value="#{c.name}" />
 						</h:column>
 						<h:column>
 							<f:facet name="header">Username</f:facet>

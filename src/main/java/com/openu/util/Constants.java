@@ -22,6 +22,8 @@ public final class Constants {
     public static final String ORDER_ID = "order_id";
     public static final String CUSTOMER_FIRST_NAME = "firstName";
     public static final String CUSTOMER_LAST_NAME = "lastName";
+    public  static final String BRAND = "brand";
+
     // ========END fields name======================
     // =============EMAIL=====L
     public static final String EMAIL_FROM = "Shoe Store";

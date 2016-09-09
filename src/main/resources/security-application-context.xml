@@ -10,7 +10,7 @@
 	<http pattern="/admin/**" use-expressions="true">
 		<intercept-url pattern="/admin/login.jsf" access="permitAll()" />
 		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
-		<form-login login-page="/admin/login.jsf" authentication-failure-url="/admin/login.jsf?error=1" default-target-url="/admin/orders.jsf" 
+		<form-login login-page="/admin/login.jsf" authentication-failure-url="/admin/login.jsf?error=1" default-target-url="/admin/products.jsf" 
 					username-parameter="username" password-parameter="password" />
 		<csrf disabled="true" />
 		<logout logout-success-url="/admin/login.jsf" />

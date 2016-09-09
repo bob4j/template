@@ -20,12 +20,12 @@
 							<f:facet name="header" class= "header_with_sorter">ID
 							<div class = "arrow_sort_container" >
 								<h:commandButton  class= "sort_button"
-						   		  action="#{adminProductController.idUp()}"
+						   		  action="#{adminProductController.productIdUp()}"
 								  image="/images/arrow-up.png">
 								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
 								</h:commandButton>
 								 <h:commandButton   class= "sort_button"
-						   		  action="#{adminProductController.idDown()}"
+						   		  action="#{adminProductController.productIdDown()}"
 								  image="/images/arrow-down.png">
 								  <f:ajax execute="table_product" event="click" render="table_product"></f:ajax>
 								</h:commandButton >

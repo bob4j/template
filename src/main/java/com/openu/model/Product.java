@@ -19,14 +19,16 @@ import javax.persistence.SequenceGenerator;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.openu.util.Constants;
+
 @Entity
 public class Product {
 
-    private static final String CATEGORY_ID = "category_id";
+    private static final String CATEGORY_ID = Constants.CATEGORY_ID;
 
-    private static final String ID = "id";
+    private static final String ID = Constants.ID;
 
-    private static final String PRODUCT_ID = "product_id";
+    private static final String PRODUCT_ID = Constants.PRODUCT_ID;
 
     private static final String PRODUCT_SEQ = "product_seq";
 
