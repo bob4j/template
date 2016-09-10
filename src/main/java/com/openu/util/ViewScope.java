@@ -1,4 +1,4 @@
-package com.openu;
+package com.openu.util;
 
 import java.util.Map;
 
