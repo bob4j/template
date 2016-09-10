@@ -169,9 +169,8 @@
 						<h:column>
 							<f:facet name="header">Action</f:facet>
 							<h:commandLink
-								actionListener="#{adminOrderController.ApplyAction(o.id )}"
-								value="#{adminOrderController.getOrderActionName(o.id )}">
-								<f:ajax render="table_product" execute="table_product"></f:ajax>
+								actionListener="#{adminOrderController.ApplyAction(o.id)}"
+								value="#{adminOrderController.getOrderActionName(o.id)}">
 							</h:commandLink>
 						</h:column>
 						<h:column>

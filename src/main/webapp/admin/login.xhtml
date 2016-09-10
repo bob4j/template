@@ -12,14 +12,15 @@
 
 			<div id="content" class="float_l">
 				<h2>Admin Login</h2>
+				<h:messages style="color:red;"></h:messages>
 				<h:form id="loginFormId" prependId="false">
 					<c:choose>
 						<c:when test="${sessionBean.admin == null}">
 							<p>Username:</p>
-							<h:inputText id="username" required="true"
+							<h:inputText id="username" required="true" value="${loginManager.username}"
 								requiredMessage="Please enter username" style="width: 300px;" />
 							<p style="margin-top: 20px;">Password:</p>
-							<h:inputSecret id="password" required="true"
+							<h:inputSecret id="password" required="true" value="${loginManager.password}"
 								requiredMessage="Please enter password" name="password"
 								style="width: 300px;" />
 							<br/>	
