@@ -224,14 +224,5 @@ public class AdminProductController extends AbstractSearchController implements 
         setDirection(Direction.DESC);
     }
     
-    public void productIdUp() {
-        setSortBy(Constants.PRODUCT_ID);
-        setDirection(Direction.ASC);
-    }
-
-    public void productIdDown() {
-        setSortBy(Constants.PRODUCT_ID);
-        setDirection(Direction.DESC);
-    }
-
+   
 }

@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.Predicate;
 
+import org.springframework.data.domain.Sort.Direction;
+
 import com.openu.model.Product;
 import com.openu.model.ProductColor;
 import com.openu.model.ProductSize;
@@ -71,12 +73,16 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
 
     private boolean isUnknownParam(Set<String> unKnownParamSet) {
         for (String param : unKnownParamSet) {
-            if (param.startsWith(Constants.PRICE_IS_BIGGER) || param.startsWith(Constants.PRICE_IS_SMALLER)) {
+            if (param.startsWith(Constants.PRICE_IS_BIGGER) || param.startsWith(Constants.PRICE_IS_SMALLER) || isNotSearchParam(param)) {
                 return false;
             }
         }
         return !unKnownParamSet.contains(Constants.SIZE) && !unKnownParamSet.contains(Constants.PRICE) && !unKnownParamSet.contains(Constants.NAME)
                 && !unKnownParamSet.contains(Constants.DESCRIPTOR) && !unKnownParamSet.contains(Constants.COLOR);
+    }
+
+    private boolean isNotSearchParam(String param) {
+	return param.startsWith("javax.") || param.startsWith("j_id_");
     }
 
     private Predicate getColorPredicate(FilterManager<Product> filterManager) {
@@ -183,4 +189,5 @@ public abstract class AbstractSearchController extends AbstractCrudController<Pr
         return priceEqualPredicate;
     }
 
+ 
 }

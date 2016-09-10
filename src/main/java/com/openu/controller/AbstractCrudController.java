@@ -110,7 +110,7 @@ public abstract class AbstractCrudController<T> {
     /**
      * sorting function 
      */
-    public void NameUp() {
+    public void nameUp() {
 	setSortBy(Constants.NAME);
 	setDirection(Direction.ASC);
     }
