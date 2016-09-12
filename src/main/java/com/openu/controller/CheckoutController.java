@@ -28,123 +28,120 @@ import com.openu.util.CustomerTransaction;
 @Scope("view")
 public class CheckoutController implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private CreditCardInfo ccInfo;
-    private Address shippingAddress;
-    private Long cityId;
-    private Boolean acceptTerms;
-    private Boolean useCustomerAddress = true;
-    private String phoneNumber;
+	private CreditCardInfo ccInfo;
+	private Address shippingAddress;
+	private Long cityId;
+	private Boolean acceptTerms;
+	private Boolean useCustomerAddress = true;
+	private String phoneNumber;
 
-    @Resource
-    private SessionBean sessionBean;
-    @Resource
-    private CustomerRepository customerRepository;
-    @Resource
-    private CityRepository cityRepository;
-    @Resource
-    private OrderRepository orderRepository;
+	@Resource
+	private SessionBean sessionBean;
+	@Resource
+	private CustomerRepository customerRepository;
+	@Resource
+	private CityRepository cityRepository;
+	@Resource
+	private OrderRepository orderRepository;
 
-    @PostConstruct
-    public void init() {
-        ccInfo = new CreditCardInfo();
-        Address customerAddress = sessionBean.loadCustomer().getAddress();
-        if (customerAddress != null && Boolean.TRUE.equals(useCustomerAddress)) {
-            shippingAddress = new Address(customerAddress.getCity(), customerAddress.getAddress());
-        } else {
-            shippingAddress = new Address();
-        }
-    }
-
-    @Transactional
-    public Double getTotalPrice() {
-        Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
-        Order order = customer.getShoppingCart();
-        // return order.getItems().stream().map(i -> i.getTotalPrice()).reduce(0D, (accumulator, i) -> accumulator + i);
-        return order.getTotalPrice();
-    }
-
-    @Transactional
-    @CustomerTransaction
-    public void order() {
-        Customer customer = sessionBean.loadCustomer();
-        Order order = customer.getShoppingCart();
-        order.setStatus(OrderStatus.PLACED);
-        order.setCcInfo(ccInfo);
-        order.setModified(System.currentTimeMillis());
-        order.setShippingAddress(getAddress(customer));
-        customerRepository.save(customer);
-    }
-
-    private Address getAddress(Customer customer) {
-	if (Boolean.TRUE.equals(useCustomerAddress)){
-	  return customer.getAddress();  
+	@PostConstruct
+	public void init() {
+		ccInfo = new CreditCardInfo();
+		Address customerAddress = sessionBean.loadCustomer().getAddress();
+		if (customerAddress != null && Boolean.TRUE.equals(useCustomerAddress)) {
+			shippingAddress = new Address(customerAddress.getCity(), customerAddress.getAddress());
+		} else {
+			shippingAddress = new Address();
+		}
 	}
-        shippingAddress.setCity(cityRepository.findOne(cityId));
-        return shippingAddress;
-    }
 
-    public List<CreditCardType> getCcTypes() {
-        return Stream.of(CreditCardType.values()).collect(Collectors.toList());
-    }
+	@Transactional
+	public Double getTotalPrice() {
+		Customer customer = customerRepository.findOne(sessionBean.getCustomer().getId());
+		Order order = customer.getShoppingCart();
+		return order.getTotalPrice();
+	}
 
-    public List<City> getCities() {
-        return (List<City>) cityRepository.findAll();
-    }
+	@Transactional
+	@CustomerTransaction
+	public void order() {
+		Customer customer = sessionBean.loadCustomer();
+		Order order = customer.getShoppingCart();
+		order.setStatus(OrderStatus.PLACED);
+		order.setCcInfo(ccInfo);
+		order.setModified(System.currentTimeMillis());
+		order.setShippingAddress(getAddress(customer));
+		customerRepository.save(customer);
+	}
 
-    public CreditCardInfo getCcInfo() {
-        return ccInfo;
-    }
+	private Address getAddress(Customer customer) {
+		if (Boolean.TRUE.equals(useCustomerAddress)) {
+			return customer.getAddress();
+		}
+		shippingAddress.setCity(cityRepository.findOne(cityId));
+		return shippingAddress;
+	}
 
-    public void setCcInfo(CreditCardInfo ccInfo) {
-        this.ccInfo = ccInfo;
-    }
+	public List<CreditCardType> getCcTypes() {
+		return Stream.of(CreditCardType.values()).collect(Collectors.toList());
+	}
 
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
+	public List<City> getCities() {
+		return (List<City>) cityRepository.findAll();
+	}
 
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
+	public CreditCardInfo getCcInfo() {
+		return ccInfo;
+	}
 
-    public Long getCityId() {
-        return cityId;
-    }
+	public void setCcInfo(CreditCardInfo ccInfo) {
+		this.ccInfo = ccInfo;
+	}
 
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
-    }
+	public Address getShippingAddress() {
+		return shippingAddress;
+	}
 
-    public Boolean getAcceptTerms() {
-        return acceptTerms;
-    }
+	public void setShippingAddress(Address shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
 
-    public void setAcceptTerms(Boolean acceptTerms) {
-        this.acceptTerms = acceptTerms;
-    }
+	public Long getCityId() {
+		return cityId;
+	}
 
+	public void setCityId(Long cityId) {
+		this.cityId = cityId;
+	}
 
-    public Boolean getUseCustomerAddress() {
-	return useCustomerAddress;
-    }
+	public Boolean getAcceptTerms() {
+		return acceptTerms;
+	}
 
-    public void setUseCustomerAddress(Boolean useCustomerAddress) {
-	this.useCustomerAddress = useCustomerAddress;
-    }
-    
-    public boolean ShowAdressField (){
-	return !useCustomerAddress;
-    }
+	public void setAcceptTerms(Boolean acceptTerms) {
+		this.acceptTerms = acceptTerms;
+	}
 
-    public String getPhoneNumber() {
-	return phoneNumber;
-    }
+	public Boolean getUseCustomerAddress() {
+		return useCustomerAddress;
+	}
 
-    public void setPhoneNumber(String phoneNumber) {
-	this.phoneNumber = phoneNumber;
-    }
-    
+	public void setUseCustomerAddress(Boolean useCustomerAddress) {
+		this.useCustomerAddress = useCustomerAddress;
+	}
+
+	public boolean ShowAdressField() {
+		return !useCustomerAddress;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 }

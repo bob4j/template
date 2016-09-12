@@ -18,25 +18,24 @@ import com.openu.model.Customer;
 @Aspect
 public class CustomerTransactionAspect {
 
-    @Resource
-    private PlatformTransactionManager txManager;
+	@Resource
+	private PlatformTransactionManager txManager;
 
-    @Resource
-    private SessionBean sessionBean;
+	@Resource
+	private SessionBean sessionBean;
 
-    @Around("@annotation(com.openu.util.CustomerTransaction)")
-    public Object intercept(ProceedingJoinPoint pjp) throws Throwable {
-        Customer customer = sessionBean.getCustomer();
-        if (customer == null) {
-            // throw new IllegalArgumentException("no logged in customer");
-            return pjp.proceed();
-        }
-        try {
-            NamedLock.lock(customer.getUsername());
-            return pjp.proceed();
-        } finally {
-            NamedLock.unlock(customer.getUsername());
-        }
-    }
+	@Around("@annotation(com.openu.util.CustomerTransaction)")
+	public Object intercept(ProceedingJoinPoint pjp) throws Throwable {
+		Customer customer = sessionBean.getCustomer();
+		if (customer == null) {
+			return pjp.proceed();
+		}
+		try {
+			NamedLock.lock(customer.getUsername());
+			return pjp.proceed();
+		} finally {
+			NamedLock.unlock(customer.getUsername());
+		}
+	}
 
 }

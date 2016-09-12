@@ -112,7 +112,6 @@ public class ProductController implements Serializable {
 			customer.getOrders().add(shoppingCart);
 		}
 		if (checkForDuplication(shoppingCart)) {
-			// customerRepository.save(customer);
 			return null;
 		}
 		OrderItem item = new OrderItem();
